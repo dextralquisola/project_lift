@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "288902897615",
+    "project_id": "project-lift-f75f9",
+    "storage_bucket": "project-lift-f75f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288902897615:android:bbc44063851e3b47cd7cba",
+        "android_client_info": {
+          "package_name": "com.example.project_lift"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "288902897615-oh14vi91s52df0eb9pkluqfjimdjppmb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANINAUsO5SHt4lVA6fRgxVq6R6FCIPCQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "288902897615-oh14vi91s52df0eb9pkluqfjimdjppmb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
