@@ -18,11 +18,12 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => UserProvider(),
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'LFT',
         theme: ThemeData(
+          fontFamily: 'Oxygen',
           primarySwatch: Colors.blue,
         ),
-        home: const LoginScreen(),
+        home: LoginScreen(),
       ),
     );
   }
