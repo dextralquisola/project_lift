@@ -32,4 +32,9 @@ class UserProvider with ChangeNotifier {
     await FirebaseAuth.instance.signInWithCredential(credential);
     notifyListeners();
   }
+
+  Future<void> logout() async {
+    await googleSignIn.disconnect();
+    FirebaseAuth.instance.signOut();
+  }
 }

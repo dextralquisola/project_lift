@@ -26,6 +26,13 @@ class LoginScreen extends StatelessWidget {
               icon: const FaIcon(FontAwesomeIcons.google, color: Colors.white),
               label: const Text('Login with Google'),
             ),
+            ElevatedButton.icon(
+              onPressed: () async {
+                await provider.logout();
+              },
+              icon: const FaIcon(FontAwesomeIcons.google, color: Colors.white),
+              label: const Text('Logout'),
+            ),
           ],
         ),
       ),
