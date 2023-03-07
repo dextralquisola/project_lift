@@ -20,14 +20,6 @@ class UserProvider with ChangeNotifier {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    print("########### Access Token ###########");
-    print("Access Token ${credential.accessToken}");
-    print("####################################");
-    print("");
-    print("########### Id Token ###########");
-    print("Id Token ${credential.idToken}");
-    print("#################################");
-    print("");
 
     await FirebaseAuth.instance.signInWithCredential(credential);
     notifyListeners();
