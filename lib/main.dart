@@ -2,33 +2,52 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/auth/screens/login_screen.dart';
 import 'package:project_lift/providers/user_provider.dart';
+import 'package:project_lift/widgets/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'constants/styles.dart';
+import 'features/auth/service/auth_service.dart';
+import 'features/home/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: MaterialApp(
-        title: 'LFT',
-        theme: ThemeData(
-          fontFamily: 'Oxygen',
-          primarySwatch: getMaterialColor(primaryColor),
-        ),
-        home: LoginScreen(),
+      child: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  final authService = AuthService();
+
+  @override
+  Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    return MaterialApp(
+      title: 'LFT',
+      theme: ThemeData(
+        fontFamily: 'Oxygen',
+        primarySwatch: getMaterialColor(primaryColor),
       ),
+      home: userProvider.isAuthenticated
+          ? const HomeScreen()
+          : FutureBuilder(
+              future: authService.fetchUser(context),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SplashScreen();
+                }
+
+                return LoginScreen();
+              },
+            ),
     );
   }
 }

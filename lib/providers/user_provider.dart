@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
 
 class UserProvider with ChangeNotifier {
-  User _user = User.initialize();
+  User _user = User.emptyUser();
 
   User get user => _user;
 
@@ -16,6 +17,15 @@ class UserProvider with ChangeNotifier {
 
   void setUserFromMap(Map<String, dynamic> user) {
     _user = User.fromMap(user);
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
+    _user = User.emptyUser();
+    
+    var prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+
     notifyListeners();
   }
 }

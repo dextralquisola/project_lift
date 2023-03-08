@@ -29,7 +29,9 @@ class HomeScreen extends StatelessWidget {
               AppButton(
                 wrapRow: true,
                 height: 50,
-                onPressed: () {},
+                onPressed: () async  {
+                  await userProvider.logout();
+                },
                 text: "Logout",
               )
             ],

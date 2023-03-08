@@ -77,12 +77,44 @@ class AuthService {
     }
   }
 
-  Future<void> fetchUser() async {
+  Future<void> fetchUser(BuildContext context) async {
     // function here
-    var res = await service.requestApi(
-      path: '/users/me',
-      method: 'GET',
-    );
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+
+      if (token == null) return;
+
+      var res = await service.requestApi(
+        path: '/users/me',
+        method: 'GET',
+        headers: {
+          "Authorization": token,
+        },
+      );
+
+      if (!context.mounted) return;
+
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () async {
+          var decoded = json.decode(res.body);
+
+          var userData = {
+            "_id": decoded['_id'],
+            "name": decoded['name'],
+            "email": decoded['email'],
+            "token": token,
+          };
+
+          userProvider.setUserFromMap(userData);
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _loginMethod({
@@ -92,7 +124,14 @@ class AuthService {
   }) async {
     var decoded = json.decode(res.body);
 
-    userProvider.setUserFromMap(decoded);
+    var userData = {
+      "_id": decoded['user']['_id'],
+      "name": decoded['user']['name'],
+      "email": decoded['user']['email'],
+      "token": decoded['token'],
+    };
+    
+    userProvider.setUserFromMap(userData);
 
     var prefs = await SharedPreferences.getInstance();
     prefs.setString('token', decoded['token']);

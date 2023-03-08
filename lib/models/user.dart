@@ -37,7 +37,7 @@ class User {
     );
   }
 
-  factory User.initialize() {
+  factory User.emptyUser() {
     return User(
       userId: '',
       name: '',
@@ -48,9 +48,9 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      userId: map['user']['_id'] ?? '',
-      name: map['user']['name'] ?? '',
-      email: map['user']['email'] ?? '',
+      userId: map['_id'] ?? '',
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
       token: map['token'] ?? '',
     );
   }
