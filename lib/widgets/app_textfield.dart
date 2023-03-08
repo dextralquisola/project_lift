@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:project_lift/constants/styles.dart';
 
 import 'app_text.dart';
 
@@ -89,8 +90,14 @@ class _AppTextFieldState extends State<AppTextField> {
                     ? IconButton(
                         onPressed: () => setState(() => isObscure = !isObscure),
                         icon: isObscure
-                            ? const Icon(Icons.remove_red_eye_outlined)
-                            : const Icon(Icons.remove_red_eye_rounded))
+                            ? Icon(
+                                Icons.remove_red_eye_outlined,
+                                color: primaryColor
+                              )
+                            : Icon(
+                                Icons.remove_red_eye_rounded,
+                                color: primaryColor
+                              ))
                     : null,
               ),
             ),

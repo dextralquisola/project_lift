@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_lift/features/auth/screens/sign_up_screen.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:project_lift/widgets/app_textfield.dart';
@@ -72,7 +74,8 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 AppButton(
                   onPressed: () async {
-                    await provider.googleLogin();
+                    //await provider.googleLogin();
+                    showSnackBar(context, "Feature coming soon!");
                   },
                   text: "Login with Google",
                   icon: FontAwesomeIcons.google,
@@ -83,6 +86,26 @@ class LoginScreen extends StatelessWidget {
                   height: 50,
                   wrapRow: true,
                 ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    AppText(text: "Don't have an account?"),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => SignupScreen(),
+                          ),
+                        );
+                      },
+                      child: AppText(
+                        text: "Sign Up",
+                        textColor: primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
