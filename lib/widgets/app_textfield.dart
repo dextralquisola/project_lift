@@ -27,7 +27,7 @@ class AppTextField extends StatefulWidget {
     this.hintText,
     this.isPassword = false,
     this.isEnabled = true,
-    this.length = 12,
+    this.length = 50,
     this.inputFormatters,
     this.maxLines = 1,
     this.outlineInputBorder,

@@ -5,10 +5,10 @@ import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:project_lift/widgets/app_textfield.dart';
-import 'package:provider/provider.dart';
 
 import '../../../constants/styles.dart';
-import '../../../providers/user_provider.dart';
+import '../../home/screens/home_screen.dart';
+import '../service/auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -16,9 +16,10 @@ class LoginScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  final authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<UserProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -48,12 +49,23 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 AppButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await authService.login(
+                      email: emailController.text,
+                      password: passwordController.text,
+                      context: context,
+                    );
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const  HomeScreen(),
+                      ),
+                    );
+                  },
                   height: 50,
                   text: "Login",
                   wrapRow: true,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -71,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                         child: Divider(color: Colors.black87, thickness: 1)),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
                 AppButton(
                   onPressed: () async {
                     //await provider.googleLogin();

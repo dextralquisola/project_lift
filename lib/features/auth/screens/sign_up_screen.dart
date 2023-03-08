@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/screens/login_screen.dart';
+import 'package:project_lift/features/home/screens/home_screen.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:project_lift/widgets/app_textfield.dart';
 
-class SignupScreen extends StatelessWidget {
+import '../service/auth_service.dart';
+
+class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  final authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +60,20 @@ class SignupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 AppButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await authService.signup(
+                      name: nameController.text,
+                      email: emailController.text,
+                      password: passwordController.text,
+                      context: context,
+                    );
+        
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  },
                   text: 'Sign Up',
                   height: 50,
                   wrapRow: true,

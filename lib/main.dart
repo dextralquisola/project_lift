@@ -4,6 +4,8 @@ import 'package:project_lift/features/auth/screens/login_screen.dart';
 import 'package:project_lift/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'constants/styles.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
         title: 'LFT',
         theme: ThemeData(
           fontFamily: 'Oxygen',
-          primarySwatch: Colors.blue,
+          primarySwatch: getMaterialColor(primaryColor),
         ),
         home: LoginScreen(),
       ),
