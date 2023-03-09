@@ -9,11 +9,18 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: AppText(
-          text: "Looking For Tutor",
-          textSize: 28,
-          textColor: primaryColor,
-          fontWeight: FontWeight.w600,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AppText(
+              text: "Looking For Tutor",
+              textSize: 28,
+              textColor: primaryColor,
+              fontWeight: FontWeight.w600,
+            ),
+            const SizedBox(height: 20),
+            const CircularProgressIndicator(),
+          ],
         ),
       ),
     );
