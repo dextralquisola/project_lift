@@ -61,6 +61,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 20),
                 AppButton(
                   onPressed: () async {
+
                     await authService.signup(
                       name: nameController.text,
                       email: emailController.text,

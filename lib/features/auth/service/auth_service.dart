@@ -69,6 +69,7 @@ class AuthService {
             context: context,
             userProvider: userProvider,
             res: res,
+            isSignup: true,
           );
         },
       );
@@ -121,6 +122,7 @@ class AuthService {
     required BuildContext context,
     required UserProvider userProvider,
     required http.Response res,
+    bool isSignup = false,
   }) async {
     var decoded = json.decode(res.body);
 
@@ -130,14 +132,14 @@ class AuthService {
       "email": decoded['user']['email'],
       "token": decoded['token'],
     };
-    
-    userProvider.setUserFromMap(userData);
 
-    var prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', decoded['token']);
+    userProvider.setUserFromMap(userData);
 
     print("Token: ${decoded['token']}");
 
-    showSnackBar(context, "Account created successfully");
+    if (isSignup) showSnackBar(context, "Account created successfully");
+
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', decoded['token']);
   }
 }

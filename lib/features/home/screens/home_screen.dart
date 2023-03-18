@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/auth/screens/login_screen.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
@@ -29,8 +30,13 @@ class HomeScreen extends StatelessWidget {
               AppButton(
                 wrapRow: true,
                 height: 50,
-                onPressed: () async  {
+                onPressed: () async {
                   await userProvider.logout();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(),
+                    ),
+                  );
                 },
                 text: "Logout",
               )
