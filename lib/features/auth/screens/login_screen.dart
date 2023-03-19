@@ -54,11 +54,13 @@ class LoginScreen extends StatelessWidget {
                       email: emailController.text,
                       password: passwordController.text,
                       context: context,
-                    );
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
+                      onSuccess: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                        );
+                      },
                     );
                   },
                   height: 50,

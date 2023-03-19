@@ -2,13 +2,15 @@ import 'dart:convert';
 
 class User {
   final String userId;
-  final String name;
+  final String firstName;
+  final String lastName;
   final String email;
   final String token;
 
   User({
     required this.userId,
-    required this.name,
+    required this.firstName,
+    required this.lastName,
     required this.email,
     required this.token,
   });
@@ -16,7 +18,8 @@ class User {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
-    result.addAll({'name': name});
+    result.addAll({'firstName': firstName});
+    result.addAll({'lastName': lastName});
     result.addAll({'email': email});
 
     return result;
@@ -24,14 +27,16 @@ class User {
 
   User copyFrom({
     String? userId,
-    String? name,
+    String? firstName,
+    String? lastName,
     String? email,
     String? token,
 
   }) {
     return User(
       userId: userId ?? this.userId,
-      name: name ?? this.name,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       token: token ?? this.token,
     );
@@ -40,7 +45,8 @@ class User {
   factory User.emptyUser() {
     return User(
       userId: '',
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       token: '',
     );
@@ -49,7 +55,8 @@ class User {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       userId: map['_id'] ?? '',
-      name: map['name'] ?? '',
+      firstName: map['firstName'] ?? '',
+      lastName: map['lastName'] ?? '',
       email: map['email'] ?? '',
       token: map['token'] ?? '',
     );

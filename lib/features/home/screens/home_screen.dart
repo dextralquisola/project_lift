@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppText(text: user.name),
+              AppText(text: user.firstName),
               const SizedBox(height: 10),
               AppText(text: user.email),
               const SizedBox(height: 20),

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:project_lift/models/user.dart';
 import 'package:project_lift/utils/http_error_handler.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +15,12 @@ class AuthService {
     required String email,
     required String password,
     required BuildContext context,
+    required Function() onSuccess,
   }) async {
     // function here
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     var res = await service.requestApi(
-      path: '/users/login',
+      path: '/api/users/login',
       body: {
         "email": email,
         "password": password,
@@ -38,22 +38,26 @@ class AuthService {
           userProvider: userProvider,
           res: res,
         );
+        onSuccess();
       },
     );
   }
 
   Future<void> signup({
-    required String name,
+    required String firstName,
+    required String lastName,
     required String email,
     required String password,
     required BuildContext context,
+    required Function() onSuccess,
   }) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
-        path: '/users',
+        path: '/api/users',
         body: {
-          "name": name,
+          "firstName": firstName,
+          "lastName": lastName,
           "email": email,
           "password": password,
         },
@@ -71,6 +75,7 @@ class AuthService {
             res: res,
             isSignup: true,
           );
+          onSuccess();
         },
       );
     } catch (e) {
@@ -88,7 +93,7 @@ class AuthService {
       if (token == null) return;
 
       var res = await service.requestApi(
-        path: '/users/me',
+        path: '/api/users/me',
         method: 'GET',
         headers: {
           "Authorization": token,
@@ -128,7 +133,8 @@ class AuthService {
 
     var userData = {
       "_id": decoded['user']['_id'],
-      "name": decoded['user']['name'],
+      "firstName": decoded['user']['firstName'],
+      "lastName": decoded['user']['lastName'],
       "email": decoded['user']['email'],
       "token": decoded['token'],
     };

@@ -16,7 +16,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final nameController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -44,8 +45,13 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 const SizedBox(height: 50),
                 AppTextField(
-                  controller: nameController,
-                  hintText: "Full Name",
+                  controller: firstNameController,
+                  hintText: "First name",
+                ),
+                const SizedBox(height: 10),
+                AppTextField(
+                  controller: lastNameController,
+                  hintText: "Last name",
                 ),
                 const SizedBox(height: 10),
                 AppTextField(
@@ -61,18 +67,22 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 20),
                 AppButton(
                   onPressed: () async {
-
+                    if (!verifyFields()) {
+                      return;
+                    }
                     await authService.signup(
-                      name: nameController.text,
+                      firstName: firstNameController.text,
+                      lastName: lastNameController.text,
                       email: emailController.text,
                       password: passwordController.text,
                       context: context,
-                    );
-        
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
+                      onSuccess: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                        );
+                      },
                     );
                   },
                   text: 'Sign Up',
@@ -105,5 +115,25 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
+  }
+
+  bool verifyFields() {
+    if (firstNameController.text.isEmpty) {
+      return false;
+    }
+
+    if (lastNameController.text.isEmpty) {
+      return false;
+    }
+
+    if (emailController.text.isEmpty) {
+      return false;
+    }
+
+    if (passwordController.text.isEmpty) {
+      return false;
+    }
+
+    return true;
   }
 }
