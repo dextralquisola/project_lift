@@ -18,29 +18,38 @@ class AuthService {
     required Function() onSuccess,
   }) async {
     // function here
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    var res = await service.requestApi(
-      path: '/api/users/login',
-      body: {
-        "email": email,
-        "password": password,
-      },
-    );
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/users/login',
+        body: {
+          "email": email,
+          "password": password,
+        },
+      );
 
-    if (!context.mounted) return;
+      if (!context.mounted) return;
 
-    httpErrorHandler(
-      response: res,
-      context: context,
-      onSuccess: () async {
-        await _loginMethod(
-          context: context,
-          userProvider: userProvider,
-          res: res,
-        );
-        onSuccess();
-      },
-    );
+      if (res.body.isEmpty) {
+        showSnackBar(context, "Please check your credentials");
+        return;
+      }
+
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () async {
+          await _loginMethod(
+            context: context,
+            userProvider: userProvider,
+            res: res,
+          );
+          onSuccess();
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> signup({
@@ -54,7 +63,7 @@ class AuthService {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
-        path: '/api/users',
+        path: '/api/users/signup',
         body: {
           "firstName": firstName,
           "lastName": lastName,
@@ -110,7 +119,8 @@ class AuthService {
 
           var userData = {
             "_id": decoded['_id'],
-            "name": decoded['name'],
+            "firstName": decoded['firstName'],
+            "lastName": decoded['lastName'],
             "email": decoded['email'],
             "token": token,
           };

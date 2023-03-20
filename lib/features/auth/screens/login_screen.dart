@@ -22,6 +22,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -35,7 +36,11 @@ class LoginScreen extends StatelessWidget {
                   textSize: 24,
                 ),
                 const SizedBox(height: 100),
-                AppTextField(controller: emailController, hintText: 'Email'),
+                AppTextField(
+                  controller: emailController,
+                  textInputType: TextInputType.emailAddress,
+                  hintText: 'Email',
+                ),
                 const SizedBox(height: 20),
                 AppTextField(
                   controller: passwordController,
@@ -50,6 +55,7 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 AppButton(
                   onPressed: () async {
+                    if (!verifyFields()) return;
                     await authService.login(
                       email: emailController.text,
                       password: passwordController.text,
@@ -126,5 +132,15 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool verifyFields() {
+    if (emailController.text.isEmpty) {
+      return false;
+    }
+    if (passwordController.text.isEmpty) {
+      return false;
+    }
+    return true;
   }
 }
