@@ -30,7 +30,7 @@ class AuthService {
 
       if (!context.mounted) return;
 
-      if (res.body.isEmpty) {
+      if (json.decode(res.body).isEmpty) {
         showSnackBar(context, "Please check your credentials");
         return;
       }

@@ -10,13 +10,26 @@ import '../../../constants/styles.dart';
 import '../../home/screens/home_screen.dart';
 import '../service/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
 
   final authService = AuthService();
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,21 +67,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 AppButton(
-                  onPressed: () async {
-                    if (!verifyFields()) return;
-                    await authService.login(
-                      email: emailController.text,
-                      password: passwordController.text,
-                      context: context,
-                      onSuccess: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                        );
-                      },
-                    );
-                  },
+                  onPressed: () => _login(context),
                   height: 50,
                   text: "Login",
                   wrapRow: true,
@@ -131,6 +130,23 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _login(BuildContext context) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (!verifyFields()) return;
+    await authService.login(
+      email: emailController.text,
+      password: passwordController.text,
+      context: context,
+      onSuccess: () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      },
     );
   }
 
