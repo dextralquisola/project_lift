@@ -19,7 +19,6 @@ class AuthService {
   }) async {
     // function here
     try {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
         path: '/api/users/login',
         body: {
@@ -41,7 +40,6 @@ class AuthService {
         onSuccess: () async {
           await _loginMethod(
             context: context,
-            userProvider: userProvider,
             res: res,
           );
           onSuccess();
@@ -61,7 +59,6 @@ class AuthService {
     required Function() onSuccess,
   }) async {
     try {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
         path: '/api/users/signup',
         body: {
@@ -80,10 +77,10 @@ class AuthService {
         onSuccess: () async {
           await _loginMethod(
             context: context,
-            userProvider: userProvider,
             res: res,
             isSignup: true,
           );
+
           onSuccess();
         },
       );
@@ -135,27 +132,29 @@ class AuthService {
 
   Future<void> _loginMethod({
     required BuildContext context,
-    required UserProvider userProvider,
     required http.Response res,
     bool isSignup = false,
   }) async {
-    var decoded = json.decode(res.body);
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var decoded = json.decode(res.body);
 
-    var userData = {
-      "_id": decoded['user']['_id'],
-      "firstName": decoded['user']['firstName'],
-      "lastName": decoded['user']['lastName'],
-      "email": decoded['user']['email'],
-      "token": decoded['token'],
-    };
+      var userData = {
+        "_id": decoded['user']['_id'],
+        "firstName": decoded['user']['firstName'],
+        "lastName": decoded['user']['lastName'],
+        "email": decoded['user']['email'],
+        "token": decoded['token'],
+      };
 
-    userProvider.setUserFromMap(userData);
+      userProvider.setUserFromMap(userData);
 
-    print("Token: ${decoded['token']}");
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', decoded['token']);
 
-    if (isSignup) showSnackBar(context, "Account created successfully");
-
-    var prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', decoded['token']);
+      if (isSignup) showSnackBar(context, "Account created successfully");
+    } catch (e) {
+      print(e);
+    }
   }
 }

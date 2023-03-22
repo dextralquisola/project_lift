@@ -42,6 +42,14 @@ class User {
     );
   }
 
+  void printUser(){
+    print('userId: $userId');
+    print('firstName: $firstName');
+    print('lastName: $lastName');
+    print('email: $email');
+    print('token: $token');
+  }
+
   factory User.emptyUser() {
     return User(
       userId: '',

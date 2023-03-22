@@ -22,7 +22,7 @@ class UserProvider with ChangeNotifier {
 
   Future<void> logout() async {
     _user = User.emptyUser();
-    
+
     var prefs = await SharedPreferences.getInstance();
     prefs.clear();
 

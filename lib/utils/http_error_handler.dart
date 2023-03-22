@@ -9,18 +9,17 @@ void httpErrorHandler({
   required BuildContext context,
   required VoidCallback onSuccess,
 }) {
-  switch (response.statusCode) {
-    case 200:
-      onSuccess();
-      break;
-    case 400:
-      showSnackBar(context, jsonDecode(response.body)['msg']);
-      break;
-    case 500:
-      showSnackBar(context, jsonDecode(response.body)['error']);
-      break;
-    default:
-      showSnackBar(context, response.body);
-      break;
+  if (response.statusCode >= 200 && response.statusCode < 300) {
+    onSuccess();
+    return;
+  } else if (response.statusCode >= 400 && response.statusCode < 500) {
+    showSnackBar(context, jsonDecode(response.body)['msg']);
+    return;
+  } else if (response.statusCode >= 500 && response.statusCode < 600) {
+    showSnackBar(context, jsonDecode(response.body)['error']);
+    return;
+  } else {
+    showSnackBar(context, "Something went wrong");
+    return;
   }
 }
