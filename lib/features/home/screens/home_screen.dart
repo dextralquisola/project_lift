@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:project_lift/features/auth/screens/login_screen.dart';
-import 'package:project_lift/widgets/app_button.dart';
+import 'package:project_lift/features/find_tutor/screens/find_tutor_screen.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int pageIndex = 0;
   var pages = [
-    Center(child: AppText(text: 'Home')),
-    Center(child: AppText(text: 'Messages')),
+    const FindTutorScreen(),
+    Center(child: AppText(text: 'Message')),
     Center(child: AppText(text: 'Profile')),
   ];
 
