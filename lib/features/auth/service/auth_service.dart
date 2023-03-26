@@ -10,6 +10,8 @@ import '../../../utils/http_utils.dart' as service;
 
 import 'package:http/http.dart' as http;
 
+import '../../../utils/socket_client.dart';
+
 class AuthService {
   Future<void> login({
     required String email,
@@ -123,6 +125,8 @@ class AuthService {
           };
 
           userProvider.setUserFromMap(userData);
+
+          SocketClient(userProvider.user.userId).socket!;
         },
       );
     } catch (e) {
@@ -151,6 +155,8 @@ class AuthService {
 
       var prefs = await SharedPreferences.getInstance();
       prefs.setString('token', decoded['token']);
+
+      SocketClient(userProvider.user.userId).socket!;
 
       if (isSignup) showSnackBar(context, "Account created successfully");
     } catch (e) {
