@@ -115,12 +115,12 @@ class AuthService {
         response: res,
         context: context,
         onSuccess: () async {
-          var decoded = json.decode(res.body);
-          decoded.addAll({'token': token});
-
-          userProvider.setUserFromMap(decoded);
-
-          SocketClient(userProvider.user.userId).socket!;
+          await _loginMethod(
+            context: context,
+            res: res,
+            isFromAutoLogin: true,
+            token: token,
+          );
         },
       );
     } catch (e) {
@@ -132,27 +132,35 @@ class AuthService {
     required BuildContext context,
     required http.Response res,
     bool isSignup = false,
+    bool isFromAutoLogin = false,
+    String token = "",
   }) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-      var decoded = json.decode(res.body);
+      var userData = json.decode(res.body);
 
-      var userData = {
-        "_id": decoded['user']['_id'],
-        "firstName": decoded['user']['firstName'],
-        "lastName": decoded['user']['lastName'],
-        "email": decoded['user']['email'],
-        "token": decoded['token'],
-      };
+      if (isFromAutoLogin) {
+        userData.addAll({'token': token});
+      } else {
+        userData = {
+          "_id": userData['user']['_id'],
+          "firstName": userData['user']['firstName'],
+          "lastName": userData['user']['lastName'],
+          "email": userData['user']['email'],
+          "token": userData['token'],
+        };
+      }
 
       userProvider.setUserFromMap(userData);
 
-      var prefs = await SharedPreferences.getInstance();
-      prefs.setString('token', decoded['token']);
+      if (isSignup) showSnackBar(context, "Account created successfully");
+
+      if (!isFromAutoLogin) {
+        var prefs = await SharedPreferences.getInstance();
+        prefs.setString('token', userData['token']);
+      }
 
       SocketClient(userProvider.user.userId).socket!;
-
-      if (isSignup) showSnackBar(context, "Account created successfully");
     } catch (e) {
       print(e);
     }
