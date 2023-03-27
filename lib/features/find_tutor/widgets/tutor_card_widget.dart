@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 
+import '../../../models/user.dart';
+
 class TutorCard extends StatelessWidget {
-  const TutorCard({super.key});
+  final User tutor;
+  const TutorCard({
+    super.key,
+    required this.tutor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,8 @@ class TutorCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _textBuilder("Dexter Jay Alquisola", true),
+                        _textBuilder(
+                            "${tutor.firstName} ${tutor.lastName}", true),
                         _textBuilder("BS Computer Science"),
                         _textBuilder("Specialization:"),
                         _textBuilder("Computer Programming 1-2"),

@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/find_tutor/widgets/background_cover.dart';
 import 'package:project_lift/widgets/app_text.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/tutors_provider.dart';
 import '../widgets/tutor_card_widget.dart';
 
 class FindTutorScreen extends StatefulWidget {
@@ -16,6 +18,8 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
   // spacing for title should be 26% of the biggest height of appbar
   @override
   Widget build(BuildContext context) {
+    final tutorsProvider = Provider.of<TutorProvider>(context);
+    final tutors = tutorsProvider.tutors;
     return SafeArea(
       child: Scaffold(
         body: NestedScrollView(
@@ -100,9 +104,9 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
             ),
           ],
           body: ListView.separated(
-            itemBuilder: (context, index) => const TutorCard(),
+            itemBuilder: (context, index) => TutorCard(tutor: tutors[index]),
             separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemCount: 30,
+            itemCount: tutors.length,
           ),
         ),
       ),

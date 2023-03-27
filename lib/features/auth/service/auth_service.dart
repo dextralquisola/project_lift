@@ -5,6 +5,8 @@ import 'package:project_lift/utils/http_error_handler.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../models/user.dart';
+import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/http_utils.dart' as service;
 
@@ -94,7 +96,6 @@ class AuthService {
   Future<void> fetchUser(BuildContext context) async {
     // function here
     try {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString('token');
 
@@ -123,6 +124,34 @@ class AuthService {
           );
         },
       );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchAllTutors(BuildContext context) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final tutorProvider = Provider.of<TutorProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/home/tutors',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+        },
+      );
+
+      if (!context.mounted) return;
+
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () {
+          final tutors = json.decode(res.body) as List<dynamic>;
+          tutorProvider.setTutorsFromJson(tutors);
+        },
+      );
+
     } catch (e) {
       print(e);
     }
@@ -159,6 +188,8 @@ class AuthService {
         var prefs = await SharedPreferences.getInstance();
         prefs.setString('token', userData['token']);
       }
+
+      await fetchAllTutors(context);
 
       SocketClient(userProvider.user.userId).socket!;
     } catch (e) {

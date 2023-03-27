@@ -6,5 +6,8 @@ class TutorProvider with ChangeNotifier {
 
   List<User> get tutors => _tutors;
 
-  void setTutorsFromJson(dynamic data) {}
+  void setTutorsFromJson(List<dynamic> tutors) {
+    _tutors = tutors.map((e) => User.fromMap(e)).toList();
+    notifyListeners();
+  }
 }
