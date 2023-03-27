@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/find_tutor/widgets/background_cover.dart';
 import 'package:project_lift/widgets/app_text.dart';
+
+import '../widgets/tutor_card_widget.dart';
 
 class FindTutorScreen extends StatefulWidget {
   const FindTutorScreen({super.key});
@@ -52,35 +55,43 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
                           ],
                         ),
                   titlePadding: const EdgeInsets.only(left: 10.0, bottom: 16.0),
-                  background: Column(
+                  background: Stack(
+                    fit: StackFit.expand,
                     children: [
-                      const SizedBox(height: 10.0),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 6.0, 16.0, 16.0),
-                        child: SizedBox(
-                          height: 36.0,
-                          width: double.infinity,
-                          child: CupertinoTextField(
-                            keyboardType: TextInputType.text,
-                            placeholder: 'Search for a tutor',
-                            placeholderStyle: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 14.0,
-                              fontFamily: 'Brutal',
-                            ),
-                            prefix: const Padding(
-                              padding: EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
-                              child: Icon(
-                                Icons.search,
-                                color: Colors.black54,
+                      const BackgroundCover(),
+                      Column(
+                        children: [
+                          const SizedBox(height: 10.0),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                16.0, 6.0, 16.0, 16.0),
+                            child: SizedBox(
+                              height: 36.0,
+                              width: double.infinity,
+                              child: CupertinoTextField(
+                                keyboardType: TextInputType.text,
+                                placeholder: 'Search for a tutor',
+                                placeholderStyle: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 14.0,
+                                  fontFamily: 'Brutal',
+                                ),
+                                prefix: const Padding(
+                                  padding:
+                                      EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              color: Colors.white,
-                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -89,9 +100,7 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
             ),
           ],
           body: ListView.separated(
-            itemBuilder: (context, index) => ListTile(
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) => const TutorCard(),
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemCount: 30,
           ),

@@ -100,6 +100,7 @@ class AuthService {
 
       if (token == null) return;
 
+      print("token: $token");
       var res = await service.requestApi(
         path: '/api/users/me',
         method: 'GET',
@@ -115,16 +116,9 @@ class AuthService {
         context: context,
         onSuccess: () async {
           var decoded = json.decode(res.body);
+          decoded.addAll({'token': token});
 
-          var userData = {
-            "_id": decoded['_id'],
-            "firstName": decoded['firstName'],
-            "lastName": decoded['lastName'],
-            "email": decoded['email'],
-            "token": token,
-          };
-
-          userProvider.setUserFromMap(userData);
+          userProvider.setUserFromMap(decoded);
 
           SocketClient(userProvider.user.userId).socket!;
         },
