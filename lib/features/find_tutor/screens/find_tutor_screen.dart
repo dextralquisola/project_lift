@@ -16,6 +16,16 @@ class FindTutorScreen extends StatefulWidget {
 
 class _FindTutorScreenState extends State<FindTutorScreen> {
   // spacing for title should be 26% of the biggest height of appbar
+  var _scrollControllerTutors = ScrollController();
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollControllerTutors = ScrollController(initialScrollOffset: 5.0)
+      ..addListener(_scrollListenerTutors);
+  }
+
   @override
   Widget build(BuildContext context) {
     final tutorsProvider = Provider.of<TutorProvider>(context);
@@ -104,6 +114,7 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
             ),
           ],
           body: ListView.separated(
+            controller: _scrollControllerTutors,
             itemBuilder: (context, index) => TutorCard(tutor: tutors[index]),
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemCount: tutors.length,
@@ -111,5 +122,23 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
         ),
       ),
     );
+  }
+
+  _scrollListenerTutors() async {
+    if (_scrollControllerTutors.offset >=
+            _scrollControllerTutors.position.maxScrollExtent &&
+        !_scrollControllerTutors.position.outOfRange) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      if (_isLoading) {
+        //call fetch tutors
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

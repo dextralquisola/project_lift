@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
 import 'package:project_lift/utils/http_error_handler.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -129,34 +130,6 @@ class AuthService {
     }
   }
 
-  Future<void> fetchAllTutors(BuildContext context) async {
-    try {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      final tutorProvider = Provider.of<TutorProvider>(context, listen: false);
-      var res = await service.requestApi(
-        path: '/home/tutors',
-        method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-        },
-      );
-
-      if (!context.mounted) return;
-
-      httpErrorHandler(
-        response: res,
-        context: context,
-        onSuccess: () {
-          final tutors = json.decode(res.body) as List<dynamic>;
-          tutorProvider.setTutorsFromJson(tutors);
-        },
-      );
-
-    } catch (e) {
-      print(e);
-    }
-  }
-
   Future<void> _loginMethod({
     required BuildContext context,
     required http.Response res,
@@ -189,7 +162,7 @@ class AuthService {
         prefs.setString('token', userData['token']);
       }
 
-      await fetchAllTutors(context);
+      await TutorService().fetchTutors(context);
 
       SocketClient(userProvider.user.userId).socket!;
     } catch (e) {

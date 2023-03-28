@@ -4,10 +4,28 @@ import 'package:project_lift/models/user.dart';
 class TutorProvider with ChangeNotifier {
   List<User> _tutors = [];
 
-  List<User> get tutors => _tutors;
+  int _currentPage = 1;
+  int _totalPages = 0;
 
-  void setTutorsFromJson(List<dynamic> tutors) {
-    _tutors = tutors.map((e) => User.fromMap(e)).toList();
+  List<User> get tutors => _tutors;
+  int get currentPage => _currentPage;
+
+  void setTutorsFromJson(dynamic data) {
+    _totalPages = data['totalPages'];
+
+    if (_currentPage > _totalPages) {
+      _currentPage--;
+      return;
+    }
+
+    List<dynamic> tutors = data['tutors'];
+
+    var newTutors = tutors.map((e) => User.fromMap(e)).toList();
+    //_currentPage = data['currentPage'];
+
+    _tutors = [..._tutors, ...newTutors];
+    _currentPage++;
+
     notifyListeners();
   }
 }
