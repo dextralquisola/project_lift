@@ -21,10 +21,9 @@ class TutorProvider with ChangeNotifier {
     List<dynamic> tutors = data['tutors'];
 
     var newTutors = tutors.map((e) => User.fromMap(e)).toList();
-    //_currentPage = data['currentPage'];
-
-    _tutors = [..._tutors, ...newTutors];
+    // _currentPage = data['currentPage'];
     _currentPage++;
+    _tutors = [..._tutors, ...newTutors];
 
     notifyListeners();
   }

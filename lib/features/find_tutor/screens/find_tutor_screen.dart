@@ -5,6 +5,7 @@ import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/tutors_provider.dart';
+import '../service/tutor_service.dart';
 import '../widgets/tutor_card_widget.dart';
 
 class FindTutorScreen extends StatefulWidget {
@@ -134,6 +135,7 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
 
       if (_isLoading) {
         //call fetch tutors
+        await TutorService().fetchTutors(context);
       }
 
       setState(() {
