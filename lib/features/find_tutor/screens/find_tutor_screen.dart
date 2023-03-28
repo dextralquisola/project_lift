@@ -34,6 +34,7 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
     return SafeArea(
       child: Scaffold(
         body: NestedScrollView(
+          controller: _scrollControllerTutors,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
               expandedHeight: 240,
@@ -115,7 +116,6 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
             ),
           ],
           body: ListView.separated(
-            controller: _scrollControllerTutors,
             itemBuilder: (context, index) => TutorCard(tutor: tutors[index]),
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemCount: tutors.length,
