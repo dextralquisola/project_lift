@@ -15,14 +15,23 @@ class FindTutorScreen extends StatefulWidget {
   State<FindTutorScreen> createState() => _FindTutorScreenState();
 }
 
-class _FindTutorScreenState extends State<FindTutorScreen> {
+class _FindTutorScreenState extends State<FindTutorScreen>
+    with SingleTickerProviderStateMixin {
   // spacing for title should be 26% of the biggest height of appbar
   var _scrollControllerTutors = ScrollController();
   bool _isLoading = false;
 
+  late AnimationController _animationController;
+  late Animation _animation;
+
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _animation = Tween(begin: 1, end: 0).animate(_animationController);
     _scrollControllerTutors = ScrollController(initialScrollOffset: 5.0)
       ..addListener(_scrollListenerTutors);
   }
@@ -43,6 +52,11 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
               pinned: true,
               flexibleSpace: LayoutBuilder(builder: (context, constraints) {
                 var top = constraints.biggest.height;
+                if (constraints.biggest.height == 56) {
+                  _animationController.reverse();
+                } else if (constraints.biggest.height > 76) {
+                  _animationController.forward();
+                }
                 return FlexibleSpaceBar(
                   title: top ==
                               MediaQuery.of(context).padding.top +
@@ -72,7 +86,8 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
                         ),
                   titlePadding: const EdgeInsets.only(left: 10.0, bottom: 16.0),
                   background: Stack(
-                    fit: StackFit.expand,
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.bottomCenter,
                     children: [
                       const BackgroundCover(),
                       Column(
@@ -116,7 +131,28 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
             ),
           ],
           body: ListView.separated(
-            itemBuilder: (context, index) => TutorCard(tutor: tutors[index]),
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: FadeTransition(
+                        opacity: _animationController,
+                        child: const SizedBox(
+                          height: 75,
+                          child: BackgroundCover(isBottomBg: true),
+                        ),
+                      ),
+                    ),
+                    TutorCard(tutor: tutors[index])
+                  ],
+                );
+              }
+              return TutorCard(tutor: tutors[index]);
+            },
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemCount: tutors.length,
           ),

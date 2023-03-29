@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class BackgroundCover extends StatelessWidget {
-  const BackgroundCover({Key? key}) : super(key: key);
+  final bool isBottomBg;
+  const BackgroundCover({
+    Key? key,
+    this.isBottomBg = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +13,9 @@ class BackgroundCover extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         SizedBox(
-          child: Image.asset('assets/images/bg_image.png', fit: BoxFit.cover),
+          child: isBottomBg
+              ? Image.asset('assets/images/bottom_bg.png', fit: BoxFit.cover)
+              : Image.asset('assets/images/bg_image.png', fit: BoxFit.cover),
         ),
         SizedBox(
           child:
