@@ -42,6 +42,25 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        constraints: const BoxConstraints(),
+                        onPressed: () {},
+                        icon:
+                            const Icon(Icons.exit_to_app, color: Colors.white),
+                      ),
+                      IconButton(
+                        constraints: const BoxConstraints(),
+                        onPressed: () {},
+                        icon: const Icon(Icons.more_vert, color: Colors.white),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:project_lift/features/find_tutor/screens/find_tutor_screen.dart';
 import 'package:project_lift/features/profile/screens/profile_screen.dart';
+import 'package:project_lift/features/study_pool/screens/study_pool_screen.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int pageIndex = 0;
   var pages = [
     const FindTutorScreen(),
-    Center(child: AppText(text: 'Message')),
+    const StudyPoolScreen(),
     const ProfileScreen(),
   ];
 
@@ -49,9 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.mail_outline,
+                Icons.group,
               ),
-              label: 'Messages',
+              label: 'Chat Room',
             ),
             BottomNavigationBarItem(
               icon: Icon(
