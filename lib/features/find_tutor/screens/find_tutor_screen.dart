@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/find_tutor/widgets/background_cover.dart';
+import 'package:project_lift/widgets/background_cover.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 

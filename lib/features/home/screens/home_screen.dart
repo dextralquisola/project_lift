@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:project_lift/features/find_tutor/screens/find_tutor_screen.dart';
+import 'package:project_lift/features/profile/screens/profile_screen.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var pages = [
     const FindTutorScreen(),
     Center(child: AppText(text: 'Message')),
-    Center(child: AppText(text: 'Profile')),
+    const ProfileScreen(),
   ];
 
   @override
