@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/widgets/app_text.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/user_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/background_cover.dart';
 
@@ -9,6 +11,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -50,7 +53,9 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       IconButton(
                         constraints: const BoxConstraints(),
-                        onPressed: () {},
+                        onPressed: () async {
+                          await userProvider.logout();
+                        },
                         icon:
                             const Icon(Icons.exit_to_app, color: Colors.white),
                       ),

@@ -58,6 +58,11 @@ class StudyPoolCard extends StatelessWidget {
                 AppText(text: "Tutor: Dexter Jay Alquisola"),
                 AppText(text: "Tutees: 5/10"),
                 const SizedBox(height: 10),
+                AppText(text: "Description:", fontWeight: FontWeight.bold,),
+                AppText(
+                    text:
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc."),
+                const SizedBox(height: 20),
                 AppButton(
                   onPressed: () {
                     Navigator.of(context).pop();
