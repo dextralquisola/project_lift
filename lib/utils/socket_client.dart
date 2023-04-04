@@ -3,13 +3,17 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class SocketClient {
   io.Socket? socket;
-  late String userId;
+  late String authToken;
   static SocketClient? _instance;
 
-  SocketClient._internal(String userId) {
+  SocketClient._internal(String authToken) {
     socket = io.io(
       baseServerAddress,
-      io.OptionBuilder().setTransports(['websocket']).build(),
+      io.OptionBuilder().setTransports(['websocket']).setQuery(
+        {
+          'authToken': authToken,
+        },
+      ).build(),
     );
 
     // socket!.connect();
@@ -18,8 +22,8 @@ class SocketClient {
     socket!.onDisconnect((data) => print('Socket.IO server disconnected'));
   }
 
-  factory SocketClient(String userId) {
-    _instance = SocketClient._internal(userId);
+  factory SocketClient(String authToken) {
+    _instance = SocketClient._internal(authToken);
     return _instance!;
   }
 

@@ -6,8 +6,6 @@ import 'package:project_lift/utils/http_error_handler.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../models/user.dart';
-import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/http_utils.dart' as service;
 
@@ -154,6 +152,7 @@ class AuthService {
       }
 
       userProvider.setUserFromMap(userData);
+      userProvider.user.printUser();
 
       if (isSignup) showSnackBar(context, "Account created successfully");
 
@@ -164,7 +163,8 @@ class AuthService {
 
       await TutorService().fetchTutors(context);
 
-      SocketClient(userProvider.user.userId).socket!;
+      SocketClient(userProvider.user.token).socket!;
+
     } catch (e) {
       print(e);
     }
