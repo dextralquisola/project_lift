@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:project_lift/utils/socket_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
@@ -7,7 +8,7 @@ class UserProvider with ChangeNotifier {
   User _user = User.emptyUser();
 
   User get user => _user;
-
+  bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '';
 
   void setUserFromModel(User user) {
@@ -22,6 +23,8 @@ class UserProvider with ChangeNotifier {
 
   Future<void> logout() async {
     _user = User.emptyUser();
+
+    SocketClient.instance.disconnect();
 
     var prefs = await SharedPreferences.getInstance();
     prefs.clear();

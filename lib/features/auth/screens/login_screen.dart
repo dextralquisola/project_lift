@@ -141,11 +141,11 @@ class _LoginScreenState extends State<LoginScreen> {
       password: passwordController.text,
       context: context,
       onSuccess: () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-        );
+        // Navigator.of(context).pushReplacement(
+        //   MaterialPageRoute(
+        //     builder: (context) => const HomeScreen(),
+        //   ),
+        // );
       },
     );
   }

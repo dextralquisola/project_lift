@@ -6,6 +6,14 @@ class SocketClient {
   late String authToken;
   static SocketClient? _instance;
 
+  bool isSocketConnected() {
+    return socket!.connected;
+  }
+
+  void disconnect(){
+    socket!.disconnect();
+  }
+
   SocketClient._internal(String authToken) {
     socket = io.io(
       baseServerAddress,

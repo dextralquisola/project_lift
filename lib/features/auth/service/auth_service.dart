@@ -42,6 +42,7 @@ class AuthService {
         context: context,
         onSuccess: () async {
           await _loginMethod(
+            isFromLogin: true,
             context: context,
             res: res,
           );
@@ -132,9 +133,16 @@ class AuthService {
     required BuildContext context,
     required http.Response res,
     bool isSignup = false,
+    bool isFromLogin = false,
     bool isFromAutoLogin = false,
     String token = "",
   }) async {
+    /*
+      if else hell
+
+      improvement: make an enum and move the functions to seperate methods
+    */
+
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var userData = json.decode(res.body);
@@ -147,12 +155,21 @@ class AuthService {
           "firstName": userData['user']['firstName'],
           "lastName": userData['user']['lastName'],
           "email": userData['user']['email'],
+          "role": userData['user']['role'],
           "token": userData['token'],
         };
       }
 
+      if (isFromLogin) {
+        await TutorService().fetchTutors(context, userData['token']);
+      }
+
       userProvider.setUserFromMap(userData);
       userProvider.user.printUser();
+
+      if (!isFromLogin) {
+        await TutorService().fetchTutors(context);
+      }
 
       if (isSignup) showSnackBar(context, "Account created successfully");
 
@@ -161,10 +178,7 @@ class AuthService {
         prefs.setString('token', userData['token']);
       }
 
-      await TutorService().fetchTutors(context);
-
       SocketClient(userProvider.user.token).socket!;
-
     } catch (e) {
       print(e);
     }

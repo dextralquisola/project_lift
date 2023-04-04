@@ -10,7 +10,7 @@ import '../../../utils/http_error_handler.dart';
 import '../../../utils/http_utils.dart' as service;
 
 class TutorService {
-  Future<void> fetchTutors(BuildContext context) async {
+  Future<void> fetchTutors(BuildContext context, [String token = ""]) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final tutorProvider = Provider.of<TutorProvider>(context, listen: false);
@@ -18,7 +18,7 @@ class TutorService {
         path: '/home/tutors?page=${tutorProvider.currentPage}&limit=10',
         method: 'GET',
         headers: {
-          "Authorization": userProvider.user.token,
+          "Authorization": token != "" ? token : userProvider.user.token,
         },
       );
 

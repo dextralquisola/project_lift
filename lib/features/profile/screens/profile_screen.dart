@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/auth/screens/login_screen.dart';
+import 'package:project_lift/main.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
@@ -55,6 +57,11 @@ class ProfileScreen extends StatelessWidget {
                         constraints: const BoxConstraints(),
                         onPressed: () async {
                           await userProvider.logout();
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => MyApp(),
+                            ),
+                          );
                         },
                         icon:
                             const Icon(Icons.exit_to_app, color: Colors.white),
