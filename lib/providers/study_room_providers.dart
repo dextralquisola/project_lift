@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/models/study_room.dart';
 
-class StudyRoomProvider with ChangeNotifier{
+class StudyRoomProvider with ChangeNotifier {
   List<StudyRoom> _studyRooms = [];
 
   List<StudyRoom> get studyRooms => _studyRooms;
 
   void addStudyRoomFromJson(dynamic data) {
-    // _studyRooms.add(studyRoom);
+    List<dynamic> studyRooms = data['rooms'];
+
+    var newStudyRooms = studyRooms.map((e) => StudyRoom.fromMap(e)).toList();
+    _studyRooms = [..._studyRooms, ...newStudyRooms];
+
     notifyListeners();
   }
 }

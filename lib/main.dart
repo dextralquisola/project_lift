@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/auth/screens/login_screen.dart';
+import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/providers/tutors_provider.dart';
 import 'package:project_lift/providers/user_provider.dart';
 import 'package:project_lift/widgets/splash_screen.dart';
@@ -18,6 +19,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => TutorProvider()),
+        ChangeNotifierProvider(create: (_) => StudyRoomProvider()),
       ],
       child: MyApp(),
     ),

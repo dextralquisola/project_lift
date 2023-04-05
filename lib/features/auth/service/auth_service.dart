@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
+import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/utils/http_error_handler.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -169,6 +170,7 @@ class AuthService {
 
       if (!isFromLogin) {
         await TutorService().fetchTutors(context);
+        await StudyPoolService().fetchStudyRooms(context);
       }
 
       if (isSignup) showSnackBar(context, "Account created successfully");

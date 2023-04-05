@@ -4,6 +4,7 @@ import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/study_pool/widgets/study_card_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/study_room_providers.dart';
 import '../../../providers/user_provider.dart';
 
 class StudyPoolScreen extends StatelessWidget {
@@ -12,6 +13,8 @@ class StudyPoolScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final studyRoomProvider = Provider.of<StudyRoomProvider>(context);
+    final studyRooms = studyRoomProvider.studyRooms;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Study Pool'),
@@ -24,9 +27,10 @@ class StudyPoolScreen extends StatelessWidget {
         backgroundColor: primaryColor,
       ),
       body: ListView.separated(
-        itemBuilder: (context, index) => const StudyPoolCard(),
+        itemBuilder: (context, index) =>
+            StudyPoolCard(studyRoom: studyRooms[index]),
         separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemCount: 10,
+        itemCount: studyRooms.length,
       ),
       floatingActionButton: userProvider.isTutor
           ? SpeedDial(

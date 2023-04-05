@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/models/study_room.dart';
 
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_text.dart';
 
 class StudyPoolCard extends StatelessWidget {
-  const StudyPoolCard({super.key});
+  final StudyRoom studyRoom;
+  const StudyPoolCard({
+    super.key,
+    required this.studyRoom,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +31,8 @@ class StudyPoolCard extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: AppText(text: 'Computer Programming 1'),
-                  subtitle: AppText(text: 'Dexter Jay Alquisola'),
+                  title: AppText(text: studyRoom.roomName),
+                  subtitle: AppText(text: studyRoom.roomOwner),
                   trailing: const Icon(Icons.more_vert),
                 ),
               ],
@@ -58,7 +63,10 @@ class StudyPoolCard extends StatelessWidget {
                 AppText(text: "Tutor: Dexter Jay Alquisola"),
                 AppText(text: "Tutees: 5/10"),
                 const SizedBox(height: 10),
-                AppText(text: "Description:", fontWeight: FontWeight.bold,),
+                AppText(
+                  text: "Description:",
+                  fontWeight: FontWeight.bold,
+                ),
                 AppText(
                     text:
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc."),

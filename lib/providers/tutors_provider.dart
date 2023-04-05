@@ -5,18 +5,20 @@ class TutorProvider with ChangeNotifier {
   List<User> _tutors = [];
 
   int _currentPage = 1;
-  int _totalPages = 0;
+  int _totalPages = 1;
 
   List<User> get tutors => _tutors;
   int get currentPage => _currentPage;
 
   void setTutorsFromJson(dynamic data) {
-    _totalPages = data['totalPages'];
-
     if (_currentPage > _totalPages) {
-      _currentPage--;
       return;
     }
+
+    print('total pages: $_totalPages');
+    print('current page: $_currentPage');
+
+    _totalPages = data['totalPages'];
 
     List<dynamic> tutors = data['tutors'];
 
@@ -25,6 +27,7 @@ class TutorProvider with ChangeNotifier {
     _currentPage++;
     _tutors = [..._tutors, ...newTutors];
 
+    print('total tutors: ${_tutors.length}');
     notifyListeners();
   }
 }

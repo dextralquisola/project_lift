@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/auth/screens/login_screen.dart';
 import 'package:project_lift/main.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +13,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final user = userProvider.user;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -85,7 +85,7 @@ class ProfileScreen extends StatelessWidget {
               //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 AppText(
-                    text: "John Doe",
+                    text: "${user.firstName} ${user.lastName}",
                     textSize: 24,
                     fontWeight: FontWeight.bold),
                 const SizedBox(height: 50),
