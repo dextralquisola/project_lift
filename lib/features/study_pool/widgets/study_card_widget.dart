@@ -69,7 +69,7 @@ class StudyPoolCard extends StatelessWidget {
                 ),
                 AppText(
                     text:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc."),
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc."),
                 const SizedBox(height: 20),
                 AppButton(
                   onPressed: () {

@@ -5,7 +5,6 @@ import 'package:project_lift/features/study_pool/screens/create_room_screen.dart
 import 'package:project_lift/features/study_pool/widgets/study_card_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constants/constants.dart';
 import '../../../providers/study_room_providers.dart';
 import '../../../providers/user_provider.dart';
 import '../service/study_pool_service.dart';
