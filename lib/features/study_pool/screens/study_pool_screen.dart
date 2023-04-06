@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:project_lift/constants/styles.dart';
+import 'package:project_lift/features/study_pool/screens/create_room_screen.dart';
 import 'package:project_lift/features/study_pool/widgets/study_card_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../../constants/constants.dart';
 import '../../../providers/study_room_providers.dart';
 import '../../../providers/user_provider.dart';
+import '../service/study_pool_service.dart';
 
 class StudyPoolScreen extends StatelessWidget {
   const StudyPoolScreen({super.key});
@@ -15,6 +18,7 @@ class StudyPoolScreen extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context);
     final studyRoomProvider = Provider.of<StudyRoomProvider>(context);
     final studyRooms = studyRoomProvider.studyRooms;
+    final studyPoolService = StudyPoolService();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Study Pool'),
@@ -41,7 +45,13 @@ class StudyPoolScreen extends StatelessWidget {
                 SpeedDialChild(
                   child: const Icon(Icons.add),
                   label: 'Create Study Room',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CreateStudyRoomScreen(),
+                      ),
+                    );
+                  },
                 ),
                 SpeedDialChild(
                   child: const Icon(Icons.list),

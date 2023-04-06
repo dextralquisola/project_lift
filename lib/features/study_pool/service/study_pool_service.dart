@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:project_lift/constants/constants.dart';
-import 'package:project_lift/utils/http_error_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/study_room_providers.dart';
@@ -20,6 +19,7 @@ class StudyPoolService {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
+      
       var res = await service.requestApi(
         path: '/api/studyroom/create',
         headers: {
@@ -34,7 +34,7 @@ class StudyPoolService {
 
       if (res.statusCode == 200) {
         // success
-        studyRoomProvider.addStudyRoomFromJson(json.decode(res.body));
+        studyRoomProvider.addSingleStudyRoom(json.decode(res.body));
       } else {
         // error
       }
