@@ -19,4 +19,9 @@ class StudyRoomProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  void clearStudyRooms() {
+    _studyRooms = [];
+    notifyListeners();
+  }
 }

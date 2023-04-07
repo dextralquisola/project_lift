@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/main.dart';
+import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/background_cover.dart';
@@ -13,6 +15,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
+    final studyPoolProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
     final user = userProvider.user;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -57,6 +62,8 @@ class ProfileScreen extends StatelessWidget {
                         constraints: const BoxConstraints(),
                         onPressed: () async {
                           await userProvider.logout();
+                          tutorsProvider.clearTutors();
+                          studyPoolProvider.clearStudyRooms();
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => MyApp(),

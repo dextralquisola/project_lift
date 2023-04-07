@@ -180,7 +180,8 @@ class AuthService {
         prefs.setString('token', userData['token']);
       }
 
-      SocketClient(userProvider.user.token).socket!;
+      SocketClient(userProvider.user.token).socket!.connect();
+      
     } catch (e) {
       print(e);
     }

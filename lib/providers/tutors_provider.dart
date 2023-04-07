@@ -30,4 +30,11 @@ class TutorProvider with ChangeNotifier {
     print('total tutors: ${_tutors.length}');
     notifyListeners();
   }
+
+  void clearTutors() {
+    _tutors = [];
+    _currentPage = 1;
+    _totalPages = 1;
+    notifyListeners();
+  }
 }
