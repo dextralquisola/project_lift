@@ -186,11 +186,19 @@ class AuthService {
         //fetch the chatroom data
         print(chatRoomRes.body);
         currentRoomProvider.setStudyRoomFromJson(json.decode(chatRoomRes.body));
-        currentRoomProvider.studyRoom.printRoom();  
-       
-        print("chatROomID: ${currentRoomProvider.studyRoom.roomId}");
-        socket.emit(
-            'join-room', {'roomId': currentRoomProvider.studyRoom.roomId});
+        currentRoomProvider.studyRoom.printRoom();
+
+        var joinResRoom = await service.requestApi(
+          path: '/api/studyroom/join/${currentRoomProvider.studyRoom.roomId}}',
+          method: 'POST',
+          headers: {
+            "Authorization": userProvider.user.token,
+          },
+        );
+
+        // print("chatROomID: ${currentRoomProvider.studyRoom.roomId}");
+        // socket.emit(
+        //     'join-room', {'roomId': currentRoomProvider.studyRoom.roomId});
       }
 
       if (!isFromLogin) {
