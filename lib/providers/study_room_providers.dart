@@ -16,7 +16,7 @@ class StudyRoomProvider with ChangeNotifier {
 
     var newStudyRooms = studyRooms.map((e) => StudyRoom.fromMap(e)).toList();
     _studyRooms = [..._studyRooms, ...newStudyRooms];
-
+    print("Study rooms: ${_studyRooms.length}}");
     notifyListeners();
   }
 

@@ -19,7 +19,7 @@ class StudyPoolService {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
-      
+
       var res = await service.requestApi(
         path: '/api/studyroom/create',
         headers: {
@@ -49,7 +49,7 @@ class StudyPoolService {
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
       var res = await service.requestApi(
-        path: '/api/studyroom',
+        path: '/api/studyroom/public',
         method: 'GET',
         headers: {
           'Authorization': userProvider.user.token,
@@ -60,7 +60,7 @@ class StudyPoolService {
         // success
         studyRoomProvider.addStudyRoomFromJson(json.decode(res.body));
       } else {
-        // error
+        print("ERROR: ${res.statusCode}");
       }
     } catch (e) {
       print(e);

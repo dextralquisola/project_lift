@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
@@ -7,6 +8,7 @@ import 'package:project_lift/utils/http_error_handler.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/http_utils.dart' as service;
 
@@ -146,6 +148,8 @@ class AuthService {
 
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       var userData = json.decode(res.body);
 
       if (isFromAutoLogin) {
@@ -168,10 +172,32 @@ class AuthService {
       userProvider.setUserFromMap(userData);
       userProvider.user.printUser();
 
+      var socket = SocketClient(userProvider.user.token).socket!.connect();
+
+      var chatRoomRes = await service.requestApi(
+        path: '/api/studyroom/user-room',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+        },
+      );
+
+      if (chatRoomRes.statusCode != 404 && chatRoomRes.statusCode == 200) {
+        //fetch the chatroom data
+        print(chatRoomRes.body);
+        currentRoomProvider.setStudyRoomFromJson(json.decode(chatRoomRes.body));
+        currentRoomProvider.studyRoom.printRoom();  
+       
+        print("chatROomID: ${currentRoomProvider.studyRoom.roomId}");
+        socket.emit(
+            'join-room', {'roomId': currentRoomProvider.studyRoom.roomId});
+      }
+
       if (!isFromLogin) {
         await TutorService().fetchTutors(context);
-        await StudyPoolService().fetchStudyRooms(context);
       }
+
+      await StudyPoolService().fetchStudyRooms(context);
 
       if (isSignup) showSnackBar(context, "Account created successfully");
 
@@ -179,9 +205,6 @@ class AuthService {
         var prefs = await SharedPreferences.getInstance();
         prefs.setString('token', userData['token']);
       }
-
-      SocketClient(userProvider.user.token).socket!.connect();
-      
     } catch (e) {
       print(e);
     }
