@@ -7,23 +7,31 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   StudyRoom _studyRoom = StudyRoom.empty();
 
   StudyRoom get studyRoom => _studyRoom;
-  List<Message> get messages => _studyRoom.messages;
+  List<Message> get messages => _studyRoom.messages.reversed.toList();
 
   bool get isEmpty => _studyRoom.roomId.isEmpty;
 
-  void addMessage(Message message) {
-    _studyRoom.messages.add(message);
+  void setMessagesFromJson(dynamic data) {
+    var messages = List<Message>.from(data.map((x) => Message.fromMap(x)));
+    _studyRoom = _studyRoom.copyWith(messages: messages);
     notifyListeners();
   }
 
   void setStudyRoomFromJson(dynamic data) {
-    var studyRoom = StudyRoom.fromMap(data, true);
+    var studyRoom = StudyRoom.fromMap(data);
     _studyRoom = studyRoom;
     notifyListeners();
   }
 
   void leaveStudyRoom() {
     _studyRoom = StudyRoom.empty();
+    notifyListeners();
+  }
+
+  void addMessage(dynamic data) {
+    var message = Message.fromMap(data, true);
+    _studyRoom =
+        _studyRoom.copyWith(messages: [..._studyRoom.messages, message]);
     notifyListeners();
   }
 }

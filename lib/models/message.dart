@@ -5,12 +5,14 @@ class Message {
   final String roomId;
   final String userId;
   final String message;
+  final String createdAt;
 
   Message({
     required this.messageId,
     required this.roomId,
     required this.userId,
     required this.message,
+    this.createdAt = '',
   });
 
   Map<String, dynamic> toMap() {
@@ -24,12 +26,13 @@ class Message {
     return result;
   }
 
-  factory Message.fromMap(Map<String, dynamic> map) {
+  factory Message.fromMap(Map<String, dynamic> map, [bool isFromAppSend = false]) {
     return Message(
-      messageId: map['messageId'] ?? '',
+      messageId: map['_id'] ?? '',
       roomId: map['roomId'] ?? '',
-      userId: map['userId'] ?? '',
+      userId: isFromAppSend ? map['userId'] : map['userId']['_id'] ?? '',
       message: map['message'] ?? '',
+      createdAt: map['createdAt'] ?? '',
     );
   }
 

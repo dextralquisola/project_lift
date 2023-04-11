@@ -41,7 +41,23 @@ class StudyRoom {
     );
   }
 
-  void printRoom(){
+  StudyRoom copyWith({
+    String? roomId,
+    String? roomName,
+    String? roomOwner,
+    List<Message>? messages,
+    List<Map<String, dynamic>>? participants,
+  }) {
+    return StudyRoom(
+      roomId: roomId ?? this.roomId,
+      messages: messages ?? this.messages,
+      participants: participants ?? this.participants,
+      roomName: roomName ?? this.roomName,
+      roomOwner: roomOwner ?? this.roomOwner,
+    );
+  }
+
+  void printRoom() {
     print("Room ID: $roomId");
     print("Room Name: $roomName");
     print("Room Owner: $roomOwner");

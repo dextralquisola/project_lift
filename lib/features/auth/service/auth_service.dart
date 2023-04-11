@@ -185,20 +185,44 @@ class AuthService {
       if (chatRoomRes.statusCode != 404 && chatRoomRes.statusCode == 200) {
         //fetch the chatroom data
         print(chatRoomRes.body);
+
         currentRoomProvider.setStudyRoomFromJson(json.decode(chatRoomRes.body));
         currentRoomProvider.studyRoom.printRoom();
 
         var joinResRoom = await service.requestApi(
-          path: '/api/studyroom/join/${currentRoomProvider.studyRoom.roomId}}',
+          path: '/api/studyroom/join/${currentRoomProvider.studyRoom.roomId}',
           method: 'POST',
           headers: {
             "Authorization": userProvider.user.token,
           },
         );
 
-        // print("chatROomID: ${currentRoomProvider.studyRoom.roomId}");
-        // socket.emit(
-        //     'join-room', {'roomId': currentRoomProvider.studyRoom.roomId});
+        if (joinResRoom.statusCode == 200) {
+          var resMessages = await service.requestApi(
+            path:
+                '/api/studyroom/messages/${currentRoomProvider.studyRoom.roomId}',
+            method: 'GET',
+            headers: {
+              "Authorization": userProvider.user.token,
+            },
+          );
+          print("messages");
+          print(resMessages.body);
+
+          if (resMessages.statusCode == 200) {
+
+            var messages = json.decode(resMessages.body);
+            currentRoomProvider.setMessagesFromJson(messages);
+            
+            socket.emit('join-room', {
+              'roomId': currentRoomProvider.studyRoom.roomId,
+            });
+          }
+
+          print("joined room");
+        } else {
+          print("failed to join room");
+        }
       }
 
       if (!isFromLogin) {

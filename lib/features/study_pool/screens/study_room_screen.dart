@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/styles.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
+import '../service/study_pool_service.dart';
 
 class CurrentRoomScreen extends StatefulWidget {
   const CurrentRoomScreen({super.key});
@@ -19,9 +19,12 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final studyRoomProvider = Provider.of<CurrentStudyRoomProvider>(context);
-    final chats = studyRoomProvider.messages;
+    final currentStudyRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context);
+    final chats = currentStudyRoomProvider.messages;
     final user = userProvider.user;
+
+    final studyRoomService = StudyPoolService();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Study Room'),
@@ -56,7 +59,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                               Text(message.message),
                               Text(
                                 DateFormat('hh:mm a').format(
-                                  DateTime.parse("").toLocal(),
+                                  DateTime.parse(message.createdAt).toLocal(),
                                 ),
                                 style: Theme.of(context).textTheme.caption,
                               ),
@@ -92,9 +95,15 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_messageInputController.text.trim().isNotEmpty) {
-                        //_sendMessage();
+                        await studyRoomService.sendMessage(
+                          roomId: currentStudyRoomProvider.studyRoom.roomId,
+                          context: context,
+                          message: _messageInputController.text,
+                        );
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        _messageInputController.clear();
                       }
                     },
                     icon: const Icon(Icons.send),
