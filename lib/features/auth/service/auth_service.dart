@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/utils/http_error_handler.dart';
+import 'package:project_lift/utils/socket_listeners.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -173,6 +174,7 @@ class AuthService {
       userProvider.user.printUser();
 
       var socket = SocketClient(userProvider.user.token).socket!.connect();
+      SocketListeners().activateEventListeners(context);
 
       var chatRoomRes = await service.requestApi(
         path: '/api/studyroom/user-room',
@@ -210,10 +212,9 @@ class AuthService {
           print(resMessages.body);
 
           if (resMessages.statusCode == 200) {
-
             var messages = json.decode(resMessages.body);
             currentRoomProvider.setMessagesFromJson(messages);
-            
+
             socket.emit('join-room', {
               'roomId': currentRoomProvider.studyRoom.roomId,
             });

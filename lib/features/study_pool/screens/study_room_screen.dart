@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project_lift/features/study_pool/screens/pending_tutees_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/styles.dart';
@@ -29,6 +30,19 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
       appBar: AppBar(
         title: const Text('Study Room'),
         backgroundColor: primaryColor,
+        actions: [
+          if (user.userId == currentStudyRoomProvider.studyRoom.roomOwner)
+            IconButton(
+              onPressed: () async {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const PendingTuteesScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.pending_actions),
+            ),
+        ],
       ),
       body: Column(
         children: [
@@ -56,6 +70,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                             children: [
+                              Text(message.userId),
                               Text(message.message),
                               Text(
                                 DateFormat('hh:mm a').format(
