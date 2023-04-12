@@ -8,6 +8,9 @@ class CurrentStudyRoomProvider with ChangeNotifier {
 
   StudyRoom get studyRoom => _studyRoom;
   List<Message> get messages => _studyRoom.messages.reversed.toList();
+  List<Map<String, dynamic>> get pendingParticipants => _studyRoom.participants
+      .where((element) => element['status'] == 'pending')
+      .toList();
 
   bool get isEmpty => _studyRoom.roomId.isEmpty;
 

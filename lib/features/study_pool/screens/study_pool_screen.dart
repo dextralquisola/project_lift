@@ -21,6 +21,8 @@ class StudyPoolScreen extends StatelessWidget {
         Provider.of<CurrentStudyRoomProvider>(context);
     final studyRooms = studyRoomProvider.studyRooms;
 
+    print('studyRooms Length ${studyRooms.length}');
+
     return currentStudyRoomProvider.isEmpty
         ? Scaffold(
             appBar: AppBar(

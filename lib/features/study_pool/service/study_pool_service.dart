@@ -46,6 +46,7 @@ class StudyPoolService {
 
   Future<void> fetchStudyRooms(BuildContext context) async {
     try {
+      print("fetching study rooms called");
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
@@ -59,7 +60,7 @@ class StudyPoolService {
 
       if (res.statusCode == 200) {
         // success
-        studyRoomProvider.addStudyRoomFromJson(json.decode(res.body));
+        studyRoomProvider.addStudyRoomFromJson(json.decode(res.body), false);
       } else {
         print("ERROR: ${res.statusCode}");
       }

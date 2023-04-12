@@ -184,9 +184,8 @@ class AuthService {
         },
       );
 
-      if (chatRoomRes.statusCode != 404 && chatRoomRes.statusCode == 200) {
+      if (chatRoomRes.statusCode == 200 && chatRoomRes.statusCode != 404) {
         //fetch the chatroom data
-        print(chatRoomRes.body);
 
         currentRoomProvider.setStudyRoomFromJson(json.decode(chatRoomRes.body));
         currentRoomProvider.studyRoom.printRoom();
@@ -208,8 +207,6 @@ class AuthService {
               "Authorization": userProvider.user.token,
             },
           );
-          print("messages");
-          print(resMessages.body);
 
           if (resMessages.statusCode == 200) {
             var messages = json.decode(resMessages.body);

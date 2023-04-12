@@ -18,24 +18,35 @@ class StudyRoom {
   });
 
   factory StudyRoom.fromMap(Map<String, dynamic> map,
-      [bool isMapMessage = false]) {
+      [bool isMapMessage = false, bool isParticipantPopulated = true]) {
     return StudyRoom(
       roomId: map['_id'] ?? '',
-      messages: isMapMessage && map['messages'] != []
+      messages: isMapMessage
           ? List<Message>.from(
               map['messages']?.map(
                 (x) => Message.fromMap(x),
               ),
             )
           : [],
-      participants: List<Map<String, dynamic>>.from(
-        map['participants']?.map(
-          (x) => {
-            'userId': x['userId'],
-            'status': x['status'],
-          },
-        ),
-      ),
+      participants: isParticipantPopulated
+          ? List<Map<String, dynamic>>.from(
+              map['participants']?.map(
+                (x) => {
+                  'userId': x['userId']['_id'],
+                  'firstName': x['userId']['firstName'],
+                  'lastName': x['userId']['lastName'],
+                  'status': x['status'],
+                },
+              ),
+            )
+          : List<Map<String, dynamic>>.from(
+              map['participants']?.map(
+                (x) => {
+                  'userId': x['userId'],
+                  'status': x['status'],
+                },
+              ),
+            ),
       roomName: map['name'] ?? '',
       roomOwner: map['owner'] ?? '',
     );

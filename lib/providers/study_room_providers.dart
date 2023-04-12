@@ -11,12 +11,14 @@ class StudyRoomProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addStudyRoomFromJson(dynamic data) {
+  void addStudyRoomFromJson(dynamic data, bool isPopulatedParticipant) {
     List<dynamic> studyRooms = data['rooms'];
 
-    var newStudyRooms = studyRooms.map((e) => StudyRoom.fromMap(e)).toList();
+    var newStudyRooms = studyRooms
+        .map((e) => StudyRoom.fromMap(e, false, isPopulatedParticipant))
+        .toList();
     _studyRooms = [..._studyRooms, ...newStudyRooms];
-    print("Study rooms: ${_studyRooms.length}}");
+
     notifyListeners();
   }
 
