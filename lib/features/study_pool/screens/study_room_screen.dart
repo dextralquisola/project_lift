@@ -28,7 +28,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
     final studyRoomService = StudyPoolService();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Study Room'),
+        title: Text(currentStudyRoomProvider.studyRoom.roomName),
         backgroundColor: primaryColor,
         actions: [
           if (user.userId == currentStudyRoomProvider.studyRoom.roomOwner)

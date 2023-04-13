@@ -10,6 +10,7 @@ class SocketListeners {
 
   void activateEventListeners(BuildContext context) {
     _onMessageEvent(context);
+    _onParticipantJoinEvent(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -20,6 +21,16 @@ class SocketListeners {
       if (userProvider.user.userId != data['userId']) {
         currentRoomProvider.addMessage(data['message']);
       }
+    });
+  }
+
+  void _onParticipantJoinEvent(BuildContext context) {
+    final currentRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    _socket.on("new-pending-participant", (data) {
+      print("event fired new-pending-participant");
+      print(data);
+      currentRoomProvider.addParticipant(data);
     });
   }
 }

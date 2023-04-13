@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/models/study_room.dart';
 
 import '../../../widgets/app_button.dart';
@@ -6,10 +7,12 @@ import '../../../widgets/app_text.dart';
 
 class StudyPoolCard extends StatelessWidget {
   final StudyRoom studyRoom;
-  const StudyPoolCard({
+  StudyPoolCard({
     super.key,
     required this.studyRoom,
   });
+
+  final studyRoomService = StudyPoolService();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +75,9 @@ class StudyPoolCard extends StatelessWidget {
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc."),
                 const SizedBox(height: 20),
                 AppButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await studyRoomService.joinRoom(
+                        roomId: studyRoom.roomId, context: context);
                     Navigator.of(context).pop();
                   },
                   height: 50,

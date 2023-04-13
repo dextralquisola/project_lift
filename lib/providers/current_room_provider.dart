@@ -37,4 +37,11 @@ class CurrentStudyRoomProvider with ChangeNotifier {
         _studyRoom.copyWith(messages: [..._studyRoom.messages, message]);
     notifyListeners();
   }
+
+  void addParticipant(dynamic data) {
+    var participant = data;
+    _studyRoom = _studyRoom.copyWith(
+        participants: [..._studyRoom.participants, participant]);
+    notifyListeners();
+  }
 }
