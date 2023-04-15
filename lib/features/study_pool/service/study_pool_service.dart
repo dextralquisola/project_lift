@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:project_lift/constants/constants.dart';
+import 'package:project_lift/utils/socket_client.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -50,6 +51,65 @@ class StudyPoolService {
     }
   }
 
+  Future<void> getUserRoom(BuildContext context) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
+      var socket = SocketClient.instance.socket!;
+
+      var chatRoomRes = await service.requestApi(
+        path: '/api/studyroom/user-room',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+        },
+      );
+
+      if (chatRoomRes.statusCode == 200 && chatRoomRes.statusCode != 404) {
+        //fetch the chatroom data
+
+        currentRoomProvider.setStudyRoomFromJson(json.decode(chatRoomRes.body));
+        currentRoomProvider.studyRoom.printRoom();
+
+        var joinResRoom = await service.requestApi(
+          path: '/api/studyroom/join/${currentRoomProvider.studyRoom.roomId}',
+          method: 'POST',
+          headers: {
+            "Authorization": userProvider.user.token,
+          },
+        );
+
+        if (joinResRoom.statusCode == 200) {
+          var resMessages = await service.requestApi(
+            path:
+                '/api/studyroom/messages/${currentRoomProvider.studyRoom.roomId}',
+            method: 'GET',
+            headers: {
+              "Authorization": userProvider.user.token,
+            },
+          );
+
+          if (resMessages.statusCode == 200) {
+            var messages = json.decode(resMessages.body);
+            currentRoomProvider.setMessagesFromJson(messages);
+
+            socket.emit('join-room', {
+              'roomId': currentRoomProvider.studyRoom.roomId,
+            });
+          }
+
+          print("joined room");
+        } else {
+          print("failed to join room");
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> fetchStudyRooms(BuildContext context) async {
     try {
       print("fetching study rooms called");
@@ -57,7 +117,7 @@ class StudyPoolService {
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
       var res = await service.requestApi(
-        path: '/api/studyroom/public',
+        path: '/api/studyroom/public?page=${studyRoomProvider.currentPage}',
         method: 'GET',
         headers: {
           'Authorization': userProvider.user.token,

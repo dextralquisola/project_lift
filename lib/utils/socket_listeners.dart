@@ -29,8 +29,15 @@ class SocketListeners {
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("new-pending-participant", (data) {
       print("event fired new-pending-participant");
-      print(data);
-      currentRoomProvider.addParticipant(data);
+      print(data.toString());
+      var participant = data['user']['participants'][0];
+      var newParticipant = {
+        "userId": participant['userId']['_id'],
+        "firstName": participant['userId']['firstName'],
+        "lastName": participant['userId']['lastName'],
+        "status": participant['status'],
+      };
+      currentRoomProvider.addParticipant(newParticipant);
     });
   }
 }

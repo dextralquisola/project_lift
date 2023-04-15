@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/auth/screens/login_screen.dart';
+import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
+import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/providers/tutors_provider.dart';
@@ -31,6 +33,8 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final authService = AuthService();
+  final studyRoomService = StudyPoolService();
+  final tutorService = TutorService();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,19 @@ class MyApp extends StatelessWidget {
         primarySwatch: getMaterialColor(primaryColor),
       ),
       home: userProvider.isAuthenticated
-          ? const HomeScreen()
+          ? FutureBuilder(
+              future: Future.wait([
+                tutorService.fetchTutors(context),
+                studyRoomService.getUserRoom(context),
+                studyRoomService.fetchStudyRooms(context),
+              ]),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SplashScreen();
+                }
+                return const HomeScreen();
+              },
+            )
           : FutureBuilder(
               future: authService.fetchUser(context),
               builder: (context, snapshot) {

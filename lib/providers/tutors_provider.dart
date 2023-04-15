@@ -14,20 +14,19 @@ class TutorProvider with ChangeNotifier {
     if (_currentPage > _totalPages) {
       return;
     }
-
-    print('total pages: $_totalPages');
-    print('current page: $_currentPage');
-
     _totalPages = data['totalPages'];
 
     List<dynamic> tutors = data['tutors'];
 
-    var newTutors = tutors.map((e) => User.fromMap(e)).toList();
-    // _currentPage = data['currentPage'];
-    _currentPage++;
-    _tutors = [..._tutors, ...newTutors];
+    if (tutors.length == 10) _currentPage++;
 
-    print('total tutors: ${_tutors.length}');
+    var newTutors = tutors.map((e) => User.fromMap(e)).toList();
+    var uniqueTutors = newTutors;
+
+    if (tutors.length < 10) uniqueTutors = removeDuplicates(newTutors);
+
+    _tutors = [..._tutors, ...uniqueTutors];
+
     notifyListeners();
   }
 
@@ -36,5 +35,15 @@ class TutorProvider with ChangeNotifier {
     _currentPage = 1;
     _totalPages = 1;
     notifyListeners();
+  }
+
+  List<User> removeDuplicates(List<User> list) {
+    List<User> newList = [];
+    for (User user in list) {
+      if (_tutors.indexWhere((e) => e.userId == user.userId) == -1) {
+        newList.add(user);
+      }
+    }
+    return newList;
   }
 }
