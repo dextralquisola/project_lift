@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +15,12 @@ class PendingTuteesScreen extends StatefulWidget {
 }
 
 class _PendingTuteesScreenState extends State<PendingTuteesScreen> {
+  final studyRoomService = StudyPoolService();
   @override
   Widget build(BuildContext context) {
     final currentRoomProvider = Provider.of<CurrentStudyRoomProvider>(context);
     final pendingParticipants = currentRoomProvider.pendingParticipants;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Pending Tutee Requests'),
@@ -44,7 +48,14 @@ class _PendingTuteesScreenState extends State<PendingTuteesScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                print("Accepting tutee");
+                                await studyRoomService.acceptTutee(
+                                  context: context,
+                                  roomId: currentRoomProvider.studyRoom.roomId,
+                                  userId: participant['userId'],
+                                );
+                              },
                               icon: const Icon(Icons.check),
                             ),
                             IconButton(

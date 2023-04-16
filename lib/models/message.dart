@@ -4,6 +4,8 @@ class Message {
   final String messageId;
   final String roomId;
   final String userId;
+  final String firstName;
+  final String lastName;
   final String message;
   final String createdAt;
 
@@ -12,6 +14,8 @@ class Message {
     required this.roomId,
     required this.userId,
     required this.message,
+    required this.firstName,
+    required this.lastName,
     this.createdAt = '',
   });
 
@@ -22,17 +26,18 @@ class Message {
     result.addAll({'roomId': roomId});
     result.addAll({'userId': userId});
     result.addAll({'message': message});
-  
     return result;
   }
 
   factory Message.fromMap(Map<String, dynamic> map, [bool isFromAppSend = false]) {
     return Message(
-      messageId: map['_id'] ?? '',
-      roomId: map['roomId'] ?? '',
-      userId: isFromAppSend ? map['userId'] : map['userId']['_id'] ?? '',
-      message: map['message'] ?? '',
-      createdAt: map['createdAt'] ?? '',
+      messageId: isFromAppSend ? map['message']['_id'] : map['_id'] ?? '',
+      roomId: isFromAppSend ? map['message']['roomId'] : map['roomId'] ?? '',
+      userId: isFromAppSend ? map['user']['userId'] : map['userId']['_id'] ?? '',
+      firstName: isFromAppSend ? map['user']['firstName'] : map['userId']['firstName'] ?? '',
+      lastName: isFromAppSend ? map['user']['lastName'] : map['userId']['lastName'] ?? '',
+      message: isFromAppSend ? map['message']['message'] : map['message'] ?? '',
+      createdAt: isFromAppSend ? map['message']['createdAt'] : map['createdAt'] ?? '',
     );
   }
 

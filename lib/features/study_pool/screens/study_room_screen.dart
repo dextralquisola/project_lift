@@ -17,6 +17,17 @@ class CurrentRoomScreen extends StatefulWidget {
 
 class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   final _messageInputController = TextEditingController();
+  var _scrollControllerMessage = ScrollController();
+
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollControllerMessage = ScrollController(initialScrollOffset: 5.0)
+      ..addListener(_scrollListenerMessage);
+  }
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -51,6 +62,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                 reverse: true,
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(16),
+                controller: _scrollControllerMessage,
                 itemBuilder: (context, index) {
                   final message = chats[index];
                   return Wrap(
@@ -70,7 +82,9 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                             children: [
-                              Text(message.userId),
+                              Text(message.userId == user.userId
+                                  ? 'You'
+                                  : "${message.firstName} ${message.lastName}"),
                               Text(message.message),
                               Text(
                                 DateFormat('hh:mm a').format(
@@ -130,5 +144,25 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
         ],
       ),
     );
+  }
+
+  _scrollListenerMessage() async {
+    if (_scrollControllerMessage.offset >=
+            _scrollControllerMessage.position.maxScrollExtent &&
+        !_scrollControllerMessage.position.outOfRange) {
+      print('reached top');
+      setState(() {
+        _isLoading = true;
+      });
+
+      if (_isLoading) {
+        //call fetch messages
+        await StudyPoolService().fetchMessages(context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

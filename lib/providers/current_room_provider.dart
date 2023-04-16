@@ -6,8 +6,13 @@ import '../models/message.dart';
 class CurrentStudyRoomProvider with ChangeNotifier {
   StudyRoom _studyRoom = StudyRoom.empty();
 
+  int _currentMessagePage = 1;
+  int _totalMessagePage = 1;
+
+  int get currentMessagePage => _currentMessagePage;
+
   StudyRoom get studyRoom => _studyRoom;
-  List<Message> get messages => _studyRoom.messages.reversed.toList();
+  List<Message> get messages => _studyRoom.messages;
   List<Map<String, dynamic>> get pendingParticipants => _studyRoom.participants
       .where((element) => element['status'] == 'pending')
       .toList();
@@ -15,9 +20,36 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   bool get isEmpty => _studyRoom.roomId.isEmpty;
 
   void setMessagesFromJson(dynamic data) {
-    var messages = List<Message>.from(data.map((x) => Message.fromMap(x)));
-    _studyRoom = _studyRoom.copyWith(messages: messages);
+    _totalMessagePage = data['totalPages'];
+
+    if (_currentMessagePage > _totalMessagePage) return;
+
+    List<dynamic> messages = data['messages'];
+    var newMessages = messages.map((e) => Message.fromMap(e)).toList();
+
+    var uniqueMessages = newMessages;
+
+    if (messages.length == 10) {
+      _currentMessagePage++;
+    } else if (messages.length < 10) {
+      uniqueMessages = removeDuplicatedMessages(newMessages);
+    }
+
+    _studyRoom = _studyRoom
+        .copyWith(messages: [..._studyRoom.messages, ...uniqueMessages]);
     notifyListeners();
+  }
+
+  List<Message> removeDuplicatedMessages(List<Message> messages) {
+    var uniqueMessages = <Message>[];
+    for (var message in messages) {
+      if (_studyRoom.messages.indexWhere(
+              (element) => element.messageId == message.messageId) ==
+          -1) {
+        uniqueMessages.add(message);
+      }
+    }
+    return uniqueMessages;
   }
 
   void setStudyRoomFromJson(dynamic data) {
@@ -34,14 +66,26 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   void addMessage(dynamic data) {
     var message = Message.fromMap(data, true);
     _studyRoom =
-        _studyRoom.copyWith(messages: [..._studyRoom.messages, message]);
+        _studyRoom.copyWith(messages: [message, ..._studyRoom.messages]);
     notifyListeners();
   }
 
   void addParticipant(dynamic data) {
     var participant = data;
+    _studyRoom = _studyRoom
+        .copyWith(participants: [..._studyRoom.participants, participant]);
+    notifyListeners();
+  }
+
+  void acceptParticipant(String userId) {
     _studyRoom = _studyRoom.copyWith(
-        participants: [..._studyRoom.participants, participant]);
+      participants: _studyRoom.participants
+          .map(
+            (e) =>
+                e['userId'] == userId ? {...e, 'status': 'accepted'} : {...e},
+          )
+          .toList(),
+    );
     notifyListeners();
   }
 }

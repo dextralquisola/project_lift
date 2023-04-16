@@ -25,7 +25,7 @@ class SocketClient {
     );
 
     // socket!.connect();
-    socket!.onConnect((data) => print('Connection established'));
+    socket!.onConnect((data) => print('Connection established!'));
     socket!.onConnectError((data) => print('Connect Error: $data'));
     socket!.onDisconnect((data) => print('Socket.IO server disconnected'));
   }

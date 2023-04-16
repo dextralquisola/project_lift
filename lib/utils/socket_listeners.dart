@@ -11,6 +11,7 @@ class SocketListeners {
   void activateEventListeners(BuildContext context) {
     _onMessageEvent(context);
     _onParticipantJoinEvent(context);
+    _onParticipantAcceptedEvent(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -38,6 +39,19 @@ class SocketListeners {
         "status": participant['status'],
       };
       currentRoomProvider.addParticipant(newParticipant);
+    });
+  }
+
+  void _onParticipantAcceptedEvent(BuildContext context){
+    _socket.on("participant-accepted", (data){
+      print("event fired participant-accepted");
+      print(data.toString());
+      print("event fired participant-accepted");
+
+      final currentRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+      currentRoomProvider.setStudyRoomFromJson(data['chatRoom']);
+      
     });
   }
 }

@@ -69,41 +69,52 @@ class StudyPoolService {
 
       if (chatRoomRes.statusCode == 200 && chatRoomRes.statusCode != 404) {
         //fetch the chatroom data
-
-        currentRoomProvider.setStudyRoomFromJson(json.decode(chatRoomRes.body));
+        var decoded = json.decode(chatRoomRes.body);
+        currentRoomProvider.setStudyRoomFromJson(decoded);
         currentRoomProvider.studyRoom.printRoom();
 
-        var joinResRoom = await service.requestApi(
-          path: '/api/studyroom/join/${currentRoomProvider.studyRoom.roomId}',
-          method: 'POST',
+        var resMessages = await service.requestApi(
+          path:
+              '/api/studyroom/messages/${currentRoomProvider.studyRoom.roomId}?page=${currentRoomProvider.currentMessagePage}',
+          method: 'GET',
           headers: {
             "Authorization": userProvider.user.token,
           },
         );
 
-        if (joinResRoom.statusCode == 200) {
-          var resMessages = await service.requestApi(
-            path:
-                '/api/studyroom/messages/${currentRoomProvider.studyRoom.roomId}',
-            method: 'GET',
-            headers: {
-              "Authorization": userProvider.user.token,
-            },
-          );
+        if (resMessages.statusCode == 200) {
+          var messages = json.decode(resMessages.body);
+          currentRoomProvider.setMessagesFromJson(messages);
 
-          if (resMessages.statusCode == 200) {
-            var messages = json.decode(resMessages.body);
-            currentRoomProvider.setMessagesFromJson(messages);
-
-            socket.emit('join-room', {
-              'roomId': currentRoomProvider.studyRoom.roomId,
-            });
-          }
-
-          print("joined room");
-        } else {
-          print("failed to join room");
+          socket.emit('join-room', {
+            'roomId': currentRoomProvider.studyRoom.roomId,
+          });
         }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchMessages(BuildContext context) async {
+    try {
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      var currentRoomProvider = Provider.of<CurrentStudyRoomProvider>(
+        context,
+        listen: false,
+      );
+      var resMessages = await service.requestApi(
+        path:
+            '/api/studyroom/messages/${currentRoomProvider.studyRoom.roomId}?page=${currentRoomProvider.currentMessagePage}',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+        },
+      );
+
+      if (resMessages.statusCode == 200) {
+        var messages = json.decode(resMessages.body);
+        currentRoomProvider.setMessagesFromJson(messages);
       }
     } catch (e) {
       print(e);
@@ -162,6 +173,7 @@ class StudyPoolService {
       print(res.body);
 
       if (res.statusCode == 200) {
+        print("message sent232323");
         currentStudyRoomProvider.addMessage(json.decode(res.body));
       } else {
         print("ERROR: ${res.statusCode}");
@@ -190,6 +202,37 @@ class StudyPoolService {
         showSnackBar(context, "Room joined!, waiting for tutor to accept");
       } else {
         print("ERROR: ${joinResRoom.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> acceptTutee({
+    required String roomId,
+    required String userId,
+    required BuildContext context,
+  }) async {
+    try {
+      final currentStudyRoomProvider = Provider.of<CurrentStudyRoomProvider>(
+        context,
+        listen: false,
+      );
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/studyroom/accept-participant/$roomId/$userId',
+        method: 'PATCH',
+        headers: {
+          "Authorization": userProvider.user.token,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        // success
+        currentStudyRoomProvider.acceptParticipant(userId);
+        showSnackBar(context, "Tutee accepted!");
+      } else {
+        print("ERROR: ${res.statusCode}");
       }
     } catch (e) {
       print(e);
