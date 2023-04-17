@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:project_lift/features/study_pool/screens/pending_tutees_screen.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../constants/styles.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
+import '../../../utils/socket_client.dart';
 import '../service/study_pool_service.dart';
 
 class CurrentRoomScreen extends StatefulWidget {
@@ -18,12 +20,23 @@ class CurrentRoomScreen extends StatefulWidget {
 class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   final _messageInputController = TextEditingController();
   var _scrollControllerMessage = ScrollController();
-
   var _isLoading = false;
+
+  final _socket = SocketClient.instance.socket!;
 
   @override
   void initState() {
     super.initState();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      var currentStudyRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
+      _socket.emit('join-room', {
+        'roomId': currentStudyRoomProvider.studyRoom.roomId,
+      });
+    });
+
     _scrollControllerMessage = ScrollController(initialScrollOffset: 5.0)
       ..addListener(_scrollListenerMessage);
   }

@@ -86,9 +86,9 @@ class StudyPoolService {
           var messages = json.decode(resMessages.body);
           currentRoomProvider.setMessagesFromJson(messages);
 
-          socket.emit('join-room', {
-            'roomId': currentRoomProvider.studyRoom.roomId,
-          });
+          // socket.emit('join-room', {
+          //   'roomId': currentRoomProvider.studyRoom.roomId,
+          // });
         }
       }
     } catch (e) {

@@ -19,7 +19,7 @@ class StudyPoolCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
-        onTap: () => _showDialog(context),
+        onTap: () => _showDialog(context: context, studyRoom: studyRoom),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Card(
@@ -46,7 +46,10 @@ class StudyPoolCard extends StatelessWidget {
     );
   }
 
-  void _showDialog(BuildContext context) {
+  void _showDialog({
+    required BuildContext context,
+    required StudyRoom studyRoom,
+  }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -56,14 +59,14 @@ class StudyPoolCard extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            title: AppText(text: 'Computer Programming 1'),
+            title: AppText(text: studyRoom.roomName),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText(text: "Location: Room 101"),
                 AppText(text: "Time: 2:00 PM - 3:00 PM"),
-                AppText(text: "Tutor: Dexter Jay Alquisola"),
+                AppText(text: "Tutor: ${studyRoom.roomOwner}}"),
                 AppText(text: "Tutees: 5/10"),
                 const SizedBox(height: 10),
                 AppText(
