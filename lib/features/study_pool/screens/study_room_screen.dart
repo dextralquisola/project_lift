@@ -8,6 +8,7 @@ import '../../../constants/styles.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/socket_client.dart';
+import '../../../widgets/app_text.dart';
 import '../service/study_pool_service.dart';
 
 class CurrentRoomScreen extends StatefulWidget {
@@ -85,7 +86,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                     children: [
                       Card(
                         color: message.userId == user.userId
-                            ? Theme.of(context).primaryColorLight
+                            ? const Color(0xff2A813E)
                             : Colors.white,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -95,15 +96,28 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                             children: [
-                              Text(message.userId == user.userId
-                                  ? 'You'
-                                  : "${message.firstName} ${message.lastName}"),
-                              Text(message.message),
-                              Text(
-                                DateFormat('hh:mm a').format(
+                              if (message.userId != user.userId)
+                                AppText(
+                                    textColor: primaryColor,
+                                    fontWeight: FontWeight.w600,
+                                    text:
+                                        "${message.firstName} ${message.lastName}"),
+                              AppText(
+                                textSize: 14,
+                                textColor: message.userId == user.userId
+                                    ? Colors.white
+                                    : Colors.black,
+                                text: message.message,
+                              ),
+                              AppText(
+                                textSize: 11,
+                                textColor: message.userId == user.userId
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontWeight: FontWeight.w300,
+                                text: DateFormat('hh:mm a').format(
                                   DateTime.parse(message.createdAt).toLocal(),
                                 ),
-                                style: Theme.of(context).textTheme.caption,
                               ),
                             ],
                           ),
