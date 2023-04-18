@@ -19,12 +19,6 @@ class SocketListeners {
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on('message-sent', (data) {
-      print("event fired message-sent");
-      print(data.toString());
-
-      print("userId: ${userProvider.user.userId}");
-      print("userIDMap ${data['user']['userId']}");
-
       if (userProvider.user.userId != data['user']['userId']) {
         currentRoomProvider.addMessage(data);
       }
@@ -35,8 +29,6 @@ class SocketListeners {
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("new-pending-participant", (data) {
-      print("event fired new-pending-participant");
-      print(data.toString());
       var participant = data['user']['participants'][0];
       var newParticipant = {
         "userId": participant['userId']['_id'],
@@ -54,10 +46,6 @@ class SocketListeners {
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomFromJson(data['chatRoom']);
       currentRoomProvider.setMessagesFromJson(data['messages']);
-
-      // _socket.emit('join-room', {
-      //   'roomId': currentRoomProvider.studyRoom.roomId,
-      // });
     });
   }
 }
