@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:project_lift/features/study_pool/screens/pending_tutees_screen.dart';
+import 'package:project_lift/providers/study_room_providers.dart';
+import 'package:project_lift/widgets/app_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/styles.dart';
+import '../../../models/study_room.dart';
+import '../../../models/user.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/socket_client.dart';
@@ -42,6 +46,8 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
       ..addListener(_scrollListenerMessage);
   }
 
+  final studyRoomService = StudyPoolService();
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -50,7 +56,6 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
     final chats = currentStudyRoomProvider.messages;
     final user = userProvider.user;
 
-    final studyRoomService = StudyPoolService();
     return Scaffold(
       appBar: AppBar(
         title: Text(currentStudyRoomProvider.studyRoom.roomName),
@@ -67,6 +72,16 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
               },
               icon: const Icon(Icons.pending_actions),
             ),
+          IconButton(
+            onPressed: () async {
+              await _showAlertDialog(
+                context: context,
+                studyRoom: currentStudyRoomProvider.studyRoom,
+                user: userProvider.user,
+              );
+            },
+            icon: const Icon(Icons.exit_to_app),
+          ),
         ],
       ),
       body: Column(
@@ -170,6 +185,61 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
           )
         ],
       ),
+    );
+  }
+
+  _showAlertDialog({
+    required BuildContext context,
+    required User user,
+    required StudyRoom studyRoom,
+  }) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: AppText(
+        text: "Cancel",
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: AppText(text: "Leave", textColor: Colors.red),
+      onPressed: () async {
+        setState(() {
+          _isLoading = true;
+        });
+        await studyRoomService.leaveStudyRoom(context);
+        setState(() {
+          _isLoading = false;
+        });
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: AppText(
+        text: "Warning!",
+        textColor: Colors.red,
+        textSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
+      content: AppText(
+        text: user.userId == studyRoom.roomOwner
+            ? "Are you sure you want to leave this study room? The room will be deleted and the tutees will be notified and kicked to the room. "
+            : "Are you sure you want to leave this study room?",
+      ),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 

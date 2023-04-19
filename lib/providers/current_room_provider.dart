@@ -88,4 +88,18 @@ class CurrentStudyRoomProvider with ChangeNotifier {
     );
     notifyListeners();
   }
+
+  void removeParticipantById(String userId) {
+    _studyRoom = _studyRoom.copyWith(
+      participants: _studyRoom.participants
+          .where((element) => element['userId'] != userId)
+          .toList(),
+    );
+    notifyListeners();
+  }
+
+  void clearRoom() {
+    _studyRoom = StudyRoom.empty();
+    notifyListeners();
+  }
 }

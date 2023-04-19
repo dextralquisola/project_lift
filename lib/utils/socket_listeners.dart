@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/socket_client.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,8 @@ class SocketListeners {
     _onMessageEvent(context);
     _onParticipantJoinEvent(context);
     _onParticipantAcceptedEvent(context);
+    _onUserLeftRoom(context);
+    _onRoomDeleted(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -46,6 +49,32 @@ class SocketListeners {
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomFromJson(data['chatRoom']);
       currentRoomProvider.setMessagesFromJson(data['messages']);
+    });
+  }
+
+  void _onUserLeftRoom(BuildContext context) {
+    _socket.on("user-left", (data) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      if (userProvider.user.userId != data['user']['userId']) {
+        final currentRoomProvider =
+            Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+        if (currentRoomProvider.studyRoom.roomId == data['roomId']) {
+          currentRoomProvider.removeParticipantById(data['user']['userId']);
+        }
+      }
+    });
+  }
+
+  void _onRoomDeleted(BuildContext context) {
+    _socket.on("room-deleted", (data) {
+      final currentRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+      final studyRoomProvider = Provider.of<StudyRoomProvider>(context, listen: false);
+      currentRoomProvider.clearRoom();
+      studyRoomProvider.removeStudyRoomById(data['roomId']);
+      _socket.emit("leave-room", {
+        "roomId": currentRoomProvider.studyRoom.roomId,
+      });
     });
   }
 }

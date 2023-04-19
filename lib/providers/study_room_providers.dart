@@ -52,4 +52,9 @@ class StudyRoomProvider with ChangeNotifier {
     }
     return newList;
   }
+
+  void removeStudyRoomById(String roomId) {
+    _studyRooms.removeWhere((element) => element.roomId == roomId);
+    notifyListeners();
+  }
 }

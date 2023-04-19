@@ -238,4 +238,35 @@ class StudyPoolService {
       print(e);
     }
   }
+
+  Future<void> leaveStudyRoom(BuildContext context) async {
+    try {
+      final currentRoomProvider = Provider.of<CurrentStudyRoomProvider>(
+        context,
+        listen: false,
+      );
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      var socket = SocketClient.instance.socket!;
+      var res = await service.requestApi(
+        path: '/api/studyroom/leave/${currentRoomProvider.studyRoom.roomId}',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        // success
+        socket.emit("leave-room", {
+          "roomId": currentRoomProvider.studyRoom.roomId,
+        });
+        currentRoomProvider.clearRoom();
+      } else {
+        print("ERROR: ${res.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }
