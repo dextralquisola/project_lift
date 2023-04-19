@@ -70,11 +70,11 @@ class SocketListeners {
       final currentRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       final studyRoomProvider = Provider.of<StudyRoomProvider>(context, listen: false);
-      currentRoomProvider.clearRoom();
-      studyRoomProvider.removeStudyRoomById(data['roomId']);
       _socket.emit("leave-room", {
         "roomId": currentRoomProvider.studyRoom.roomId,
       });
+      studyRoomProvider.removeStudyRoomById(data['roomId']);
+      currentRoomProvider.clearRoom();
     });
   }
 }
