@@ -212,6 +212,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
         setState(() {
           _isLoading = false;
         });
+        Navigator.of(context).pop();
       },
     );
 
