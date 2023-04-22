@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:project_lift/features/study_pool/screens/pending_tutees_screen.dart';
-import 'package:project_lift/providers/study_room_providers.dart';
-import 'package:project_lift/widgets/app_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/styles.dart';
@@ -72,15 +70,44 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
               },
               icon: const Icon(Icons.pending_actions),
             ),
-          IconButton(
-            onPressed: () async {
-              await _showAlertDialog(
-                context: context,
-                studyRoom: currentStudyRoomProvider.studyRoom,
-                user: userProvider.user,
-              );
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: 0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.people, color: Colors.black),
+                      const SizedBox(width: 5),
+                      AppText(text: "Participants"),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 1,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.exit_to_app, color: Colors.redAccent),
+                      const SizedBox(width: 5),
+                      AppText(text: "Leave Room"),
+                    ],
+                  ),
+                ),
+              ];
             },
-            icon: const Icon(Icons.exit_to_app),
+            onSelected: (value) async {
+              if (value == 0) {
+                print("Participants is selected.");
+              } else if (value == 1) {
+                await _showAlertDialog(
+                  context: context,
+                  studyRoom: currentStudyRoomProvider.studyRoom,
+                  user: userProvider.user,
+                );
+              }
+            },
           ),
         ],
       ),
