@@ -19,6 +19,8 @@ class TutorService {
         method: 'GET',
         headers: {
           "Authorization": token != "" ? token : userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
       );
 

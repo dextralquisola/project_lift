@@ -27,7 +27,7 @@ Future<http.Response> requestApi({
       headers: h,
     );
   }
-  if(method.toLowerCase() == "patch"){
+  if (method.toLowerCase() == "patch") {
     return await http.patch(
       Uri.parse('$baseServerAddress$path'),
       body: body != null ? json.encode(body) : null,

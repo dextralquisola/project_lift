@@ -21,6 +21,18 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setTokens({
+    required String fcmToken,
+    required String deviceToken,
+  }) async {
+    _user = _user.copyFrom(
+      firebaseToken: fcmToken,
+      deviceToken: deviceToken,
+    );
+
+    notifyListeners();
+  }
+
   Future<void> logout() async {
     _user = User.emptyUser();
 

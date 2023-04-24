@@ -7,6 +7,8 @@ class User {
   final String email;
   final String role;
   final String token;
+  final String firebaseToken;
+  final String deviceToken;
 
   User({
     required this.userId,
@@ -15,6 +17,8 @@ class User {
     required this.email,
     required this.role,
     required this.token,
+    this.firebaseToken = '',
+    this.deviceToken = '',
   });
 
   Map<String, dynamic> toMap() {
@@ -24,6 +28,7 @@ class User {
     result.addAll({'lastName': lastName});
     result.addAll({'email': email});
     result.addAll({'role': role});
+    result.addAll({'deviceToken': deviceToken});
 
     return result;
   }
@@ -35,6 +40,8 @@ class User {
     String? email,
     String? token,
     String? role,
+    String? deviceToken,
+    String? firebaseToken,
   }) {
     return User(
       userId: userId ?? this.userId,
@@ -43,6 +50,8 @@ class User {
       email: email ?? this.email,
       role: role ?? this.role,
       token: token ?? this.token,
+      deviceToken: deviceToken ?? this.deviceToken,
+      firebaseToken: firebaseToken ?? this.firebaseToken,
     );
   }
 
@@ -53,6 +62,8 @@ class User {
     print('email: $email');
     print('role: $role');
     print('token: $token');
+    print('deviceToken: $deviceToken');
+    print('firebaseToken: $firebaseToken');
   }
 
   factory User.emptyUser() {
@@ -63,6 +74,8 @@ class User {
       email: '',
       role: '',
       token: '',
+      deviceToken: '',
+      firebaseToken: '',
     );
   }
 

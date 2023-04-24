@@ -31,6 +31,8 @@ class StudyPoolService {
         path: '/api/studyroom/create',
         headers: {
           'Authorization': userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
         body: {
           'name': studyPoolName,
@@ -64,6 +66,8 @@ class StudyPoolService {
         method: 'GET',
         headers: {
           "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
       );
 
@@ -79,6 +83,8 @@ class StudyPoolService {
           method: 'GET',
           headers: {
             "Authorization": userProvider.user.token,
+            "fcmToken": userProvider.user.firebaseToken,
+            "deviceToken": userProvider.user.deviceToken,
           },
         );
 
@@ -109,6 +115,8 @@ class StudyPoolService {
         method: 'GET',
         headers: {
           "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
       );
 
@@ -132,6 +140,8 @@ class StudyPoolService {
         method: 'GET',
         headers: {
           'Authorization': userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
       );
 
@@ -162,6 +172,8 @@ class StudyPoolService {
         method: 'POST',
         headers: {
           'Authorization': userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
         body: {
           'roomId': roomId,
@@ -194,6 +206,8 @@ class StudyPoolService {
         method: 'POST',
         headers: {
           "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
       );
 
@@ -224,6 +238,8 @@ class StudyPoolService {
         method: 'PATCH',
         headers: {
           "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
       );
 
@@ -253,6 +269,8 @@ class StudyPoolService {
         method: 'POST',
         headers: {
           "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
         },
       );
 
