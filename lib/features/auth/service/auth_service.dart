@@ -92,6 +92,7 @@ class AuthService {
           "password": password,
           "deviceToken": deviceToken,
           "fcmToken": fcmToken,
+          "role": "tutor",
         },
       );
 
@@ -109,7 +110,7 @@ class AuthService {
             context: context,
             res: res,
             isSignup: true,
-            fcmToken: fcmToken!,
+            fcmToken: fcmToken,
             deviceToken: deviceToken,
           );
 
@@ -124,10 +125,10 @@ class AuthService {
   Future<void> fetchUser(BuildContext context) async {
     // function here
     try {
-      print("this hsit");
-
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
+
+      print("auto login");
       print("fcmToken: $fcmToken");
       print("deviceToken: $deviceToken");
 
@@ -144,10 +145,6 @@ class AuthService {
           "fcmToken": fcmToken!,
           "deviceToken": deviceToken!,
         },
-        body: {
-          "fcmToken": fcmToken!,
-          "deviceToken": deviceToken!,
-        }
       );
 
       if (!context.mounted) return;
@@ -161,8 +158,8 @@ class AuthService {
             res: res,
             isFromAutoLogin: true,
             token: token,
-            fcmToken: fcmToken!,
-            deviceToken: deviceToken!,
+            fcmToken: fcmToken,
+            deviceToken: deviceToken,
           );
         },
       );
@@ -222,6 +219,28 @@ class AuthService {
     }
   }
 
+  Future<bool> logout(BuildContext context) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/users/logout',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
   Future<String?> _getDeviceId() async {
     var deviceInfo = DeviceInfoPlugin();
     if (Platform.isIOS) {
@@ -233,6 +252,8 @@ class AuthService {
       print('device id: ${androidDeviceInfo.id}');
       return androidDeviceInfo.id; // unique ID on Android
     }
+
+    return null;
   }
 
   Future<String?> _getFCMToken() async {

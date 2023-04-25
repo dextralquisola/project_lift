@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/auth/service/auth_service.dart';
 import 'package:project_lift/main.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +16,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authService = AuthService();
     final userProvider = Provider.of<UserProvider>(context);
     final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
     final studyPoolProvider =
@@ -61,14 +64,20 @@ class ProfileScreen extends StatelessWidget {
                       IconButton(
                         constraints: const BoxConstraints(),
                         onPressed: () async {
-                          await userProvider.logout();
-                          tutorsProvider.clearTutors();
-                          studyPoolProvider.clearStudyRooms();
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => MyApp(),
-                            ),
-                          );
+                          var isLogoutSuccess =
+                              await authService.logout(context);
+                          if (isLogoutSuccess) {
+                            await userProvider.logout();
+                            tutorsProvider.clearTutors();
+                            studyPoolProvider.clearStudyRooms();
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => MyApp(),
+                              ),
+                            );
+                          } else {
+                            showSnackBar(context, "Something went wrong");
+                          }
                         },
                         icon:
                             const Icon(Icons.exit_to_app, color: Colors.white),
