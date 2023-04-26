@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/study_room_providers.dart';
 import '../../../providers/user_provider.dart';
+import '../../../widgets/app_text.dart';
 
 class StudyPoolScreen extends StatefulWidget {
   const StudyPoolScreen({super.key});
@@ -50,13 +51,18 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
               ],
               backgroundColor: primaryColor,
             ),
-            body: ListView.separated(
-              controller: _scrollControllerRoom,
-              itemBuilder: (context, index) =>
-                  StudyPoolCard(studyRoom: studyRooms[index]),
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemCount: studyRooms.length,
-            ),
+            body: studyRooms.isEmpty
+                ? Center(
+                    child: AppText(text: "No study room..."),
+                  )
+                : ListView.separated(
+                    controller: _scrollControllerRoom,
+                    itemBuilder: (context, index) =>
+                        StudyPoolCard(studyRoom: studyRooms[index]),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemCount: studyRooms.length,
+                  ),
             floatingActionButton: userProvider.isTutor
                 ? SpeedDial(
                     animatedIcon: AnimatedIcons.menu_close,

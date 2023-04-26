@@ -130,32 +130,37 @@ class _FindTutorScreenState extends State<FindTutorScreen>
               }),
             ),
           ],
-          body: ListView.separated(
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return Stack(
-                  children: [
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      child: FadeTransition(
-                        opacity: _animationController,
-                        child: const SizedBox(
-                          height: 75,
-                          child: BackgroundCover(isBottomBg: true),
-                        ),
-                      ),
-                    ),
-                    TutorCard(tutor: tutors[index])
-                  ],
-                );
-              }
-              return TutorCard(tutor: tutors[index]);
-            },
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemCount: tutors.length,
-          ),
+          body: tutors.isEmpty
+              ? Center(
+                  child: AppText(text: "There is no tutor available."),
+                )
+              : ListView.separated(
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Stack(
+                        children: [
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            child: FadeTransition(
+                              opacity: _animationController,
+                              child: const SizedBox(
+                                height: 75,
+                                child: BackgroundCover(isBottomBg: true),
+                              ),
+                            ),
+                          ),
+                          TutorCard(tutor: tutors[index])
+                        ],
+                      );
+                    }
+                    return TutorCard(tutor: tutors[index]);
+                  },
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10),
+                  itemCount: tutors.length,
+                ),
         ),
       ),
     );
