@@ -153,6 +153,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                               subject: newSubject,
                               context: context,
                             );
+                            Navigator.pop(context);
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
