@@ -2,14 +2,23 @@ import 'package:flutter/foundation.dart';
 import 'package:project_lift/utils/socket_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/subject.dart';
 import '../models/user.dart';
 
 class UserProvider with ChangeNotifier {
   User _user = User.emptyUser();
 
   User get user => _user;
+  List<Subject> get subjects => _user.subjects;
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '';
+
+  void addSubject(Subject subject) {
+    _user = _user.copyFrom(
+      subjects: [...subjects, subject],
+    );
+    notifyListeners();
+  }
 
   void setUserFromModel(User user) {
     _user = user;

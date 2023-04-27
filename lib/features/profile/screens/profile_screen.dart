@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
 import 'package:project_lift/main.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
@@ -10,9 +11,26 @@ import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/background_cover.dart';
+import 'add_subject_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,109 +42,146 @@ class ProfileScreen extends StatelessWidget {
     final user = userProvider.user;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 200,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                const SizedBox(
-                  child: BackgroundCover(hasBgImage: false),
-                ),
-                Positioned(
-                  bottom: -75,
-                  left: 0,
-                  right: 0,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 150,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(color: Colors.white, width: 5),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(105),
-                        child: Container(
-                          color: Colors.deepPurple,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 200,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  const SizedBox(
+                    child: BackgroundCover(hasBgImage: false),
+                  ),
+                  Positioned(
+                    bottom: -75,
+                    left: 0,
+                    right: 0,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 150,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(color: Colors.white, width: 5),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(105),
+                          child: Container(
+                            color: Colors.deepPurple,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        constraints: const BoxConstraints(),
-                        onPressed: () async {
-                          var isLogoutSuccess =
-                              await authService.logout(context);
-                          if (isLogoutSuccess) {
-                            await userProvider.logout();
-                            tutorsProvider.clearTutors();
-                            studyPoolProvider.clearStudyRooms();
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => MyApp(),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          constraints: const BoxConstraints(),
+                          onPressed: () async {
+                            var isLogoutSuccess =
+                                await authService.logout(context);
+                            if (isLogoutSuccess) {
+                              await userProvider.logout();
+                              tutorsProvider.clearTutors();
+                              studyPoolProvider.clearStudyRooms();
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => MyApp(),
+                                ),
+                              );
+                            } else {
+                              showSnackBar(context, "Something went wrong");
+                            }
+                          },
+                          icon:
+                              const Icon(Icons.exit_to_app, color: Colors.white),
+                        ),
+                        IconButton(
+                          constraints: const BoxConstraints(),
+                          onPressed: () {},
+                          icon: const Icon(Icons.more_vert, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 80),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AppText(
+                      text: "${user.firstName} ${user.lastName}",
+                      textSize: 24,
+                      fontWeight: FontWeight.bold),
+                  const SizedBox(height: 20),
+                  Card(
+                    child: Column(
+                      children: [
+                        ExpansionTile(
+                          title: AppText(
+                            text: "Subjects I can help with",
+                            fontWeight: FontWeight.w600,
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                constraints: const BoxConstraints(),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AddSubjectScreen(),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(Icons.add, color: primaryColor),
                               ),
-                            );
-                          } else {
-                            showSnackBar(context, "Something went wrong");
-                          }
-                        },
-                        icon:
-                            const Icon(Icons.exit_to_app, color: Colors.white),
-                      ),
-                      IconButton(
-                        constraints: const BoxConstraints(),
-                        onPressed: () {},
-                        icon: const Icon(Icons.more_vert, color: Colors.white),
-                      ),
-                    ],
+                              AnimatedIcon(
+                                icon: AnimatedIcons.menu_close,
+                                progress: animationController,
+                              ),
+                            ],
+                          ),
+                          children: [
+                            if (userProvider.user.subjects.isEmpty)
+                              ListTile(
+                                title: AppText(text: "No subjects yet"),
+                              ),
+                            ...userProvider.subjects.map((e) {
+                              return ListTile(
+                                title: AppText(text: e.subjectCode),
+                                subtitle: AppText(text: e.description),
+                              );
+                            }).toList(),
+                          ],
+                          onExpansionChanged: (value) {
+                            if (value) {
+                              animationController.forward();
+                            } else {
+                              animationController.reverse();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 80),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AppText(
-                    text: "${user.firstName} ${user.lastName}",
-                    textSize: 24,
-                    fontWeight: FontWeight.bold),
-                const SizedBox(height: 50),
-                Column(
-                  children: [
-                    AppButton(
-                      height: 50,
-                      onPressed: () {},
-                      wrapRow: true,
-                      text: "Account Settings",
-                    ),
-                    const SizedBox(height: 10),
-                    AppButton(
-                      onPressed: () => _showDialog(context),
-                      wrapRow: true,
-                      text: "Be a tutor!",
-                      height: 50,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          )
-          // profile body
-        ],
+                ],
+              ),
+            )
+            // profile body
+          ],
+        ),
       ),
     );
   }

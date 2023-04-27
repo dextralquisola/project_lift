@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import './subject.dart';
+
 class User {
   final String userId;
   final String firstName;
   final String lastName;
   final String email;
   final String role;
+  final List<Subject> subjects;
   final String token;
   final String firebaseToken;
   final String deviceToken;
@@ -17,6 +20,7 @@ class User {
     required this.email,
     required this.role,
     required this.token,
+    required this.subjects,
     this.firebaseToken = '',
     this.deviceToken = '',
   });
@@ -42,6 +46,7 @@ class User {
     String? role,
     String? deviceToken,
     String? firebaseToken,
+    List<Subject>? subjects,
   }) {
     return User(
       userId: userId ?? this.userId,
@@ -52,6 +57,7 @@ class User {
       token: token ?? this.token,
       deviceToken: deviceToken ?? this.deviceToken,
       firebaseToken: firebaseToken ?? this.firebaseToken,
+      subjects: subjects ?? this.subjects,
     );
   }
 
@@ -76,6 +82,7 @@ class User {
       token: '',
       deviceToken: '',
       firebaseToken: '',
+      subjects: [],
     );
   }
 
@@ -87,6 +94,13 @@ class User {
       email: map['email'] ?? '',
       role: map['role'] ?? '',
       token: map['token'] ?? '',
+      subjects: map['subjects'].isEmpty
+          ? []
+          : List<Subject>.from(
+              map['subjects']?.map(
+                (x) => Subject.fromMap(x),
+              ),
+            ),
     );
   }
 

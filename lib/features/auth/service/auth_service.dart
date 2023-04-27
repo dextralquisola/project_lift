@@ -147,6 +147,8 @@ class AuthService {
         },
       );
 
+      print(res.body);
+
       if (!context.mounted) return;
 
       httpErrorHandler(

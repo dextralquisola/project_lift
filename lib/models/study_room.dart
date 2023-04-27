@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:project_lift/models/message.dart';
+import 'package:project_lift/models/subject.dart';
 
 class StudyRoom {
   final String roomId;
@@ -8,6 +9,7 @@ class StudyRoom {
   final String roomOwner;
   final List<Message> messages;
   final List<Map<String, dynamic>> participants;
+  final Subject subject;
 
   StudyRoom({
     required this.roomId,
@@ -15,6 +17,7 @@ class StudyRoom {
     required this.messages,
     required this.participants,
     required this.roomOwner,
+    required this.subject,
   });
 
   factory StudyRoom.fromMap(Map<String, dynamic> map,
@@ -49,6 +52,7 @@ class StudyRoom {
             ),
       roomName: map['name'] ?? '',
       roomOwner: map['owner'] ?? '',
+      subject: Subject.fromMap(map['subject']),
     );
   }
 
@@ -58,6 +62,7 @@ class StudyRoom {
     String? roomOwner,
     List<Message>? messages,
     List<Map<String, dynamic>>? participants,
+    Subject? subject,
   }) {
     return StudyRoom(
       roomId: roomId ?? this.roomId,
@@ -65,6 +70,7 @@ class StudyRoom {
       participants: participants ?? this.participants,
       roomName: roomName ?? this.roomName,
       roomOwner: roomOwner ?? this.roomOwner,
+      subject: subject ?? this.subject,
     );
   }
 
@@ -86,6 +92,7 @@ class StudyRoom {
       participants: [],
       roomName: '',
       roomOwner: '',
+      subject: Subject.empty(),
     );
   }
 }

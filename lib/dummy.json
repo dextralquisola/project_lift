@@ -1,0 +1,23 @@
+{
+  "_id": "6447f056aad66fba83e4b572",
+  "firstName": "Tutor1",
+  "lastName": "Example",
+  "email": "tutor1@example.com",
+  "age": 0,
+  "posts": [],
+  "role": "tutor",
+  "tutorRatings": [],
+  "tuteeRatings": [],
+  "subjects": [],
+  "devices": [
+    {
+      "deviceToken": "RSR1.210210.001.A1",
+      "fcmToken": "fGDQ8gQkRfatZUVNqwhr98:APA91bGaFoDSRdzHZTQQvsDgngVkUh5scjBSReRw__apTYhN2y-OREotEp0lOyuG_MsKnnohykoTKZtxuCV465nGDz6mwnV9ZhAWZ8lca52Y_yD8inYVoynKNdWPrnGpNArzjwO6kt34",
+      "_id": "64487284929301f5e4cfe9f2"
+    }
+  ],
+  "createdAt": "2023-04-25T15:23:02.046Z",
+  "updatedAt": "2023-04-26T14:03:50.534Z",
+  "__v": 5,
+  "socketId": "UXlSksfqSRr7FWeMAAAB"
+}
