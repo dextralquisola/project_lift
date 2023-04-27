@@ -13,6 +13,10 @@ class UserProvider with ChangeNotifier {
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '';
 
+  bool isSubjectAdded(String subjectCode) {
+    return subjects.any((subject) => subject.subjectCode == subjectCode);
+  }
+
   void addSubject(Subject subject) {
     _user = _user.copyFrom(
       subjects: [...subjects, subject],

@@ -5,8 +5,10 @@ import 'package:project_lift/models/subject.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:project_lift/widgets/app_textfield.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants/subjects.dart';
+import '../../../providers/user_provider.dart';
 
 class AddSubjectScreen extends StatefulWidget {
   const AddSubjectScreen({super.key});
@@ -21,26 +23,28 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
 
   List<SubTopic> subTopics = [];
 
-  String selectedValue = computerScience[3]['subjectCode']!;
-  List<DropdownMenuItem<String>> get dropdownItems {
-    var menuItems = [
-      ...computerScience
-          .map(
-            (e) => DropdownMenuItem(
-              value: e['subjectCode'],
-              child:
-                  AppText(text: '${e["subjectCode"]!}: ${e["description"]!}'),
-            ),
-          )
-          .toList(),
-    ];
-    return menuItems;
-  }
+  String selectedValue = computerScience[0]['subjectCode']!;
+
+  late List<DropdownMenuItem<String>> dropdownItems;
 
   final profileService = ProfileServie();
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    var filteredSubjects = filterSubjects(userProvider);
+    dropdownItems = filteredSubjects
+        .map(
+          (e) => DropdownMenuItem(
+            value: e['subjectCode'],
+            child: e['subjectCode'] != ''
+                ? AppText(text: '${e['subjectCode']}: ${e['description']}')
+                : AppText(text: 'List of subjects'),
+          ),
+        )
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Subject'),
@@ -136,7 +140,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                       const SizedBox(height: 10),
                       AppButton(
                         onPressed: () async {
-                          if (subTopics.isNotEmpty) {
+                          if (subTopics.isNotEmpty && selectedValue != '') {
                             var newSubject = Subject(
                               subjectCode: selectedValue,
                               description: computerScience.firstWhere(
@@ -153,7 +157,8 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: AppText(
-                                  text: 'Please add sub topics.',
+                                  text:
+                                      'Please add sub topics and select a subject.',
                                   textColor: Colors.white,
                                 ),
                                 backgroundColor: Colors.redAccent,
@@ -174,6 +179,18 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
         ),
       ),
     );
+  }
+
+  List<Map<String, String>> filterSubjects(UserProvider userProvider) {
+    List<Map<String, String>> newFilteredSubjects = [];
+
+    for (var subject in computerScience) {
+      if (!userProvider.isSubjectAdded(subject['subjectCode']!)) {
+        newFilteredSubjects.add(subject);
+      }
+    }
+
+    return newFilteredSubjects;
   }
 
   void _onChange(String? value) {

@@ -98,13 +98,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                               showSnackBar(context, "Something went wrong");
                             }
                           },
-                          icon:
-                              const Icon(Icons.exit_to_app, color: Colors.white),
+                          icon: const Icon(Icons.exit_to_app,
+                              color: Colors.white),
                         ),
                         IconButton(
                           constraints: const BoxConstraints(),
                           onPressed: () {},
-                          icon: const Icon(Icons.more_vert, color: Colors.white),
+                          icon:
+                              const Icon(Icons.more_vert, color: Colors.white),
                         ),
                       ],
                     ),
@@ -128,6 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     child: Column(
                       children: [
                         ExpansionTile(
+                          initiallyExpanded: true,
                           title: AppText(
                             text: "Subjects I can help with",
                             fontWeight: FontWeight.w600,
