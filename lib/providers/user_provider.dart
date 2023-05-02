@@ -13,8 +13,18 @@ class UserProvider with ChangeNotifier {
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '';
 
+  Subject get firstSubject => _user.subjects.first;
+
   bool isSubjectAdded(String subjectCode) {
     return subjects.any((subject) => subject.subjectCode == subjectCode);
+  }
+
+  Subject getSubject(String subjectCode) {
+    return subjects.firstWhere((subject) => subject.subjectCode == subjectCode);
+  }
+
+  List<SubTopic> getSubTopics(String subjectCode) {
+    return [SubTopic.empty(), ...getSubject(subjectCode).subTopics];
   }
 
   void addSubject(Subject subject) {

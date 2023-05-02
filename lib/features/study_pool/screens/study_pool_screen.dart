@@ -5,6 +5,7 @@ import 'package:project_lift/features/study_pool/screens/create_room_screen.dart
 import 'package:project_lift/features/study_pool/screens/study_room_screen.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/features/study_pool/widgets/study_card_widget.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/current_room_provider.dart';
@@ -73,6 +74,13 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                         child: const Icon(Icons.add),
                         label: 'Create Study Room',
                         onTap: () {
+                          if (userProvider.user.subjects.isEmpty) {
+                            showSnackBar(
+                              context,
+                              "Please add subjects to your profile first",
+                            );
+                            return;
+                          }
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => CreateStudyRoomScreen(),

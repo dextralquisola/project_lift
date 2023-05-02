@@ -84,6 +84,19 @@ class SubTopic {
     );
   }
 
+  factory SubTopic.empty() {
+    return SubTopic(
+      topic: '',
+      description: '',
+    );
+  }
+
+  void printSubTopic(){
+    print('SubTopic:');
+    print('topic: $topic');
+    print('description: $description');
+  }
+
   String toJson() => json.encode(toMap());
 
   factory SubTopic.fromJson(String source) =>

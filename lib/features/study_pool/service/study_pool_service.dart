@@ -6,6 +6,7 @@ import 'package:project_lift/utils/socket_client.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/subject.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/study_room_providers.dart';
 import '../../../providers/user_provider.dart';
@@ -16,6 +17,8 @@ class StudyPoolService {
     required String studyPoolName,
     required BuildContext context,
     required StudyRoomStatus status,
+    required Subject subject,
+    required List<SubTopic> subTopics,
   }) async {
     // function here
     try {
@@ -37,6 +40,9 @@ class StudyPoolService {
         body: {
           'name': studyPoolName,
           'status': status == StudyRoomStatus.public ? 'public' : 'private',
+          'subjectCode': subject.subjectCode,
+          'description': subject.description,
+          'subtopics': subTopicListToMap(subTopics),
         },
         method: 'POST',
       );
