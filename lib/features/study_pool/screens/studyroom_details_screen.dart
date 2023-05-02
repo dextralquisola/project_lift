@@ -98,7 +98,8 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                                 ),
                                 trailing:
                                     participants[index]['status'] == 'owner'
-                                        ? const Icon(Icons.star)
+                                        ? const Icon(Icons.star,
+                                            color: Colors.yellow)
                                         : AppText(text: 'Paricipant'),
                               );
                             },
