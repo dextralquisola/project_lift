@@ -114,73 +114,75 @@ class _ProfileScreenState extends State<ProfileScreen>
               ),
             ),
             const SizedBox(height: 80),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  AppText(
+            if (userProvider.isTutor)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AppText(
                       text: "${user.firstName} ${user.lastName}",
                       textSize: 24,
-                      fontWeight: FontWeight.bold),
-                  const SizedBox(height: 20),
-                  Card(
-                    child: Column(
-                      children: [
-                        ExpansionTile(
-                          initiallyExpanded: true,
-                          title: AppText(
-                            text: "Subjects I can help with",
-                            fontWeight: FontWeight.w600,
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AddSubjectScreen(),
-                                    ),
-                                  );
-                                },
-                                icon: Icon(Icons.add, color: primaryColor),
-                              ),
-                              AnimatedIcon(
-                                icon: AnimatedIcons.menu_close,
-                                progress: animationController,
-                              ),
-                            ],
-                          ),
-                          children: [
-                            if (userProvider.user.subjects.isEmpty)
-                              ListTile(
-                                title: AppText(text: "No subjects yet"),
-                              ),
-                            ...userProvider.subjects.map((e) {
-                              return ListTile(
-                                title: AppText(text: e.subjectCode),
-                                subtitle: AppText(text: e.description),
-                              );
-                            }).toList(),
-                          ],
-                          onExpansionChanged: (value) {
-                            if (value) {
-                              animationController.forward();
-                            } else {
-                              animationController.reverse();
-                            }
-                          },
-                        ),
-                      ],
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                ],
-              ),
-            )
+                    const SizedBox(height: 20),
+                    Card(
+                      child: Column(
+                        children: [
+                          ExpansionTile(
+                            initiallyExpanded: true,
+                            title: AppText(
+                              text: "Subjects I can help with",
+                              fontWeight: FontWeight.w600,
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AddSubjectScreen(),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.add, color: primaryColor),
+                                ),
+                                AnimatedIcon(
+                                  icon: AnimatedIcons.menu_close,
+                                  progress: animationController,
+                                ),
+                              ],
+                            ),
+                            children: [
+                              if (userProvider.user.subjects.isEmpty)
+                                ListTile(
+                                  title: AppText(text: "No subjects yet"),
+                                ),
+                              ...userProvider.subjects.map((e) {
+                                return ListTile(
+                                  title: AppText(text: e.subjectCode),
+                                  subtitle: AppText(text: e.description),
+                                );
+                              }).toList(),
+                            ],
+                            onExpansionChanged: (value) {
+                              if (value) {
+                                animationController.forward();
+                              } else {
+                                animationController.reverse();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
             // profile body
           ],
         ),

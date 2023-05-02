@@ -60,12 +60,14 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                                 const Divider(),
                             itemCount: roomSubTopics.length,
                             itemBuilder: (context, index) {
-                              return ListTile(
-                                title: AppText(
-                                  text: roomSubTopics[index].topic,
-                                ),
-                                subtitle: AppText(
-                                  text: roomSubTopics[index].description,
+                              return Card(
+                                child: ListTile(
+                                  title: AppText(
+                                    text: 'Topic: ${roomSubTopics[index].topic}',
+                                  ),
+                                  subtitle: AppText(
+                                    text: 'Description: ${roomSubTopics[index].description}',
+                                  ),
                                 ),
                               );
                             },
@@ -96,11 +98,13 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                                   text:
                                       '${participants[index]["firstName"]} ${participants[index]["lastName"]}',
                                 ),
-                                trailing:
-                                    participants[index]['status'] == 'owner'
-                                        ? const Icon(Icons.star,
-                                            color: Colors.yellow)
-                                        : AppText(text: 'Paricipant'),
+                                trailing: participants[index]['status'] ==
+                                        'owner'
+                                    ? const Icon(Icons.star,
+                                        color: Colors.yellow)
+                                    : participants[index]['status'] == 'pending'
+                                        ? AppText(text: 'Pending')
+                                        : AppText(text: 'Participant'),
                               );
                             },
                           ),

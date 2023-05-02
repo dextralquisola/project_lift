@@ -10,6 +10,7 @@ class StudyRoom {
   final List<Message> messages;
   final List<Map<String, dynamic>> participants;
   final Subject subject;
+  final int participantCount;
 
   StudyRoom({
     required this.roomId,
@@ -18,6 +19,7 @@ class StudyRoom {
     required this.participants,
     required this.roomOwner,
     required this.subject,
+    this.participantCount = 0,
   });
 
   factory StudyRoom.fromMap(Map<String, dynamic> map,
@@ -42,17 +44,11 @@ class StudyRoom {
                 },
               ),
             )
-          : List<Map<String, dynamic>>.from(
-              map['participants']?.map(
-                (x) => {
-                  'userId': x['userId'],
-                  'status': x['status'],
-                },
-              ),
-            ),
+          : [],
       roomName: map['name'] ?? '',
       roomOwner: map['owner'] ?? '',
       subject: Subject.fromMap(map['subject']),
+      participantCount: map['participantCount'] ?? 0,
     );
   }
 
@@ -63,6 +59,7 @@ class StudyRoom {
     List<Message>? messages,
     List<Map<String, dynamic>>? participants,
     Subject? subject,
+    int? participantCount,
   }) {
     return StudyRoom(
       roomId: roomId ?? this.roomId,
@@ -71,6 +68,7 @@ class StudyRoom {
       roomName: roomName ?? this.roomName,
       roomOwner: roomOwner ?? this.roomOwner,
       subject: subject ?? this.subject,
+      participantCount: participantCount ?? this.participantCount,
     );
   }
 
@@ -80,6 +78,7 @@ class StudyRoom {
     print("Room Owner: $roomOwner");
     print("Room Messages: $messages");
     print("Room Participants: $participants");
+    print("participantCount: $participantCount");
   }
 
   factory StudyRoom.fromJson(String source) =>
@@ -93,6 +92,7 @@ class StudyRoom {
       roomName: '',
       roomOwner: '',
       subject: Subject.empty(),
+      participantCount: 0,
     );
   }
 }

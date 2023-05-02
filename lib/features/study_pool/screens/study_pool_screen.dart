@@ -83,7 +83,7 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                           }
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => CreateStudyRoomScreen(),
+                              builder: (context) => const CreateStudyRoomScreen(),
                             ),
                           );
                         },

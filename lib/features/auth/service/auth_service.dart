@@ -39,6 +39,9 @@ class AuthService {
 
       if (!context.mounted) return;
 
+      print('login res');
+      print(res.body);
+
       if (json.decode(res.body).isEmpty) {
         showSnackBar(context, "Please check your credentials");
         return;
@@ -200,6 +203,7 @@ class AuthService {
           "email": userData['user']['email'],
           "role": userData['user']['role'],
           "token": userData['token'],
+          "subjects": userData['user']['subjects'],
         };
       }
 

@@ -66,8 +66,8 @@ class StudyPoolCard extends StatelessWidget {
               children: [
                 AppText(text: "Location: Room 101"),
                 AppText(text: "Time: 2:00 PM - 3:00 PM"),
-                AppText(text: "Tutor: ${studyRoom.roomOwner}}"),
-                AppText(text: "Tutees: 5/10"),
+                AppText(text: "Tutor: ${studyRoom.roomOwner}"),
+                AppText(text: "Tutees: ${studyRoom.participantCount}"),
                 const SizedBox(height: 10),
                 AppText(
                   text: "Description:",
