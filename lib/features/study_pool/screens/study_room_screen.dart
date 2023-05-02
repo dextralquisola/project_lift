@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:project_lift/features/study_pool/screens/pending_tutees_screen.dart';
+import 'package:project_lift/features/study_pool/screens/studyroom_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/styles.dart';
@@ -56,7 +57,10 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(currentStudyRoomProvider.studyRoom.roomName),
+        title: AppText(
+          text: currentStudyRoomProvider.studyRoom.roomName,
+          textColor: Colors.white,
+        ),
         backgroundColor: primaryColor,
         actions: [
           if (user.userId == currentStudyRoomProvider.studyRoom.roomOwner)
@@ -78,9 +82,9 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.people, color: Colors.black),
+                      const Icon(Icons.info, color: Colors.black),
                       const SizedBox(width: 5),
-                      AppText(text: "Participants"),
+                      AppText(text: "Studyroom Details"),
                     ],
                   ),
                 ),
@@ -99,7 +103,11 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
             },
             onSelected: (value) async {
               if (value == 0) {
-                print("Participants is selected.");
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const StudyRoomDetailsScreen(),
+                  ),
+                );
               } else if (value == 1) {
                 await _showAlertDialog(
                   context: context,

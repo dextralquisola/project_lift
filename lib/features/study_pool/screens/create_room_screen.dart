@@ -10,7 +10,7 @@ import '../../../models/subject.dart';
 import '../../../providers/user_provider.dart';
 
 class CreateStudyRoomScreen extends StatefulWidget {
-  CreateStudyRoomScreen({super.key});
+  const CreateStudyRoomScreen({super.key});
 
   @override
   State<CreateStudyRoomScreen> createState() => _CreateStudyRoomScreenState();
