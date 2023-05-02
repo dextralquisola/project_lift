@@ -10,7 +10,7 @@ class TutorProvider with ChangeNotifier {
   List<User> get tutors => _tutors;
   int get currentPage => _currentPage;
 
-  void setTutorsFromJson(dynamic data) {
+  void setTutorsFromJson(dynamic data, String userId) {
     if (_currentPage > _totalPages) {
       return;
     }
@@ -20,7 +20,15 @@ class TutorProvider with ChangeNotifier {
 
     if (tutors.length == 10) _currentPage++;
 
-    var newTutors = tutors.map((e) => User.fromMap(e)).toList();
+    //var newTutors = tutors.map((e) => User.fromMap(e)).toList();
+    List<User> newTutors = [];
+    for (var tutor in tutors) {
+      var newTutor = User.fromMap(tutor);
+      if (newTutor.userId != userId) {
+        newTutors.add(newTutor);
+      }
+    }
+
     var uniqueTutors = newTutors;
 
     if (tutors.length < 10) uniqueTutors = removeDuplicates(newTutors);

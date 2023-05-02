@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/find_tutor/screens/find_tutor_search_screen.dart';
 import 'package:project_lift/widgets/background_cover.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
@@ -100,6 +101,15 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                               height: 36.0,
                               width: double.infinity,
                               child: CupertinoTextField(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const FindTutorSearchScreen(),
+                                    ),
+                                  );
+                                },
+                                readOnly: true,
                                 keyboardType: TextInputType.text,
                                 placeholder: 'Search for a tutor',
                                 placeholderStyle: const TextStyle(
