@@ -1,28 +1,24 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/find_tutor/widgets/tutor_card_widget.dart';
-import 'package:project_lift/widgets/app_textfield.dart';
+import 'package:project_lift/features/study_pool/widgets/study_card_widget.dart';
+import 'package:project_lift/models/study_room.dart';
 
-import '../../../models/user.dart';
 import '../../../widgets/app_text.dart';
-import '../service/tutor_service.dart';
+import '../service/study_pool_service.dart';
 
-class FindTutorSearchScreen extends StatefulWidget {
-  const FindTutorSearchScreen({super.key});
+class StudyRoomSearchScreen extends StatefulWidget {
+  const StudyRoomSearchScreen({super.key});
 
   @override
-  State<FindTutorSearchScreen> createState() => _FindTutorSearchScreenState();
+  State<StudyRoomSearchScreen> createState() => _StudyRoomSearchScreenState();
 }
 
-class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
-  final tutorService = TutorService();
+class _StudyRoomSearchScreenState extends State<StudyRoomSearchScreen> {
+  final studyPoolService = StudyPoolService();
 
   final _searchController = StreamController<String>();
-  //final _debounce = const Duration(milliseconds: 300);
   Stream<String> get searchStream => _searchController.stream;
-
   final _textController = TextEditingController();
 
   @override
@@ -64,20 +60,21 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
         stream: searchStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return FutureBuilder<List<User>>(
-              future: tutorService.searchTutor(
+            return FutureBuilder<List<StudyRoom>>(
+              future: studyPoolService.searchStudyRoom(
                 search: _textController.text,
                 context: context,
               ),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   // Display search results
-                  final tutors = snapshot.data;
+                  final studyRoom = snapshot.data;
                   return ListView.builder(
-                    itemCount: tutors!.length,
+                    itemCount: studyRoom!.length,
                     itemBuilder: (context, index) {
-                      final tutor = tutors[index];
-                      return TutorCard(tutor: tutor);
+                      return StudyPoolCard(
+                        studyRoom: studyRoom[index],
+                      );
                     },
                   );
                 } else if (snapshot.hasError) {

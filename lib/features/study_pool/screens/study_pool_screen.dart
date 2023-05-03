@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/study_pool/screens/create_room_screen.dart';
 import 'package:project_lift/features/study_pool/screens/study_room_screen.dart';
+import 'package:project_lift/features/study_pool/screens/study_room_search_screen.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/features/study_pool/widgets/study_card_widget.dart';
 import 'package:project_lift/utils/utils.dart';
@@ -47,14 +48,20 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
               actions: [
                 IconButton(
                   icon: const Icon(Icons.search),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const StudyRoomSearchScreen(),
+                      ),
+                    );
+                  },
                 ),
               ],
               backgroundColor: primaryColor,
             ),
             body: studyRooms.isEmpty
                 ? Center(
-                    child: AppText(text: "No study room..."),
+                    child: AppText(text: "No study rooms..."),
                   )
                 : ListView.separated(
                     controller: _scrollControllerRoom,
@@ -83,7 +90,8 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                           }
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const CreateStudyRoomScreen(),
+                              builder: (context) =>
+                                  const CreateStudyRoomScreen(),
                             ),
                           );
                         },

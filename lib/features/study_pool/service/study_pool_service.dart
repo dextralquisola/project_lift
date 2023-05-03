@@ -6,6 +6,7 @@ import 'package:project_lift/utils/socket_client.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/study_room.dart';
 import '../../../models/subject.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/study_room_providers.dart';
@@ -309,5 +310,47 @@ class StudyPoolService {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<List<StudyRoom>> searchStudyRoom({
+    required BuildContext context,
+    String search = '',
+  }) async {
+    try {
+      if (search == '') {
+        return [];
+      }
+
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final user = userProvider.user;
+      var res = await service.requestApi(
+        path: '/api/studyroom/public?search=$search',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        List<StudyRoom> searchedStudyRooms = [];
+
+        var studyRooms = json.decode(res.body)['rooms'];
+        for (var room in studyRooms) {
+          var newStudyRoom = StudyRoom.fromMap(room, false, false);
+          if (newStudyRoom.roomOwner != "${user.firstName} ${user.lastName}") {
+            searchedStudyRooms.add(newStudyRoom);
+          }
+        }
+        return searchedStudyRooms;
+      } else {
+        print("ERROR: ${res.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    return [];
   }
 }
