@@ -30,6 +30,13 @@ class _StudyRoomSearchScreenState extends State<StudyRoomSearchScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchController.close();
+    _textController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

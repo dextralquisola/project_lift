@@ -34,6 +34,13 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchController.close();
+    _textController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
