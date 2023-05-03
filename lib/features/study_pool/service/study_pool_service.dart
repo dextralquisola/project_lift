@@ -339,9 +339,7 @@ class StudyPoolService {
         var studyRooms = json.decode(res.body)['rooms'];
         for (var room in studyRooms) {
           var newStudyRoom = StudyRoom.fromMap(room, false, false);
-          if (newStudyRoom.roomOwner != "${user.firstName} ${user.lastName}") {
-            searchedStudyRooms.add(newStudyRoom);
-          }
+          searchedStudyRooms.add(newStudyRoom);
         }
         return searchedStudyRooms;
       } else {
