@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
@@ -30,6 +32,12 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.initState();
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    animationController.dispose();
   }
 
   @override
@@ -89,6 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 await authService.logout(context);
                             if (isLogoutSuccess) {
                               await userProvider.logout();
+                              RestartWidget.restartApp(context);
                               tutorsProvider.clearTutors();
                               studyPoolProvider.clearStudyRooms();
                               currentStudyRoomProvider.leaveStudyRoom();

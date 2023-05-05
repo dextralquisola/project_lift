@@ -69,7 +69,8 @@ class SocketListeners {
     _socket.on("room-deleted", (data) {
       final currentRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
-      final studyRoomProvider = Provider.of<StudyRoomProvider>(context, listen: false);
+      final studyRoomProvider =
+          Provider.of<StudyRoomProvider>(context, listen: false);
       _socket.emit("leave-room", {
         "roomId": currentRoomProvider.studyRoom.roomId,
       });

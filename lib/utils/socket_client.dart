@@ -11,6 +11,8 @@ class SocketClient {
 
   void disconnect() {
     socket!.disconnect();
+    socket = null;
+    _instance = null;
     io.cache.clear();
   }
 

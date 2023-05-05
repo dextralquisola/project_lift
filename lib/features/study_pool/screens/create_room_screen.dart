@@ -40,6 +40,12 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    studyNameController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

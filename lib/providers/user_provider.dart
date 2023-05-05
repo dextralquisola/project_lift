@@ -57,7 +57,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    _user = User.emptyUser();
+    //_user = User.emptyUser();
 
     SocketClient.instance.disconnect();
 

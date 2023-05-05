@@ -30,6 +30,13 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
   final profileService = ProfileServie();
 
   @override
+  void dispose() {
+    super.dispose();
+    topicController.dispose();
+    descriptionController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 

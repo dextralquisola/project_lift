@@ -34,6 +34,12 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _scrollControllerRoom.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final studyRoomProvider = Provider.of<StudyRoomProvider>(context);

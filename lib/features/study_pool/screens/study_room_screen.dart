@@ -45,6 +45,13 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
       ..addListener(_scrollListenerMessage);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollControllerMessage.dispose();
+    _messageInputController.dispose();
+  }
+
   final studyRoomService = StudyPoolService();
 
   @override

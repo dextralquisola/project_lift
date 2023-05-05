@@ -15,7 +15,6 @@ class StudyRoomDetailsScreen extends StatelessWidget {
     final roomSubject = studyRoom.subject;
     final roomSubTopics = roomSubject.subTopics;
     final participants = studyRoom.participants;
-    print('room partocopants: $participants');
     return Scaffold(
       appBar: AppBar(
         title: AppText(text: 'Study Room Details', textColor: Colors.white),
@@ -63,10 +62,12 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                               return Card(
                                 child: ListTile(
                                   title: AppText(
-                                    text: 'Topic: ${roomSubTopics[index].topic}',
+                                    text:
+                                        'Topic: ${roomSubTopics[index].topic}',
                                   ),
                                   subtitle: AppText(
-                                    text: 'Description: ${roomSubTopics[index].description}',
+                                    text:
+                                        'Description: ${roomSubTopics[index].description}',
                                   ),
                                 ),
                               );
