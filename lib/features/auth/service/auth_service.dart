@@ -131,10 +131,6 @@ class AuthService {
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
 
-      print("auto login");
-      print("fcmToken: $fcmToken");
-      print("deviceToken: $deviceToken");
-
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString('token');
       if (token == null) return;
@@ -209,7 +205,6 @@ class AuthService {
 
       userProvider.setUserFromMap(userData);
       userProvider.setTokens(fcmToken: fcmToken, deviceToken: deviceToken);
-      userProvider.user.printUser();
 
       SocketClient(userProvider.user.token).socket!.connect();
       SocketListeners().activateEventListeners(context);

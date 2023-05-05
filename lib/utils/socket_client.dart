@@ -3,15 +3,15 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class SocketClient {
   io.Socket? socket;
-  late String authToken;
   static SocketClient? _instance;
 
-  bool isSocketConnected() {
-    return socket!.connected;
+  void connect() {
+    socket!.connect();
   }
 
-  void disconnect(){
+  void disconnect() {
     socket!.disconnect();
+    io.cache.clear();
   }
 
   SocketClient._internal(String authToken) {

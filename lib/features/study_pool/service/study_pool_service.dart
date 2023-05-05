@@ -66,8 +66,6 @@ class StudyPoolService {
       final currentRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
 
-      var socket = SocketClient.instance.socket!;
-
       var chatRoomRes = await service.requestApi(
         path: '/api/studyroom/user-room',
         method: 'GET',

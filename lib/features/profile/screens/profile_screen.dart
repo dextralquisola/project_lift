@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
 import 'package:project_lift/main.dart';
+import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_text.dart';
@@ -26,7 +27,6 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
@@ -39,6 +39,8 @@ class _ProfileScreenState extends State<ProfileScreen>
     final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
     final studyPoolProvider =
         Provider.of<StudyRoomProvider>(context, listen: false);
+    final currentStudyRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     final user = userProvider.user;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -89,6 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               await userProvider.logout();
                               tutorsProvider.clearTutors();
                               studyPoolProvider.clearStudyRooms();
+                              currentStudyRoomProvider.leaveStudyRoom();
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder: (context) => MyApp(),
