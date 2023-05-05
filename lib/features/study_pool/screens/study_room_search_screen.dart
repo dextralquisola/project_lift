@@ -18,14 +18,21 @@ class _StudyRoomSearchScreenState extends State<StudyRoomSearchScreen> {
   final studyPoolService = StudyPoolService();
 
   final _searchController = StreamController<String>();
-  Stream<String> get searchStream => _searchController.stream;
   final _textController = TextEditingController();
+
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _textController.addListener(() {
-      _searchController.sink.add(_textController.text);
+
+    _searchController.stream.listen((searchQuery) async {
+      await Future.delayed(const Duration(milliseconds: 700));
+      if (searchQuery == _searchQuery) {
+        setState(() {
+          _searchQuery = searchQuery;
+        });
+      }
     });
   }
 
@@ -49,11 +56,16 @@ class _StudyRoomSearchScreenState extends State<StudyRoomSearchScreen> {
           child: Center(
             child: TextField(
               controller: _textController,
+              onChanged: (searchQuery) {
+                _searchQuery = searchQuery;
+                _searchController.add(searchQuery);
+              },
               decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: () {
+                      _searchQuery = '';
                       _textController.clear();
                     },
                   ),
@@ -63,16 +75,24 @@ class _StudyRoomSearchScreenState extends State<StudyRoomSearchScreen> {
           ),
         ),
       ),
-      body: StreamBuilder<String>(
-        stream: searchStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return FutureBuilder<List<StudyRoom>>(
+      body: _searchQuery.isEmpty
+          ? Center(
+              child: AppText(
+                text: "Search something...",
+              ),
+            )
+          : FutureBuilder<List<StudyRoom>>(
               future: studyPoolService.searchStudyRoom(
-                search: _textController.text,
+                search: _searchQuery,
                 context: context,
               ),
               builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
                 if (snapshot.hasData) {
                   // Display search results
                   final studyRoom = snapshot.data;
@@ -92,17 +112,7 @@ class _StudyRoomSearchScreenState extends State<StudyRoomSearchScreen> {
                   child: CircularProgressIndicator(),
                 );
               },
-            );
-          } else {
-            // Display empty search UI
-          }
-          return Center(
-            child: AppText(
-              text: "Empty search",
             ),
-          );
-        },
-      ),
     );
   }
 }
