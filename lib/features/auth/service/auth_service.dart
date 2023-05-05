@@ -39,10 +39,7 @@ class AuthService {
 
       if (!context.mounted) return;
 
-      print('login res');
-      print(res.body);
-
-      if (json.decode(res.body).isEmpty) {
+      if (res.body.isEmpty) {
         showSnackBar(context, "Please check your credentials");
         return;
       }
@@ -98,9 +95,6 @@ class AuthService {
           "role": "tutor",
         },
       );
-
-      print("here1");
-      print('${res.statusCode}');
 
       if (!context.mounted) return;
 

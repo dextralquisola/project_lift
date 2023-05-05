@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/features/auth/screens/login_screen.dart';
-import 'package:project_lift/features/home/screens/home_screen.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:project_lift/widgets/app_textfield.dart';
@@ -9,7 +7,7 @@ import 'package:project_lift/widgets/app_textfield.dart';
 import '../service/auth_service.dart';
 
 class SignupScreen extends StatefulWidget {
-  SignupScreen({super.key});
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -22,6 +20,15 @@ class _SignupScreenState extends State<SignupScreen> {
   final passwordController = TextEditingController();
 
   final authService = AuthService();
+
+  @override
+  void dispose() {
+    super.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,11 +85,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       password: passwordController.text,
                       context: context,
                       onSuccess: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                        );
+                        Navigator.of(context).pop();
                       },
                     );
                   },
@@ -96,11 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     AppText(text: "Already have an account?"),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
+                        Navigator.of(context).pop();
                       },
                       child: AppText(
                         text: "Login",

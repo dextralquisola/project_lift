@@ -7,11 +7,10 @@ import 'package:project_lift/widgets/app_text.dart';
 import 'package:project_lift/widgets/app_textfield.dart';
 
 import '../../../constants/styles.dart';
-import '../../home/screens/home_screen.dart';
 import '../service/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -111,9 +110,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     AppText(text: "Don't have an account?"),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(
+                        emailController.clear();
+                        passwordController.clear();
+                        Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => SignupScreen(),
+                            builder: (context) => const SignupScreen(),
                           ),
                         );
                       },

@@ -92,11 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                               tutorsProvider.clearTutors();
                               studyPoolProvider.clearStudyRooms();
                               currentStudyRoomProvider.leaveStudyRoom();
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) => MyApp(),
-                                ),
-                              );
                             } else {
                               showSnackBar(context, "Something went wrong");
                             }
