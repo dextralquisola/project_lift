@@ -32,7 +32,7 @@ class Message {
   factory Message.fromMap(Map<String, dynamic> map, [bool isFromAppSend = false]) {
     return Message(
       messageId: isFromAppSend ? map['message']['_id'] : map['_id'] ?? '',
-      roomId: isFromAppSend ? map['message']['roomId'] : map['roomId'] ?? '',
+      roomId: isFromAppSend ? map['message']['roomId'] : map['roomId']['_id'] ?? '',
       userId: isFromAppSend ? map['user']['userId'] : map['userId']['_id'] ?? '',
       firstName: isFromAppSend ? map['user']['firstName'] : map['userId']['firstName'] ?? '',
       lastName: isFromAppSend ? map['user']['lastName'] : map['userId']['lastName'] ?? '',

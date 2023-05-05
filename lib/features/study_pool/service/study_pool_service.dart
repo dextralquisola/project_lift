@@ -76,10 +76,6 @@ class StudyPoolService {
           "fcmToken": userProvider.user.firebaseToken,
           "deviceToken": userProvider.user.deviceToken,
         },
-        body: {
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
       );
 
       if (chatRoomRes.statusCode == 200 && chatRoomRes.statusCode != 404) {
@@ -97,19 +93,15 @@ class StudyPoolService {
             "fcmToken": userProvider.user.firebaseToken,
             "deviceToken": userProvider.user.deviceToken,
           },
-          body: {
-            "fcmToken": userProvider.user.firebaseToken,
-            "deviceToken": userProvider.user.deviceToken,
-          },
         );
+
+        print('resmessage');
+        print(resMessages.statusCode);
+        print(resMessages.body);
 
         if (resMessages.statusCode == 200) {
           var messages = json.decode(resMessages.body);
           currentRoomProvider.setMessagesFromJson(messages);
-
-          // socket.emit('join-room', {
-          //   'roomId': currentRoomProvider.studyRoom.roomId,
-          // });
         }
       }
     } catch (e) {
