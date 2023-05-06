@@ -1,10 +1,6 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/find_tutor/widgets/tutor_card_widget.dart';
-import 'package:project_lift/widgets/app_textfield.dart';
-
+import '../widgets/tutor_card_widget.dart';
 import '../../../models/user.dart';
 import '../../../widgets/app_text.dart';
 import '../service/tutor_service.dart';
@@ -31,6 +27,13 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
     _textController.addListener(() {
       _searchController.sink.add(_textController.text);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _searchController.close();
+    _textController.dispose();
   }
 
   @override

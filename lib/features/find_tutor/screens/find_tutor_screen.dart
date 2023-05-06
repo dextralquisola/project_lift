@@ -38,6 +38,13 @@ class _FindTutorScreenState extends State<FindTutorScreen>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _scrollControllerTutors.dispose();
+    _animationController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final tutorsProvider = Provider.of<TutorProvider>(context);
     final tutors = tutorsProvider.tutors;
