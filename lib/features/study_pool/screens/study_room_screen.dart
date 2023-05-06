@@ -45,6 +45,13 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
       ..addListener(_scrollListenerMessage);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _messageInputController.dispose();
+    _scrollControllerMessage.dispose();
+  }
+
   final studyRoomService = StudyPoolService();
 
   @override
@@ -283,19 +290,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
     if (_scrollControllerMessage.offset >=
             _scrollControllerMessage.position.maxScrollExtent &&
         !_scrollControllerMessage.position.outOfRange) {
-      print('reached top');
-      setState(() {
-        _isLoading = true;
-      });
-
-      if (_isLoading) {
-        //call fetch messages
-        await StudyPoolService().fetchMessages(context);
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
+      await StudyPoolService().fetchMessages(context);
     }
   }
 }

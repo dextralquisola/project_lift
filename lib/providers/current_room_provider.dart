@@ -59,6 +59,8 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   }
 
   void leaveStudyRoom() {
+    _totalMessagePage = 1;
+    _currentMessagePage = 1;
     _studyRoom = StudyRoom.empty();
     notifyListeners();
   }

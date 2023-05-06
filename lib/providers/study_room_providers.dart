@@ -39,6 +39,8 @@ class StudyRoomProvider with ChangeNotifier {
   }
 
   void clearStudyRooms() {
+    _currentPage = 1;
+    _totalPages = 1;
     _studyRooms = [];
     notifyListeners();
   }
