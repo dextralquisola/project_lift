@@ -97,7 +97,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 await authService.logout(context);
                             if (isLogoutSuccess) {
                               await userProvider.logout();
-                              RestartWidget.restartApp(context);
                               tutorsProvider.clearTutors();
                               studyPoolProvider.clearStudyRooms();
                               currentStudyRoomProvider.leaveStudyRoom();

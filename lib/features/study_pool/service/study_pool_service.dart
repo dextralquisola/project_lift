@@ -93,10 +93,6 @@ class StudyPoolService {
           },
         );
 
-        print('resmessage');
-        print(resMessages.statusCode);
-        print(resMessages.body);
-
         if (resMessages.statusCode == 200) {
           var messages = json.decode(resMessages.body);
           currentRoomProvider.setMessagesFromJson(messages);

@@ -11,6 +11,7 @@ import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/providers/tutors_provider.dart';
 import 'package:project_lift/providers/user_provider.dart';
+import 'package:project_lift/utils/socket_client.dart';
 import 'package:project_lift/widgets/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -27,16 +28,14 @@ void main() async {
   });
 
   runApp(
-    RestartWidget(
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => UserProvider()),
-          ChangeNotifierProvider(create: (_) => TutorProvider()),
-          ChangeNotifierProvider(create: (_) => StudyRoomProvider()),
-          ChangeNotifierProvider(create: (_) => CurrentStudyRoomProvider()),
-        ],
-        child: MyApp(),
-      ),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => TutorProvider()),
+        ChangeNotifierProvider(create: (_) => StudyRoomProvider()),
+        ChangeNotifierProvider(create: (_) => CurrentStudyRoomProvider()),
+      ],
+      child: MyApp(),
     ),
   );
 }
@@ -81,41 +80,6 @@ class MyApp extends StatelessWidget {
                 return const LoginScreen();
               },
             ),
-    );
-  }
-}
-
-class RestartWidget extends StatefulWidget {
-  RestartWidget({required this.child});
-
-  final Widget child;
-
-  static void restartApp(BuildContext context) {
-    context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
-  }
-
-  @override
-  _RestartWidgetState createState() => _RestartWidgetState();
-}
-
-class _RestartWidgetState extends State<RestartWidget> {
-  Key key = UniqueKey();
-
-  void restartApp() {
-    setState(() {
-      key = UniqueKey();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    print("======");
-    print("built the app");
-    print(key);
-    print("******");
-    return KeyedSubtree(
-      key: key,
-      child: widget.child,
     );
   }
 }
