@@ -16,16 +16,20 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
   final tutorService = TutorService();
 
   final _searchController = StreamController<String>();
-  //final _debounce = const Duration(milliseconds: 300);
-  Stream<String> get searchStream => _searchController.stream;
-
   final _textController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _textController.addListener(() {
-      _searchController.sink.add(_textController.text);
+
+    _searchController.stream.listen((searchQuery) async {
+      await Future.delayed(const Duration(milliseconds: 700));
+      if (searchQuery == _searchQuery) {
+        setState(() {
+          _searchQuery = searchQuery;
+        });
+      }
     });
   }
 
@@ -49,30 +53,43 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
           child: Center(
             child: TextField(
               controller: _textController,
+              onChanged: (searchQuery) {
+                _searchQuery = searchQuery;
+                _searchController.add(searchQuery);
+              },
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _textController.clear();
-                    },
-                  ),
-                  hintText: 'Search...',
-                  border: InputBorder.none),
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    _textController.clear();
+                  },
+                ),
+                hintText: 'Search...',
+                border: InputBorder.none,
+              ),
             ),
           ),
         ),
       ),
-      body: StreamBuilder<String>(
-        stream: searchStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return FutureBuilder<List<User>>(
+      body: _searchQuery.isEmpty
+          ? Center(
+              child: AppText(
+                text: "Search something...",
+              ),
+            )
+          : FutureBuilder<List<User>>(
               future: tutorService.searchTutor(
-                search: _textController.text,
+                search: _searchQuery,
                 context: context,
               ),
               builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
                 if (snapshot.hasData) {
                   // Display search results
                   final tutors = snapshot.data;
@@ -91,17 +108,7 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
                   child: CircularProgressIndicator(),
                 );
               },
-            );
-          } else {
-            // Display empty search UI
-          }
-          return Center(
-            child: AppText(
-              text: "Empty search",
             ),
-          );
-        },
-      ),
     );
   }
 }

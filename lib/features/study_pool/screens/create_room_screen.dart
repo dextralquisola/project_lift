@@ -30,6 +30,8 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   List<DropdownMenuItem<SubTopic>> availableSubTopics = [];
 
   final studyNameController = TextEditingController();
+  final locationController = TextEditingController();
+
   var studyRoomStatus = StudyRoomStatus.public;
   var _isLoading = false;
 
@@ -59,6 +61,12 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
             AppTextField(
               controller: studyNameController,
               labelText: "Study Room Name",
+            ),
+            const SizedBox(height: 10),
+            AppTextField(
+              controller: locationController,
+              labelText: "Study location",
+              hintText: 'e.g. Library, 3rd floor',
             ),
             const SizedBox(height: 10),
             Row(
