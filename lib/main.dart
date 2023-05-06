@@ -36,15 +36,29 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final authService = AuthService();
+
   final studyRoomService = StudyPoolService();
+
   final tutorService = TutorService();
 
   @override
+  void dispose() {
+    super.dispose();
+    print("Disposing MyApp!");
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("Building MyApp!");
     final userProvider = Provider.of<UserProvider>(context);
     return MaterialApp(
       title: 'LFT',

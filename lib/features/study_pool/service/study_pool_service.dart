@@ -20,6 +20,8 @@ class StudyPoolService {
     required StudyRoomStatus status,
     required Subject subject,
     required List<SubTopic> subTopics,
+    required String location,
+    required String schedule,
   }) async {
     // function here
     try {
@@ -44,6 +46,8 @@ class StudyPoolService {
           'subjectCode': subject.subjectCode,
           'description': subject.description,
           'subtopics': subTopicListToMap(subTopics),
+          'location': location,
+          'schedule': schedule,
         },
         method: 'POST',
       );

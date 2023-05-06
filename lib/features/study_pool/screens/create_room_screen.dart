@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:project_lift/widgets/app_textfield.dart';
@@ -32,7 +34,18 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   final studyNameController = TextEditingController();
   final locationController = TextEditingController();
 
+  int _currentStep = 0;
   var studyRoomStatus = StudyRoomStatus.public;
+
+  var fromTime = TimeOfDay.now();
+  final fromTimeTextController = TextEditingController();
+
+  var toTime = TimeOfDay.now();
+  final toTimeTextController = TextEditingController();
+
+  var selectedDate = DateTime.now();
+  final selectedDateTextController = TextEditingController();
+
   var _isLoading = false;
 
   @override
@@ -54,126 +67,360 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
         title: const Text('Create Study Room'),
         backgroundColor: primaryColor,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            AppTextField(
-              controller: studyNameController,
-              labelText: "Study Room Name",
-            ),
-            const SizedBox(height: 10),
-            AppTextField(
-              controller: locationController,
-              labelText: "Study location",
-              hintText: 'e.g. Library, 3rd floor',
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: SizedBox(
+          width: double.maxFinite,
+          child: Column(
+            children: [
+              Expanded(
+                child: Stepper(
+                  type: StepperType.vertical,
+                  physics: const ScrollPhysics(),
+                  currentStep: _currentStep,
+                  onStepTapped: (step) => tapped(step),
+                  onStepContinue: _currentStep == 3 ? null : continued,
+                  controlsBuilder: (context, details) {
+                    return SizedBox(
+                      width: double.maxFinite,
+                      child: details.currentStep == 3
+                          ? null
+                          : Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Row(
+                                children: [
+                                  AppButton(
+                                    onPressed: details.onStepContinue!,
+                                    bgColor: primaryColor,
+                                    text: "Next",
+                                  ),
+                                  const SizedBox(width: 12),
+                                  AppButton(
+                                    bgColor: Colors.redAccent,
+                                    onPressed: details.onStepCancel!,
+                                    text: _currentStep == 0 ? "Cancel" : "Back",
+                                  ),
+                                ],
+                              ),
+                            ),
+                    );
+                  },
+                  onStepCancel: cancel,
+                  steps: [
+                    Step(
+                      title: AppText(text: 'Set study room name.'),
+                      content: Column(
                         children: [
-                          AppText(text: "Select subject", textSize: 20),
-                          DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 300,
-                            value: selectedSubject,
-                            items: availableSubjects,
-                            onChanged: (s) => _onChangeSubject(s as Subject),
+                          AppTextField(
+                            controller: studyNameController,
+                            labelText: "Study Room Name",
+                          ),
+                          const SizedBox(height: 10),
+                          AppTextField(
+                            controller: locationController,
+                            labelText: "Study location",
+                            hintText: 'e.g. Library, 3rd floor',
+                          ),
+                          const SizedBox(height: 10)
+                        ],
+                      ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep == 0
+                          ? StepState.complete
+                          : StepState.disabled,
+                    ),
+                    Step(
+                      title: AppText(text: "Select subject and sub-topics."),
+                      content: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        AppText(
+                                            text: "Select subject",
+                                            textSize: 17),
+                                        DropdownButton(
+                                          isExpanded: true,
+                                          menuMaxHeight: 300,
+                                          value: selectedSubject,
+                                          items: availableSubjects,
+                                          onChanged: (s) =>
+                                              _onChangeSubject(s as Subject),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      AppText(
+                                          text: "Selected subtopics",
+                                          textSize: 17),
+                                      const Spacer(),
+                                      IconButton(
+                                        onPressed: () async =>
+                                            await _showSelectTopicDialog(
+                                                context),
+                                        icon: Icon(Icons.add,
+                                            color: primaryColor),
+                                      ),
+                                    ],
+                                  ),
+                                  const Divider(),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: selectedSubTopics.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        title: AppText(
+                                            text:
+                                                selectedSubTopics[index].topic),
+                                        trailing: IconButton(
+                                          onPressed: () => removeSubTopic(
+                                              selectedSubTopics[index]),
+                                          icon: const Icon(Icons.remove,
+                                              color: Colors.red),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep == 1
+                          ? StepState.complete
+                          : StepState.disabled,
                     ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        AppText(text: "Selected subtopics", textSize: 20),
-                        const Spacer(),
-                        IconButton(
-                          onPressed: () async =>
-                              await _showSelectTopicDialog(context),
-                          icon: Icon(Icons.add, color: primaryColor),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: selectedSubTopics.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: AppText(text: selectedSubTopics[index].topic),
-                          trailing: IconButton(
-                            onPressed: () =>
-                                removeSubTopic(selectedSubTopics[index]),
-                            icon: const Icon(Icons.remove, color: Colors.red),
+                    Step(
+                      title: AppText(text: "Set meet schedule."),
+                      content: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              DateTime? newDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2023),
+                                lastDate: DateTime(2100),
+                              );
+                              if (newDate == null) return;
+                              if (validateDate(newDate)) {
+                                showSnackBar(context,
+                                    "You can't pick date from the past!");
+                                return;
+                              }
+
+                              setState(() {
+                                selectedDateTextController.text =
+                                    DateFormat('MMMM dd, yyyy').format(newDate);
+                              });
+                            },
+                            child: AppTextField(
+                              labelText: "Select date.",
+                              controller: selectedDateTextController,
+                              hintText: 'August 22, 2023',
+                              isEnabled: false,
+                            ),
                           ),
-                        );
-                      },
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            width: double.maxFinite,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      TimeOfDay? newTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: fromTime,
+                                      );
+
+                                      if (newTime == null) return;
+                                      if (validateTimeOfDay(newTime)) {
+                                        showSnackBar(context,
+                                            "Please select a time between 6:00 AM to 7:00 PM");
+                                        return;
+                                      }
+
+                                      setState(() {
+                                        fromTime = newTime;
+                                        fromTimeTextController.text =
+                                            fromTime.format(context);
+                                      });
+                                    },
+                                    child: AppTextField(
+                                      labelText: "From.",
+                                      controller: fromTimeTextController,
+                                      hintText: '5:00 AM',
+                                      isEnabled: false,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      TimeOfDay? newTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: toTime,
+                                      );
+
+                                      if (newTime == null) return;
+                                      if (validateTimeOfDay(newTime)) {
+                                        showSnackBar(context,
+                                            "Please select a time between 6:00 AM to 7:00 PM");
+                                        return;
+                                      }
+
+                                      setState(() {
+                                        toTime = newTime;
+                                        toTimeTextController.text =
+                                            toTime.format(context);
+                                      });
+                                    },
+                                    child: AppTextField(
+                                      labelText: "To.",
+                                      controller: toTimeTextController,
+                                      hintText: '6:00 PM',
+                                      isEnabled: false,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep == 2
+                          ? StepState.complete
+                          : StepState.disabled,
+                    ),
+                    Step(
+                      title: AppText(text: "Select room privacy"),
+                      content: Column(
+                        children: [
+                          RadioListTile(
+                            title: AppText(text: "Public"),
+                            value: StudyRoomStatus.public,
+                            groupValue: studyRoomStatus,
+                            onChanged: (value) {
+                              setState(() {
+                                studyRoomStatus = value!;
+                              });
+                            },
+                          ),
+                          RadioListTile(
+                            title: AppText(text: "Private"),
+                            value: StudyRoomStatus.private,
+                            groupValue: studyRoomStatus,
+                            onChanged: (value) {
+                              setState(() {
+                                studyRoomStatus = value!;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          _isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : AppButton(
+                                  wrapRow: true,
+                                  height: 50,
+                                  onPressed: () async {
+                                    setState(() => _isLoading = true);
+                                    await studyPoolService.createStudyPool(
+                                      context: context,
+                                      studyPoolName: studyNameController.text,
+                                      status: studyRoomStatus,
+                                      subject: selectedSubject,
+                                      subTopics: selectedSubTopics,
+                                      location: locationController.text,
+                                      schedule: scheduleBuilder(
+                                        selectedDate,
+                                        fromTime,
+                                        toTime,
+                                      ),
+                                    );
+                                    setState(() => _isLoading = false);
+                                    Navigator.of(context).pop();
+                                  },
+                                  text: "Create Study Room",
+                                ),
+                          TextButton(
+                            onPressed: () => setState(() => _currentStep = 2),
+                            child: AppText(
+                              text: "<< Go back to previous step.",
+                              textColor: Colors.redAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep == 3
+                          ? StepState.complete
+                          : StepState.disabled,
                     ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            RadioListTile(
-              title: AppText(text: "Public"),
-              value: StudyRoomStatus.public,
-              groupValue: studyRoomStatus,
-              onChanged: (value) {
-                setState(() {
-                  studyRoomStatus = value!;
-                });
-              },
-            ),
-            RadioListTile(
-              title: AppText(text: "Private"),
-              value: StudyRoomStatus.private,
-              groupValue: studyRoomStatus,
-              onChanged: (value) {
-                setState(() {
-                  studyRoomStatus = value!;
-                });
-              },
-            ),
-            _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : AppButton(
-                    wrapRow: true,
-                    height: 50,
-                    onPressed: () async {
-                      setState(() => _isLoading = true);
-                      await studyPoolService.createStudyPool(
-                        context: context,
-                        studyPoolName: studyNameController.text,
-                        status: studyRoomStatus,
-                        subject: selectedSubject,
-                        subTopics: selectedSubTopics,
-                      );
-                      setState(() => _isLoading = false);
-                      Navigator.of(context).pop();
-                    },
-                    text: "Create Study Room",
-                  ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  bool validateStep() {
+    switch (_currentStep) {
+      case 0:
+        return studyNameController.text.isNotEmpty &&
+            locationController.text.isNotEmpty;
+      case 2:
+        return selectedDateTextController.text.isNotEmpty &&
+            fromTimeTextController.text.isNotEmpty &&
+            toTimeTextController.text.isNotEmpty;
+      default:
+        return true;
+    }
+  }
+
+  bool validateTimeOfDay(TimeOfDay timeOfDay) {
+    return timeOfDay.hour < 6 || timeOfDay.hour > 19;
+  }
+
+  bool validateDate(DateTime date) {
+    return date.isBefore(DateTime.now());
+  }
+
+  String scheduleBuilder(
+    DateTime date,
+    TimeOfDay from,
+    TimeOfDay to,
+  ) {
+    var newDate = date.toIso8601String();
+    var fromTime = '${from.hour}:${from.minute}';
+    var toTime = '${to.hour}:${to.minute}';
+
+    return "$newDate+$fromTime.$toTime";
   }
 
   void removeSubTopic(SubTopic subTopic) {
@@ -301,6 +548,34 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
       },
     );
     setState(() {});
+  }
+
+  tapped(int step) {
+    setState(() {
+      _currentStep = step;
+    });
+  }
+
+  continued() {
+    _currentStep < 3
+        ? validateStep()
+            ? setState(() => _currentStep += 1)
+            : ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.redAccent,
+                  content: AppText(
+                    text: 'Please fill up all fields.',
+                    textColor: Colors.white,
+                  ),
+                ),
+              )
+        : Navigator.of(context).pop();
+  }
+
+  cancel() {
+    _currentStep > 0
+        ? setState(() => _currentStep -= 1)
+        : Navigator.of(context).pop();
   }
 
   bool isEmptySubtopic(SubTopic subTopic) {

@@ -96,10 +96,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                             var isLogoutSuccess =
                                 await authService.logout(context);
                             if (isLogoutSuccess) {
-                              await userProvider.logout();
                               tutorsProvider.clearTutors();
                               studyPoolProvider.clearStudyRooms();
                               currentStudyRoomProvider.leaveStudyRoom();
+                              await userProvider.logout();
                             } else {
                               showSnackBar(context, "Something went wrong");
                             }
@@ -195,6 +195,8 @@ class _ProfileScreenState extends State<ProfileScreen>
       ),
     );
   }
+
+  Future<void> logout() async {}
 
   void _showDialog(BuildContext context) {
     showDialog(
