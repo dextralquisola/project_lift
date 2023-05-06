@@ -161,7 +161,8 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                               ),
                             ),
                           ),
-                          TutorCard(tutor: tutors[index])
+                          if (tutors[index].subjects.isNotEmpty)
+                            TutorCard(tutor: tutors[index])
                         ],
                       );
                     }

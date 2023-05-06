@@ -37,21 +37,34 @@ class TutorCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 30),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _textBuilder(
-                            "${tutor.firstName} ${tutor.lastName}", true),
-                        _textBuilder("BS Computer Science"),
-                        _textBuilder("Specialization:"),
-                        _textBuilder("Computer Programming 1-2"),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _textBuilder(
+                            text: "${tutor.firstName} ${tutor.lastName}",
+                            isName: true,
+                          ),
+                          _textBuilder(text: "Specialization: "),
+                          ...tutor.subjects
+                              .map(
+                                (e) {
+                                  return _textBuilder(
+                                      text:
+                                          '${e.subjectCode}: ${e.description}',
+                                      textSize: 12);
+                                },
+                              )
+                              .toList()
+                              .take(3)
+                        ],
+                      ),
                     )
                   ],
                 ),
                 const SizedBox(height: 10),
-                _textBuilder("Schedule"),
-                _textBuilder("Monday - Friday: 8:00 AM - 5:00 PM"),
+                _textBuilder(text: "Schedule"),
+                _textBuilder(text: "Monday - Friday: 8:00 AM - 5:00 PM"),
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,
@@ -67,11 +80,16 @@ class TutorCard extends StatelessWidget {
     );
   }
 
-  Widget _textBuilder(String text, [isName = false]) {
+  Widget _textBuilder({
+    required String text,
+    bool isName = false,
+    double textSize = 14,
+  }) {
     return AppText(
       text: text,
-      textSize: isName ? 18 : 14,
+      textSize: isName ? 18 : textSize,
       fontWeight: isName ? FontWeight.bold : FontWeight.w300,
+      textOverflow: TextOverflow.ellipsis,
     );
   }
 }

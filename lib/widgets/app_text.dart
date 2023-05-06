@@ -7,6 +7,7 @@ class AppText extends StatelessWidget {
   FontWeight? fontWeight;
   TextAlign? textAlign;
   Alignment? alignment;
+  TextOverflow? textOverflow;
   AppText({
     super.key,
     required this.text,
@@ -15,6 +16,7 @@ class AppText extends StatelessWidget {
     this.fontWeight,
     this.textAlign,
     this.alignment,
+    this.textOverflow,
   });
 
   @override
@@ -29,6 +31,7 @@ class AppText extends StatelessWidget {
     return Text(
       text,
       textAlign: textAlign,
+      overflow: textOverflow,
       style: TextStyle(
         color: textColor,
         fontSize: textSize,
