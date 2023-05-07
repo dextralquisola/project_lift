@@ -222,14 +222,19 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                                 firstDate: DateTime(2023),
                                 lastDate: DateTime(2100),
                               );
+
                               if (newDate == null) return;
-                              if (validateDate(newDate)) {
-                                showSnackBar(context,
-                                    "You can't pick date from the past!");
-                                return;
-                              }
+
+                              // ! Uncomment this after testing
+                              // if (validateDate(newDate)) {
+                              //   showSnackBar(context,
+                              //       "You can't pick date from the past!");
+                              //   return;
+                              // }
+                              // !
 
                               setState(() {
+                                selectedDate = newDate;
                                 selectedDateTextController.text =
                                     DateFormat('MMMM dd, yyyy').format(newDate);
                               });

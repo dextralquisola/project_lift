@@ -62,6 +62,10 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
     final chats = currentStudyRoomProvider.messages;
     final user = userProvider.user;
 
+    final roomSchedule = StudyRoomSchedule(
+        scheduleString: currentStudyRoomProvider.studyRoom.schedule);
+    final date = roomSchedule.scheduleDate;
+
     return Scaffold(
       appBar: AppBar(
         title: AppText(
@@ -106,6 +110,22 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                     ],
                   ),
                 ),
+                if (userProvider.user.userId ==
+                    currentStudyRoomProvider.studyRoom.roomOwner)
+                  PopupMenuItem(
+                    value: 2,
+                    enabled: DateTime.now().isAfter(date) &&
+                        currentStudyRoomProvider.studyRoom.participants.length >
+                            1,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.exit_to_app, color: Colors.red),
+                        const SizedBox(width: 5),
+                        AppText(text: "End session"),
+                      ],
+                    ),
+                  ),
               ];
             },
             onSelected: (value) async {
@@ -121,6 +141,12 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                   studyRoom: currentStudyRoomProvider.studyRoom,
                   user: userProvider.user,
                 );
+              } else if (value == 2) {
+                await _showEndSessionDialog(
+                  context: context,
+                  studyRoom: currentStudyRoomProvider.studyRoom,
+                  user: userProvider.user,
+                );
               }
             },
           ),
@@ -130,14 +156,14 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
         children: [
           chats.isEmpty
               ? Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: AppText(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: AppText(
                       text: "Send hello to get started! 😊",
                       textSize: 20,
                     ),
-                ),
-              )
+                  ),
+                )
               : Expanded(
                   child: ListView.separated(
                       reverse: true,
@@ -283,6 +309,58 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
             ? "Are you sure you want to leave this study room? The room will be deleted and the tutees will be notified and kicked to the room. "
             : "Are you sure you want to leave this study room?",
       ),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  _showEndSessionDialog({
+    required BuildContext context,
+    required User user,
+    required StudyRoom studyRoom,
+  }) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: AppText(
+        text: "Cancel",
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: AppText(text: "End session", textColor: Colors.red),
+      onPressed: () async {
+        setState(() {
+          _isLoading = true;
+        });
+        await studyRoomService.endStudySession(context: context);
+        setState(() {
+          _isLoading = false;
+        });
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: AppText(
+        text: "Warning!",
+        textColor: Colors.red,
+        textSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
+      content:
+          AppText(text: "Are you sure you want to end this study session?"),
       actions: [
         cancelButton,
         continueButton,

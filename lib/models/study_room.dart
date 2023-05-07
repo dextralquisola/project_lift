@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:project_lift/models/message.dart';
 import 'package:project_lift/models/subject.dart';
 
@@ -15,6 +14,7 @@ class StudyRoom {
   final List<Map<String, dynamic>> participants;
   final Subject subject;
   final int participantCount;
+  final bool sessionEnded;
 
   StudyRoom({
     required this.roomId,
@@ -25,6 +25,7 @@ class StudyRoom {
     required this.subject,
     required this.location,
     required this.schedule,
+    required this.sessionEnded,
     this.participantCount = 0,
   });
 
@@ -55,6 +56,7 @@ class StudyRoom {
       roomOwner: map['owner'] ?? '',
       location: map['location'] ?? '',
       schedule: map['schedule'] ?? '',
+      sessionEnded: map['sessionEnded'] ?? false,
       subject: Subject.fromMap(map['subject']),
       participantCount: map['participantCount'] ?? 0,
     );
@@ -70,6 +72,7 @@ class StudyRoom {
     int? participantCount,
     String? location,
     String? schedule,
+    bool? sessionEnded,
   }) {
     return StudyRoom(
       roomId: roomId ?? this.roomId,
@@ -81,6 +84,7 @@ class StudyRoom {
       participantCount: participantCount ?? this.participantCount,
       location: location ?? this.location,
       schedule: schedule ?? this.schedule,
+      sessionEnded: sessionEnded ?? this.sessionEnded,
     );
   }
 
@@ -93,6 +97,7 @@ class StudyRoom {
     print("participantCount: $participantCount");
     print("location: $location");
     print("schedule: $schedule");
+    print("sessionEnded: $sessionEnded");
   }
 
   factory StudyRoom.fromJson(String source) =>
@@ -107,6 +112,7 @@ class StudyRoom {
       roomOwner: '',
       location: '',
       schedule: '',
+      sessionEnded: false,
       subject: Subject.empty(),
       participantCount: 0,
     );

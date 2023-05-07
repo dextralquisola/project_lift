@@ -56,6 +56,12 @@ class StudyPoolService {
         // success
         studyRoomProvider.addSingleStudyRoom(json.decode(res.body));
         currentStudyRoomProvider.setStudyRoomFromJson(json.decode(res.body));
+        currentStudyRoomProvider.addParticipant({
+          'userId': userProvider.user.userId,
+          'firstName': userProvider.user.firstName,
+          'lastName': userProvider.user.lastName,
+          'status': 'owner',
+        });
       } else {
         // error
       }
@@ -361,6 +367,31 @@ class StudyPoolService {
         for (var room in decoded) {
           studyRoomProvider.addPendingRoom(room['_id']);
         }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> endStudySession({
+    required BuildContext context,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentSudyRoom =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/studyroom/end-session/${currentSudyRoom.studyRoom.roomId}',
+        method: 'PATCH',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        showSnackBar(context, "Study session ended!");
       }
     } catch (e) {
       print(e);

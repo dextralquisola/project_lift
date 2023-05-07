@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/study_pool/screens/create_room_screen.dart';
+import 'package:project_lift/features/study_pool/screens/rate_screen.dart';
 import 'package:project_lift/features/study_pool/screens/study_room_screen.dart';
 import 'package:project_lift/features/study_pool/screens/study_room_search_screen.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
@@ -114,7 +115,9 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                   )
                 : null,
           )
-        : const CurrentRoomScreen();
+        : currentStudyRoomProvider.studyRoom.sessionEnded
+            ? const RateScreen()
+            : const CurrentRoomScreen();
   }
 
   _scrollListenerRoom() async {
