@@ -168,11 +168,11 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                               ),
                             ),
                           ),
-                          if (tutors[index].subjects.isNotEmpty)
-                            TutorCard(tutor: tutors[index])
+                          TutorCard(tutor: tutors[index])
                         ],
                       );
                     }
+
                     return TutorCard(tutor: tutors[index]);
                   },
                   separatorBuilder: (context, index) =>
