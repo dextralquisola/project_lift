@@ -128,66 +128,78 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: ListView.separated(
-                reverse: true,
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(16),
-                controller: _scrollControllerMessage,
-                itemBuilder: (context, index) {
-                  final message = chats[index];
-                  return Wrap(
-                    alignment: message.userId == user.userId
-                        ? WrapAlignment.end
-                        : WrapAlignment.start,
-                    children: [
-                      Card(
-                        color: message.userId == user.userId
-                            ? const Color(0xff2A813E)
-                            : Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: message.userId == user.userId
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
-                            children: [
-                              if (message.userId != user.userId)
-                                AppText(
-                                    textColor: primaryColor,
-                                    fontWeight: FontWeight.w600,
-                                    text:
-                                        "${message.firstName} ${message.lastName}"),
-                              AppText(
-                                textSize: 14,
-                                textColor: message.userId == user.userId
-                                    ? Colors.white
-                                    : Colors.black,
-                                text: message.message,
-                              ),
-                              AppText(
-                                textSize: 11,
-                                textColor: message.userId == user.userId
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontWeight: FontWeight.w300,
-                                text: DateFormat('hh:mm a').format(
-                                  DateTime.parse(message.createdAt).toLocal(),
+          chats.isEmpty
+              ? Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: AppText(
+                      text: "Send hello to get started! 😊",
+                      textSize: 20,
+                    ),
+                ),
+              )
+              : Expanded(
+                  child: ListView.separated(
+                      reverse: true,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(16),
+                      controller: _scrollControllerMessage,
+                      itemBuilder: (context, index) {
+                        final message = chats[index];
+                        return Wrap(
+                          alignment: message.userId == user.userId
+                              ? WrapAlignment.end
+                              : WrapAlignment.start,
+                          children: [
+                            Card(
+                              color: message.userId == user.userId
+                                  ? const Color(0xff2A813E)
+                                  : Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      message.userId == user.userId
+                                          ? CrossAxisAlignment.end
+                                          : CrossAxisAlignment.start,
+                                  children: [
+                                    if (message.userId != user.userId)
+                                      AppText(
+                                          textColor: primaryColor,
+                                          fontWeight: FontWeight.w600,
+                                          text:
+                                              "${message.firstName} ${message.lastName}"),
+                                    AppText(
+                                      textSize: 14,
+                                      textColor: message.userId == user.userId
+                                          ? Colors.white
+                                          : Colors.black,
+                                      text: message.message,
+                                    ),
+                                    AppText(
+                                      textSize: 11,
+                                      textColor: message.userId == user.userId
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w300,
+                                      text: DateFormat('hh:mm a').format(
+                                        DateTime.parse(message.createdAt)
+                                            .toLocal(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            )
+                          ],
+                        );
+                      },
+                      separatorBuilder: (_, index) => const SizedBox(
+                            height: 5,
                           ),
-                        ),
-                      )
-                    ],
-                  );
-                },
-                separatorBuilder: (_, index) => const SizedBox(
-                      height: 5,
-                    ),
-                itemCount: chats.length),
-          ),
+                      itemCount: chats.length),
+                ),
           Container(
             decoration: BoxDecoration(
               color: Colors.grey.shade200,
