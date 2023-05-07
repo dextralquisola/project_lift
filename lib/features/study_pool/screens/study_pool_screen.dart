@@ -71,8 +71,11 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                   )
                 : ListView.separated(
                     controller: _scrollControllerRoom,
-                    itemBuilder: (context, index) =>
-                        StudyPoolCard(studyRoom: studyRooms[index]),
+                    itemBuilder: (context, index) => StudyPoolCard(
+                      studyRoom: studyRooms[index],
+                      isStudyRoomPending: studyRoomProvider
+                          .isRoomPending(studyRooms[index].roomId),
+                    ),
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 10),
                     itemCount: studyRooms.length,

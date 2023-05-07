@@ -7,9 +7,11 @@ import '../../../widgets/app_text.dart';
 
 class StudyPoolCard extends StatelessWidget {
   final StudyRoom studyRoom;
+  final bool isStudyRoomPending;
   StudyPoolCard({
     super.key,
     required this.studyRoom,
+    required this.isStudyRoomPending,
   });
 
   final studyRoomService = StudyPoolService();
@@ -80,9 +82,12 @@ class StudyPoolCard extends StatelessWidget {
                 AppButton(
                   onPressed: () async {
                     await studyRoomService.joinRoom(
-                        roomId: studyRoom.roomId, context: context);
+                      roomId: studyRoom.roomId,
+                      context: context,
+                    );
                     Navigator.of(context).pop();
                   },
+                  isEnabled: !isStudyRoomPending,
                   height: 50,
                   wrapRow: true,
                   text: "Join now!",

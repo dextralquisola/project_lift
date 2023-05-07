@@ -45,10 +45,13 @@ class SocketListeners {
 
   void _onParticipantAcceptedEvent(BuildContext context) {
     _socket.on("participant-accepted", (data) {
+      final studyRoomProvider =
+          Provider.of<StudyRoomProvider>(context, listen: false);
       final currentRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomFromJson(data['chatRoom']);
       currentRoomProvider.setMessagesFromJson(data['messages']);
+      studyRoomProvider.clearPendingRooms();
     });
   }
 

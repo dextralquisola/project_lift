@@ -3,11 +3,27 @@ import 'package:project_lift/models/study_room.dart';
 
 class StudyRoomProvider with ChangeNotifier {
   List<StudyRoom> _studyRooms = [];
+  List<String> _pendingRooms = [];
+
   int _currentPage = 1;
   int _totalPages = 1;
 
   List<StudyRoom> get studyRooms => _studyRooms;
   int get currentPage => _currentPage;
+
+  void clearPendingRooms() {
+    _pendingRooms = [];
+    notifyListeners();
+  }
+
+  bool isRoomPending(String roomId) {
+    return _pendingRooms.contains(roomId);
+  }
+
+  void addPendingRoom(String roomId) {
+    _pendingRooms.add(roomId);
+    notifyListeners();
+  }
 
   void addSingleStudyRoom(dynamic data) {
     if (_studyRooms.length % 10 == 0) _currentPage++;

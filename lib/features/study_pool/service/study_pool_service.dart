@@ -205,6 +205,8 @@ class StudyPoolService {
   }) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final studyRoomProvider =
+          Provider.of<StudyRoomProvider>(context, listen: false);
       var joinResRoom = await service.requestApi(
         path: '/api/studyroom/join/$roomId',
         method: 'POST',
@@ -213,14 +215,10 @@ class StudyPoolService {
           "fcmToken": userProvider.user.firebaseToken,
           "deviceToken": userProvider.user.deviceToken,
         },
-        body: {
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
       );
 
       if (joinResRoom.statusCode == 202) {
-        // success
+        studyRoomProvider.addPendingRoom(roomId);
         showSnackBar(context, "Room joined!, waiting for tutor to accept");
       } else {
         print("ERROR: ${joinResRoom.statusCode}");
@@ -340,5 +338,32 @@ class StudyPoolService {
     }
 
     return [];
+  }
+
+  Future<void> getPendingChatRoomIds(BuildContext context) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final studyRoomProvider =
+          Provider.of<StudyRoomProvider>(context, listen: false);
+
+      var res = await service.requestApi(
+        path: '/api/studyroom/pending',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        var decoded = json.decode(res.body);
+        for (var room in decoded) {
+          studyRoomProvider.addPendingRoom(room['_id']);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }
