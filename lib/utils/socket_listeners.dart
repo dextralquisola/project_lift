@@ -50,7 +50,7 @@ class SocketListeners {
       final currentRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomFromJson(data['chatRoom']);
-      currentRoomProvider.setMessagesFromJson(data['messages']);
+      currentRoomProvider.setMessagesFromJson(data);
       studyRoomProvider.clearPendingRooms();
     });
   }
