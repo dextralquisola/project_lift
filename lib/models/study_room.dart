@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:project_lift/models/message.dart';
 import 'package:project_lift/models/subject.dart';
 
@@ -7,6 +9,8 @@ class StudyRoom {
   final String roomId;
   final String roomName;
   final String roomOwner;
+  final String location;
+  final String schedule;
   final List<Message> messages;
   final List<Map<String, dynamic>> participants;
   final Subject subject;
@@ -19,6 +23,8 @@ class StudyRoom {
     required this.participants,
     required this.roomOwner,
     required this.subject,
+    required this.location,
+    required this.schedule,
     this.participantCount = 0,
   });
 
@@ -47,6 +53,8 @@ class StudyRoom {
           : [],
       roomName: map['name'] ?? '',
       roomOwner: map['owner'] ?? '',
+      location: map['location'] ?? '',
+      schedule: map['schedule'] ?? '',
       subject: Subject.fromMap(map['subject']),
       participantCount: map['participantCount'] ?? 0,
     );
@@ -60,6 +68,8 @@ class StudyRoom {
     List<Map<String, dynamic>>? participants,
     Subject? subject,
     int? participantCount,
+    String? location,
+    String? schedule,
   }) {
     return StudyRoom(
       roomId: roomId ?? this.roomId,
@@ -69,6 +79,8 @@ class StudyRoom {
       roomOwner: roomOwner ?? this.roomOwner,
       subject: subject ?? this.subject,
       participantCount: participantCount ?? this.participantCount,
+      location: location ?? this.location,
+      schedule: schedule ?? this.schedule,
     );
   }
 
@@ -79,6 +91,8 @@ class StudyRoom {
     print("Room Messages: $messages");
     print("Room Participants: $participants");
     print("participantCount: $participantCount");
+    print("location: $location");
+    print("schedule: $schedule");
   }
 
   factory StudyRoom.fromJson(String source) =>
@@ -91,8 +105,35 @@ class StudyRoom {
       participants: [],
       roomName: '',
       roomOwner: '',
+      location: '',
+      schedule: '',
       subject: Subject.empty(),
       participantCount: 0,
     );
   }
+}
+
+class StudyRoomSchedule {
+  final String scheduleString;
+
+  StudyRoomSchedule({
+    required this.scheduleString,
+  });
+
+  DateTime get scheduleDate => DateTime.parse(
+        scheduleString.split('+')[0],
+      );
+
+  TimeOfDay get fromTime => TimeOfDay(
+        hour:
+            int.parse(scheduleString.split('+')[1].split('.')[0].split(':')[0]),
+        minute:
+            int.parse(scheduleString.split('+')[1].split('.')[0].split(':')[1]),
+      );
+  TimeOfDay get toTime => TimeOfDay(
+        hour:
+            int.parse(scheduleString.split('+')[1].split('.')[1].split(':')[0]),
+        minute:
+            int.parse(scheduleString.split('+')[1].split('.')[1].split(':')[1]),
+      );
 }

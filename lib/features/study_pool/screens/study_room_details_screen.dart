@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:project_lift/models/study_room.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/current_room_provider.dart';
@@ -15,17 +17,23 @@ class StudyRoomDetailsScreen extends StatelessWidget {
     final roomSubject = studyRoom.subject;
     final roomSubTopics = roomSubject.subTopics;
     final participants = studyRoom.participants;
+
+    final roomSchedule = StudyRoomSchedule(scheduleString: studyRoom.schedule);
+    final date = roomSchedule.scheduleDate;
+    final fromTime = roomSchedule.fromTime;
+    final toTime = roomSchedule.toTime;
+
     return Scaffold(
       appBar: AppBar(
         title: AppText(text: 'Study Room Details', textColor: Colors.white),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: SizedBox(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
                 width: double.infinity,
                 child: Card(
                   child: Padding(
@@ -41,43 +49,54 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         AppText(
+                          text: 'Location: ${studyRoom.location}',
+                          textColor: Colors.black,
+                          textSize: 20,
+                        ),
+                        const SizedBox(height: 10),
+                        AppText(
+                          text:
+                              'Schedule:\n${DateFormat('MMMM dd, yyyy').format(date)} from ${fromTime.format(context)} - ${toTime.format(context)}',
+                          textColor: Colors.black,
+                          textSize: 20,
+                        ),
+                        const SizedBox(height: 10),
+                        AppText(
                           text:
                               'Room subject: ${roomSubject.subjectCode}, ${roomSubject.description}',
                           textColor: Colors.black,
                           textSize: 20,
                         ),
                         const SizedBox(height: 10),
-                        AppText(
-                          text: 'Room sub topics:',
-                          textColor: Colors.black,
-                          textSize: 20,
-                        ),
-                        SizedBox(
-                          height: 100,
-                          child: ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                const Divider(),
-                            itemCount: roomSubTopics.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: ListTile(
-                                  title: AppText(
-                                    text:
-                                        'Topic: ${roomSubTopics[index].topic}',
+                        roomSubject.subTopics.isEmpty
+                            ? const SizedBox()
+                            : Column(
+                                children: [
+                                  AppText(
+                                    text: 'Room sub topics:',
+                                    textColor: Colors.black,
+                                    textSize: 20,
                                   ),
-                                  subtitle: AppText(
-                                    text:
-                                        'Description: ${roomSubTopics[index].description}',
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const Divider(thickness: 2),
+                                  ...roomSubTopics
+                                      .map(
+                                        (e) => Card(
+                                          child: ListTile(
+                                            title: AppText(
+                                              text: 'Topic: ${e.topic}',
+                                            ),
+                                            subtitle: AppText(
+                                              text:
+                                                  'Description: ${e.description}',
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ],
+                              ),
                         const SizedBox(height: 10),
                         AppText(
-                          text: 'Room members:',
+                          text: 'Room participants:',
                           textColor: Colors.black,
                           textSize: 20,
                         ),
@@ -115,8 +134,8 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

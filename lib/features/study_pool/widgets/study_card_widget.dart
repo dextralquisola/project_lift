@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/models/study_room.dart';
 
@@ -52,6 +53,11 @@ class StudyPoolCard extends StatelessWidget {
     required BuildContext context,
     required StudyRoom studyRoom,
   }) {
+    final roomSchedule = StudyRoomSchedule(scheduleString: studyRoom.schedule);
+    final date = roomSchedule.scheduleDate;
+    final fromTime = roomSchedule.fromTime;
+    final toTime = roomSchedule.toTime;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -66,8 +72,12 @@ class StudyPoolCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText(text: "Location: Room 101"),
-                AppText(text: "Time: 2:00 PM - 3:00 PM"),
+                AppText(text: "Location: ${studyRoom.location}"),
+                AppText(
+                    text: "Date: ${DateFormat('MMMM dd, yyyy').format(date)}"),
+                AppText(
+                    text:
+                        "Time: ${fromTime.format(context)} - ${toTime.format(context)}"),
                 AppText(text: "Tutor: ${studyRoom.roomOwner}"),
                 AppText(text: "Tutees: ${studyRoom.participantCount}"),
                 const SizedBox(height: 10),
