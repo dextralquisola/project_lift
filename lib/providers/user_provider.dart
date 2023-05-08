@@ -15,6 +15,25 @@ class UserProvider with ChangeNotifier {
 
   Subject get firstSubject => _user.subjects.first;
 
+  double getRating({required bool isTutor}) {
+    double totalRating = 0;
+    if (isTutor) {
+      for (var rating in _user.ratingAsTutor) {
+        totalRating += rating.rating;
+      }
+    } else {
+      for (var rating in _user.ratingAsTutee) {
+        totalRating += rating.rating;
+      }
+    }
+
+    return isTutor
+        ? totalRating /
+            (_user.ratingAsTutor.isEmpty ? 1 : _user.ratingAsTutor.length)
+        : totalRating /
+            (_user.ratingAsTutee.isEmpty ? 1 : _user.ratingAsTutee.length);
+  }
+
   bool isSubjectAdded(String subjectCode) {
     return subjects.any((subject) => subject.subjectCode == subjectCode);
   }

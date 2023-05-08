@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
 import 'package:project_lift/main.dart';
@@ -50,6 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     final currentStudyRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     final user = userProvider.user;
+    final ratingAsTutor = userProvider.getRating(isTutor: true);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -76,11 +78,44 @@ class _ProfileScreenState extends State<ProfileScreen>
                           borderRadius: BorderRadius.circular(100),
                           border: Border.all(color: Colors.white, width: 5),
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(105),
-                          child: Container(
-                            color: Colors.deepPurple,
-                          ),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(105),
+                              child: Container(
+                                color: Colors.deepPurple,
+                              ),
+                            ),
+                            if (userProvider.isTutor)
+                              Positioned(
+                                bottom: -5,
+                                left: 1,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Container(
+                                    width: 30,
+                                    height: 30,
+                                    color: primaryColor,
+                                    child: const Icon(
+                                      FontAwesomeIcons.graduationCap,
+                                      color: Colors.amber,
+                                      size: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            Positioned(
+                              bottom: 0,
+                              right: -15,
+                              child: AppText(
+                                text: '⭐️ $ratingAsTutor',
+                                textSize: 20,
+                                textColor: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -195,8 +230,6 @@ class _ProfileScreenState extends State<ProfileScreen>
       ),
     );
   }
-
-  Future<void> logout() async {}
 
   void _showDialog(BuildContext context) {
     showDialog(

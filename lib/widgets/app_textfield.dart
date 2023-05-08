@@ -6,6 +6,8 @@ import 'app_text.dart';
 
 class AppTextField extends StatefulWidget {
   final VoidCallback? onEditingComplete;
+  final VoidCallback? onTap;
+  final Function(PointerDownEvent p)? onTapOutside;
   final TextEditingController controller;
   final TextInputType? textInputType;
   final MouseCursor? mouseCursor;
@@ -17,6 +19,7 @@ class AppTextField extends StatefulWidget {
   final int length;
   final int maxLines;
   final OutlineInputBorder? outlineInputBorder;
+  final FocusNode? focusNode;
 
   const AppTextField({
     required this.controller,
@@ -31,6 +34,9 @@ class AppTextField extends StatefulWidget {
     this.inputFormatters,
     this.maxLines = 1,
     this.outlineInputBorder,
+    this.onTap,
+    this.onTapOutside,
+    this.focusNode,
     super.key,
   });
 
@@ -54,6 +60,8 @@ class _AppTextFieldState extends State<AppTextField> {
         SizedBox(
           child: Material(
             child: TextField(
+              onTapOutside: widget.onTapOutside,
+              focusNode: widget.focusNode,
               maxLength: widget.length,
               enabled: widget.isEnabled,
               controller: widget.controller,
@@ -67,6 +75,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   widget.onEditingComplete!();
                 }
               },
+              onTap: widget.onTap,
               decoration: InputDecoration(
                 counterText: "",
                 fillColor: Colors.white,
@@ -90,14 +99,10 @@ class _AppTextFieldState extends State<AppTextField> {
                     ? IconButton(
                         onPressed: () => setState(() => isObscure = !isObscure),
                         icon: isObscure
-                            ? Icon(
-                                Icons.remove_red_eye_outlined,
-                                color: primaryColor
-                              )
-                            : Icon(
-                                Icons.remove_red_eye_rounded,
-                                color: primaryColor
-                              ))
+                            ? Icon(Icons.remove_red_eye_outlined,
+                                color: primaryColor)
+                            : Icon(Icons.remove_red_eye_rounded,
+                                color: primaryColor))
                     : null,
               ),
             ),

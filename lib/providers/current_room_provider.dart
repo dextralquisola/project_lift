@@ -58,6 +58,11 @@ class CurrentStudyRoomProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setStudyRoomSessionEnded() {
+    _studyRoom = _studyRoom.copyWith(sessionEnded: true);
+    notifyListeners();
+  }
+
   void leaveStudyRoom() {
     _totalMessagePage = 1;
     _currentMessagePage = 1;
@@ -101,6 +106,8 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   }
 
   void clearRoom() {
+    _totalMessagePage = 1;
+    _currentMessagePage = 1;
     _studyRoom = StudyRoom.empty();
     notifyListeners();
   }

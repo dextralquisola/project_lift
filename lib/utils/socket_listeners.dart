@@ -15,6 +15,7 @@ class SocketListeners {
     _onParticipantAcceptedEvent(context);
     _onUserLeftRoom(context);
     _onRoomDeleted(context);
+    _onSessionEnded(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -79,6 +80,14 @@ class SocketListeners {
       });
       studyRoomProvider.removeStudyRoomById(data['roomId']);
       currentRoomProvider.clearRoom();
+    });
+  }
+
+  void _onSessionEnded(BuildContext context) {
+    _socket.on("session-ended", (data) {
+      final currentRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+      currentRoomProvider.setStudyRoomSessionEnded();
     });
   }
 }

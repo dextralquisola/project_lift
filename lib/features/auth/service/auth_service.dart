@@ -194,6 +194,8 @@ class AuthService {
           "role": userData['user']['role'],
           "token": userData['token'],
           "subjects": userData['user']['subjects'],
+          "ratingAsTutor": userData['user']['ratingAsTutor'],
+          "ratingAsTutee": userData['user']['ratingAsTutee'],
         };
       }
 

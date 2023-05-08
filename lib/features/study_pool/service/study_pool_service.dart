@@ -276,27 +276,28 @@ class StudyPoolService {
         context,
         listen: false,
       );
+      final studyRoomProvider =
+          Provider.of<StudyRoomProvider>(context, listen: false);
       final userProvider = Provider.of<UserProvider>(context, listen: false);
 
       var socket = SocketClient.instance.socket!;
       var res = await service.requestApi(
-          path: '/api/studyroom/leave/${currentRoomProvider.studyRoom.roomId}',
-          method: 'POST',
-          headers: {
-            "Authorization": userProvider.user.token,
-            "fcmToken": userProvider.user.firebaseToken,
-            "deviceToken": userProvider.user.deviceToken,
-          },
-          body: {
-            "fcmToken": userProvider.user.firebaseToken,
-            "deviceToken": userProvider.user.deviceToken,
-          });
+        path: '/api/studyroom/leave/${currentRoomProvider.studyRoom.roomId}',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
 
       if (res.statusCode == 200) {
         // success
         socket.emit("leave-room", {
           "roomId": currentRoomProvider.studyRoom.roomId,
         });
+        studyRoomProvider
+            .removeStudyRoomById(currentRoomProvider.studyRoom.roomId);
         currentRoomProvider.clearRoom();
       } else {
         print("ERROR: ${res.statusCode}");
@@ -396,5 +397,72 @@ class StudyPoolService {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<bool> rateUsers({
+    required BuildContext context,
+    required int rating,
+    required String feedback,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentSudyRoom =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
+      String path = '';
+      Map<String, dynamic> body = {};
+
+      if (userProvider.user.userId == currentSudyRoom.studyRoom.roomOwner) {
+        print("rate participants");
+        path = '/api/rate-participants';
+
+        var participantsMapped = currentSudyRoom.studyRoom.participants
+            .map((e) {
+              if (e['status'] == 'accepted') {
+                return {
+                  "_id": e['userId'],
+                };
+              }
+              return {};
+            })
+            .toList()
+            .where((element) => element.isNotEmpty)
+            .toList();
+
+        body = {
+          "rating": rating,
+          "feedback": feedback,
+          "participants": participantsMapped,
+        };
+      } else {
+        path = '/api/rate-tutor';
+        body = {
+          "rating": rating,
+          "feedback": feedback,
+          "tutorId": currentSudyRoom.studyRoom.roomOwner,
+        };
+      }
+
+      var res = await service.requestApi(
+        path: path,
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: body,
+      );
+
+      if (res.statusCode == 200) {
+        print("Success");
+        return true;
+      } else {
+        print("ERROR: ${res.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
   }
 }

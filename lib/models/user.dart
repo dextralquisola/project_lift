@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:project_lift/models/rating.dart';
+
 import './subject.dart';
 
 class User {
@@ -12,6 +14,8 @@ class User {
   final String token;
   final String firebaseToken;
   final String deviceToken;
+  final List<Rating> ratingAsTutor;
+  final List<Rating> ratingAsTutee;
 
   User({
     required this.userId,
@@ -21,6 +25,8 @@ class User {
     required this.role,
     required this.token,
     required this.subjects,
+    required this.ratingAsTutor,
+    required this.ratingAsTutee,
     this.firebaseToken = '',
     this.deviceToken = '',
   });
@@ -58,6 +64,8 @@ class User {
       deviceToken: deviceToken ?? this.deviceToken,
       firebaseToken: firebaseToken ?? this.firebaseToken,
       subjects: subjects ?? this.subjects,
+      ratingAsTutor: ratingAsTutor,
+      ratingAsTutee: ratingAsTutee,
     );
   }
 
@@ -70,6 +78,9 @@ class User {
     print('token: $token');
     print('deviceToken: $deviceToken');
     print('firebaseToken: $firebaseToken');
+    print('subjects: $subjects');
+    print('ratingAsTutor: ${[...ratingAsTutor.map((e) => e.rating).toList()]}');
+    print('ratingAsTutee: $ratingAsTutee');
   }
 
   factory User.emptyUser() {
@@ -83,6 +94,8 @@ class User {
       deviceToken: '',
       firebaseToken: '',
       subjects: [],
+      ratingAsTutor: [],
+      ratingAsTutee: [],
     );
   }
 
@@ -94,6 +107,20 @@ class User {
       email: map['email'] ?? '',
       role: map['role'] ?? '',
       token: map['token'] ?? '',
+      ratingAsTutor: map['ratingsAsTutor'].isEmpty
+          ? []
+          : List<Rating>.from(
+              map['ratingsAsTutor']?.map(
+                (x) => Rating.fromMap(x),
+              ),
+            ),
+      ratingAsTutee: map['ratingsAsTutee'].isEmpty
+          ? []
+          : List<Rating>.from(
+              map['ratingsAsTutee']?.map(
+                (x) => Rating.fromMap(x),
+              ),
+            ),
       subjects: map['subjects'].isEmpty
           ? []
           : List<Subject>.from(
