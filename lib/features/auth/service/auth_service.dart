@@ -102,15 +102,8 @@ class AuthService {
         response: res,
         context: context,
         onSuccess: () async {
-          print("signup success!");
-          await _loginMethod(
-            context: context,
-            res: res,
-            isSignup: true,
-            fcmToken: fcmToken,
-            deviceToken: deviceToken,
-          );
-
+          showSnackBar(context,
+              "Account created successfully, please verify your email and then login.");
           onSuccess();
         },
       );
@@ -196,11 +189,21 @@ class AuthService {
           "subjects": userData['user']['subjects'],
           "ratingAsTutor": userData['user']['ratingAsTutor'],
           "ratingAsTutee": userData['user']['ratingAsTutee'],
+          "isEmailVerified": userData['user']['isEmailVerified'] ?? false,
         };
       }
 
+      print("login");
+      print(userData);
+
       userProvider.setUserFromMap(userData);
       userProvider.setTokens(fcmToken: fcmToken, deviceToken: deviceToken);
+
+      if (!userProvider.user.isEmailVerified) {
+        showSnackBar(context, "Please verify your email");
+        userProvider.clearUserData();
+        return;
+      }
 
       SocketClient(userProvider.user.token).socket!.connect();
       SocketListeners().activateEventListeners(context);

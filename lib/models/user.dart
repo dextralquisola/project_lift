@@ -16,6 +16,7 @@ class User {
   final String deviceToken;
   final List<Rating> ratingAsTutor;
   final List<Rating> ratingAsTutee;
+  final bool isEmailVerified;
 
   User({
     required this.userId,
@@ -27,6 +28,7 @@ class User {
     required this.subjects,
     required this.ratingAsTutor,
     required this.ratingAsTutee,
+    required this.isEmailVerified,
     this.firebaseToken = '',
     this.deviceToken = '',
   });
@@ -53,6 +55,9 @@ class User {
     String? deviceToken,
     String? firebaseToken,
     List<Subject>? subjects,
+    List<Rating>? ratingAsTutor,
+    List<Rating>? ratingAsTutee,
+    bool? isEmailVerified,
   }) {
     return User(
       userId: userId ?? this.userId,
@@ -64,8 +69,9 @@ class User {
       deviceToken: deviceToken ?? this.deviceToken,
       firebaseToken: firebaseToken ?? this.firebaseToken,
       subjects: subjects ?? this.subjects,
-      ratingAsTutor: ratingAsTutor,
-      ratingAsTutee: ratingAsTutee,
+      ratingAsTutor: ratingAsTutor ?? this.ratingAsTutor,
+      ratingAsTutee: ratingAsTutee ?? this.ratingAsTutee,
+      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
     );
   }
 
@@ -81,6 +87,7 @@ class User {
     print('subjects: $subjects');
     print('ratingAsTutor: ${[...ratingAsTutor.map((e) => e.rating).toList()]}');
     print('ratingAsTutee: $ratingAsTutee');
+    print('isEmailVerified: $isEmailVerified');
   }
 
   factory User.emptyUser() {
@@ -93,6 +100,7 @@ class User {
       token: '',
       deviceToken: '',
       firebaseToken: '',
+      isEmailVerified: false,
       subjects: [],
       ratingAsTutor: [],
       ratingAsTutee: [],
@@ -107,14 +115,15 @@ class User {
       email: map['email'] ?? '',
       role: map['role'] ?? '',
       token: map['token'] ?? '',
-      ratingAsTutor: map['ratingsAsTutor'].isEmpty
+      isEmailVerified: map['isEmailVerified'] ?? false,
+      ratingAsTutor: map['ratingsAsTutor'] == null || map['ratingsAsTutor'].isEmpty
           ? []
           : List<Rating>.from(
               map['ratingsAsTutor']?.map(
                 (x) => Rating.fromMap(x),
               ),
             ),
-      ratingAsTutee: map['ratingsAsTutee'].isEmpty
+      ratingAsTutee: map['ratingsAsTutee'] == null || map['ratingsAsTutee'].isEmpty
           ? []
           : List<Rating>.from(
               map['ratingsAsTutee']?.map(

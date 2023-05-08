@@ -11,7 +11,7 @@ class UserProvider with ChangeNotifier {
   User get user => _user;
   List<Subject> get subjects => _user.subjects;
   bool get isTutor => _user.role == 'tutor';
-  bool get isAuthenticated => _user.token != '';
+  bool get isAuthenticated => _user.token != '' && user.isEmailVerified;
 
   Subject get firstSubject => _user.subjects.first;
 
@@ -83,6 +83,11 @@ class UserProvider with ChangeNotifier {
     var prefs = await SharedPreferences.getInstance();
     prefs.clear();
 
+    notifyListeners();
+  }
+
+  void clearUserData() {
+    _user = User.emptyUser();
     notifyListeners();
   }
 }
