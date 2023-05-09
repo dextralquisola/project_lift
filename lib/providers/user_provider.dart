@@ -9,19 +9,40 @@ import '../models/user.dart';
 class UserProvider with ChangeNotifier {
   User _user = User.emptyUser();
   List<Request> _requests = [];
+  List<Request> _myRequests = [];
 
   User get user => _user;
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '' && user.isEmailVerified;
   List<Request> get requests => _requests;
+  List<Request> get myRequests => _myRequests;
 
-  void removeRequestById(String id) {
+  bool isHasRequest(String id) {
+    return _myRequests.indexWhere((req) => req.tutorId == id) == -1;
+  }
+
+  void removeMyRequestById(String id) {
+    _myRequests.removeWhere((element) => element.requestId == id);
+    notifyListeners();
+  }
+
+  void addMyRequestFromMap(List<dynamic> requests,
+      [bool notifyListener = false, bool isFromNew = false]) {
+    _myRequests =
+        requests.map((e) => Request.fromMap(e, true, isFromNew)).toList();
+
+    notifyListener ? notifyListeners() : () {};
+  }
+
+  void removeTuteeRequestById(String id) {
     _requests.removeWhere((element) => element.requestId == id);
     notifyListeners();
   }
 
-  void addRequestsFromMap(List<dynamic> requests) {
-    _requests = requests.map((e) => Request.fromMap(e)).toList();
+  void addTuteeRequestsFromMap(List<dynamic> requests,
+      [bool notifyListener = false, bool isFromNew = false]) {
+    _requests = requests.map((e) => Request.fromMap(e, false, isFromNew)).toList();
+    notifyListener ? notifyListeners() : () {};
   }
 
   void addSubject(Subject subject) {

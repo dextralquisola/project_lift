@@ -3,14 +3,15 @@ import 'package:project_lift/features/study_pool/screens/create_room_screen.dart
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 
-import '../../../models/study_room.dart';
 import '../../../models/user.dart';
 
 class TutorCard extends StatelessWidget {
   final User tutor;
+  final bool isPendingRequest;
   const TutorCard({
     super.key,
     required this.tutor,
+    required this.isPendingRequest,
   });
 
   @override
@@ -75,6 +76,7 @@ class TutorCard extends StatelessWidget {
                   const SizedBox(height: 20),
                   AppButton(
                     height: 50,
+                    isEnabled: isPendingRequest,
                     onPressed: () async {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -145,8 +147,9 @@ class TutorCard extends StatelessWidget {
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,
+                  isEnabled: isPendingRequest,
                   onPressed: () async {
-                    Navigator.of(context).push(
+                    await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => CreateStudyRoomScreen(
                           isAskHelp: true,
@@ -154,6 +157,7 @@ class TutorCard extends StatelessWidget {
                         ),
                       ),
                     );
+                    Navigator.of(context).pop();
                   },
                   wrapRow: true,
                   text: "Ask Help",

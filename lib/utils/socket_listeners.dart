@@ -17,6 +17,8 @@ class SocketListeners {
     _onRoomDeleted(context);
     _onSessionEnded(context);
     _onRequestAccepted(context);
+    _onRequestRejected(context);
+    _onTuteeRequested(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -81,7 +83,8 @@ class SocketListeners {
         "roomId": currentRoomProvider.studyRoom.roomId,
       });
 
-      studyRoomProvider.removeStudyRoomById(currentRoomProvider.studyRoom.roomId);
+      studyRoomProvider
+          .removeStudyRoomById(currentRoomProvider.studyRoom.roomId);
       currentRoomProvider.clearRoom();
     });
   }
@@ -99,6 +102,22 @@ class SocketListeners {
       final currentRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomFromJson(data);
+    });
+  }
+
+  void _onRequestRejected(BuildContext context) {
+    _socket.on("request-rejected", (data) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.removeMyRequestById(data['_id']);
+    });
+  }
+
+  void _onTuteeRequested(BuildContext context) {
+    _socket.on("new-request", (data) {
+      print("New request received");
+      print(data);
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.addTuteeRequestsFromMap([data], true, true);
     });
   }
 }

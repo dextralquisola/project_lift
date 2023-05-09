@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/user_provider.dart';
 import '../widgets/tutor_card_widget.dart';
 import '../../../models/user.dart';
 import '../../../widgets/app_text.dart';
@@ -42,6 +44,7 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         // The search area here
@@ -97,7 +100,12 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
                     itemCount: tutors!.length,
                     itemBuilder: (context, index) {
                       final tutor = tutors[index];
-                      return TutorCard(tutor: tutor);
+                      var isPendingRequest =
+                          userProvider.isHasRequest(tutor.userId);
+                      return TutorCard(
+                        tutor: tutor,
+                        isPendingRequest: isPendingRequest,
+                      );
                     },
                   );
                 } else if (snapshot.hasError) {

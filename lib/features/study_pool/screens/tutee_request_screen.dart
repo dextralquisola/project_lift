@@ -52,13 +52,19 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
                       onPressed: () async {
                         await respondTutee(request.requestId, 'accepted');
                       },
-                      icon: const Icon(Icons.check),
+                      icon: const Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
                     ),
                     IconButton(
                       onPressed: () async {
                         await respondTutee(request.requestId, 'rejected');
                       },
-                      icon: const Icon(Icons.close),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
                     ),
                   ],
                 ),
@@ -113,6 +119,7 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
                           text: "${subTopic.topic} ${subTopic.description}"),
                     )
                     .toList(),
+                AppText(text: "Location: ${request.location}"),
                 AppText(
                   text: "Date: ${DateFormat('MMMM dd, yyyy').format(date)}",
                 ),

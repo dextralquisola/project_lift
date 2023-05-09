@@ -6,6 +6,7 @@ import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/tutors_provider.dart';
+import '../../../providers/user_provider.dart';
 import '../service/tutor_service.dart';
 import '../widgets/tutor_card_widget.dart';
 
@@ -46,6 +47,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     final tutorsProvider = Provider.of<TutorProvider>(context);
     final tutors = tutorsProvider.tutors;
     return SafeArea(
@@ -153,6 +155,8 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                 )
               : ListView.separated(
                   itemBuilder: (context, index) {
+                    var isPendingRequest =
+                        userProvider.isHasRequest(tutors[index].userId);
                     if (index == 0) {
                       return Stack(
                         children: [
@@ -168,12 +172,18 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                               ),
                             ),
                           ),
-                          TutorCard(tutor: tutors[index])
+                          TutorCard(
+                            tutor: tutors[index],
+                            isPendingRequest: isPendingRequest,
+                          )
                         ],
                       );
                     }
 
-                    return TutorCard(tutor: tutors[index]);
+                    return TutorCard(
+                      tutor: tutors[index],
+                      isPendingRequest: isPendingRequest,
+                    );
                   },
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),

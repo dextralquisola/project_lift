@@ -74,6 +74,7 @@ class _MyAppState extends State<MyApp> {
                 studyRoomService.fetchStudyRooms(context),
                 studyRoomService.getPendingChatRoomIds(context),
                 studyRoomService.getTuteeRequests(context),
+                studyRoomService.getMyRequests(context),
               ]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
