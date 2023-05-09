@@ -2,53 +2,31 @@ import 'package:flutter/foundation.dart';
 import 'package:project_lift/utils/socket_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/request.dart';
 import '../models/subject.dart';
 import '../models/user.dart';
 
 class UserProvider with ChangeNotifier {
   User _user = User.emptyUser();
+  List<Request> _requests = [];
 
   User get user => _user;
-  List<Subject> get subjects => _user.subjects;
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '' && user.isEmailVerified;
+  List<Request> get requests => _requests;
 
-  Subject get firstSubject => _user.subjects.first;
-
-  double getRating({required bool isTutor}) {
-    double totalRating = 0;
-    if (isTutor) {
-      for (var rating in _user.ratingAsTutor) {
-        totalRating += rating.rating;
-      }
-    } else {
-      for (var rating in _user.ratingAsTutee) {
-        totalRating += rating.rating;
-      }
-    }
-
-    return isTutor
-        ? totalRating /
-            (_user.ratingAsTutor.isEmpty ? 1 : _user.ratingAsTutor.length)
-        : totalRating /
-            (_user.ratingAsTutee.isEmpty ? 1 : _user.ratingAsTutee.length);
+  void removeRequestById(String id) {
+    _requests.removeWhere((element) => element.requestId == id);
+    notifyListeners();
   }
 
-  bool isSubjectAdded(String subjectCode) {
-    return subjects.any((subject) => subject.subjectCode == subjectCode);
-  }
-
-  Subject getSubject(String subjectCode) {
-    return subjects.firstWhere((subject) => subject.subjectCode == subjectCode);
-  }
-
-  List<SubTopic> getSubTopics(String subjectCode) {
-    return [SubTopic.empty(), ...getSubject(subjectCode).subTopics];
+  void addRequestsFromMap(List<dynamic> requests) {
+    _requests = requests.map((e) => Request.fromMap(e)).toList();
   }
 
   void addSubject(Subject subject) {
     _user = _user.copyFrom(
-      subjects: [...subjects, subject],
+      subjects: [..._user.subjects, subject],
     );
     notifyListeners();
   }

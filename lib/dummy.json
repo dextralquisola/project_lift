@@ -1,59 +1,26 @@
-{
-  "messages": [
-    {
-      "_id": "645336ee4ece28042128f3c8",
-      "roomId": {
-        "_id": "6450adda340df59682c59253",
-        "name": "create room sample 1"
-      },
-      "userId": {
-        "_id": "64507c3f0f9d2b2a8f0bec3f",
-        "firstName": "karl",
-        "lastName": "testing"
-      },
-      "message": "12",
-      "createdAt": "2023-05-04T04:39:10.995Z",
-      "updatedAt": "2023-05-04T04:39:10.995Z",
-      "__v": 0
+[
+  {
+    "subject": {
+      "subjectCode": "DCIT 22A",
+      "description": "COMPUTER PROGRAMMING 1",
+      "subtopics": []
     },
-    {
-      "_id": "645336eb4ece28042128f3b5",
-      "roomId": {
-        "_id": "6450adda340df59682c59253",
-        "name": "create room sample 1"
-      },
-      "userId": {
-        "_id": "6447f056aad66fba83e4b572",
-        "firstName": "Tutor1",
-        "lastName": "Example"
-      },
-      "message": "2",
-      "createdAt": "2023-05-04T04:39:07.870Z",
-      "updatedAt": "2023-05-04T04:39:07.870Z",
-      "__v": 0
+    "_id": "6459dcd36e710270b8b83165",
+    "tutorId": {
+      "_id": "64595750e70eb74250f36763",
+      "firstName": "Dexter",
+      "lastName": "Alquisola"
     },
-    {
-      "_id": "645332784ece28042128f38d",
-      "roomId": {
-        "_id": "6450adda340df59682c59253",
-        "name": "create room sample 1"
-      },
-      "userId": {
-        "_id": "6447f056aad66fba83e4b572",
-        "firstName": "Tutor1",
-        "lastName": "Example"
-      },
-      "message": "2",
-      "createdAt": "2023-05-04T04:20:08.650Z",
-      "updatedAt": "2023-05-04T04:20:08.650Z",
-      "__v": 0
+    "studentId": {
+      "_id": "6459d087e70eb74250f381c8",
+      "firstName": "Chris P",
+      "lastName": "Chicken"
     },
-    {
-      "_id": "645332754ece28042128f37e",
-      "roomId": {
-        "_id": "6450adda340df59682c59253",
-        "name": "create room sample 1"
-      }
-    }
-  ]
-}
+    "name": "Test req",
+    "status": "public",
+    "location": "asdf",
+    "schedule": "2023-05-08T00:00:00.000+13:40.13:40",
+    "reqStatus": "pending",
+    "__v": 0
+  }
+]

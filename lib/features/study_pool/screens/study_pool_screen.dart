@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/features/study_pool/screens/create_room_screen.dart';
-import 'package:project_lift/features/study_pool/screens/rate_screen.dart';
-import 'package:project_lift/features/study_pool/screens/study_room_screen.dart';
-import 'package:project_lift/features/study_pool/screens/study_room_search_screen.dart';
-import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
-import 'package:project_lift/features/study_pool/widgets/study_card_widget.dart';
-import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
+import '../../../constants/styles.dart';
+
+import './create_room_screen.dart';
+import './rate_screen.dart';
+import './study_room_screen.dart';
+import './study_room_search_screen.dart';
+import './tutee_request_screen.dart';
+import '../service/study_pool_service.dart';
+import '../widgets/study_card_widget.dart';
+import '../../../utils/utils.dart';
 
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/study_room_providers.dart';
@@ -109,7 +112,13 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                       SpeedDialChild(
                         child: const Icon(Icons.list),
                         label: 'Tutee Requests',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (contxt) => const TuteeRequestScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   )

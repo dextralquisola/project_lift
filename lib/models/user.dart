@@ -116,20 +116,22 @@ class User {
       role: map['role'] ?? '',
       token: map['token'] ?? '',
       isEmailVerified: map['isEmailVerified'] ?? false,
-      ratingAsTutor: map['ratingsAsTutor'] == null || map['ratingsAsTutor'].isEmpty
-          ? []
-          : List<Rating>.from(
-              map['ratingsAsTutor']?.map(
-                (x) => Rating.fromMap(x),
-              ),
-            ),
-      ratingAsTutee: map['ratingsAsTutee'] == null || map['ratingsAsTutee'].isEmpty
-          ? []
-          : List<Rating>.from(
-              map['ratingsAsTutee']?.map(
-                (x) => Rating.fromMap(x),
-              ),
-            ),
+      ratingAsTutor:
+          map['ratingsAsTutor'] == null || map['ratingsAsTutor'].isEmpty
+              ? []
+              : List<Rating>.from(
+                  map['ratingsAsTutor']?.map(
+                    (x) => Rating.fromMap(x),
+                  ),
+                ),
+      ratingAsTutee:
+          map['ratingsAsTutee'] == null || map['ratingsAsTutee'].isEmpty
+              ? []
+              : List<Rating>.from(
+                  map['ratingsAsTutee']?.map(
+                    (x) => Rating.fromMap(x),
+                  ),
+                ),
       subjects: map['subjects'].isEmpty
           ? []
           : List<Subject>.from(
@@ -138,6 +140,38 @@ class User {
               ),
             ),
     );
+  }
+
+  Subject get firstSubject => subjects.first;
+  List<Subject> get getSubjects => subjects;
+
+  Subject getSubject(String subjectCode) {
+    return subjects.firstWhere((subject) => subject.subjectCode == subjectCode);
+  }
+
+  List<SubTopic> getSubTopics(String subjectCode) {
+    return [SubTopic.empty(), ...getSubject(subjectCode).subTopics];
+  }
+
+  bool isSubjectAdded(String subjectCode) {
+    return subjects.any((subject) => subject.subjectCode == subjectCode);
+  }
+
+  double getRating({required bool isTutor}) {
+    double totalRating = 0;
+    if (isTutor) {
+      for (var rating in ratingAsTutor) {
+        totalRating += rating.rating;
+      }
+    } else {
+      for (var rating in ratingAsTutee) {
+        totalRating += rating.rating;
+      }
+    }
+
+    return isTutor
+        ? totalRating / (ratingAsTutor.isEmpty ? 1 : ratingAsTutor.length)
+        : totalRating / (ratingAsTutee.isEmpty ? 1 : ratingAsTutee.length);
   }
 
   String toJson() => json.encode(toMap());

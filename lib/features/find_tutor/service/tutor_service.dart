@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:project_lift/models/study_room.dart';
 import 'package:project_lift/models/user.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/subject.dart';
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/http_error_handler.dart';
@@ -74,5 +76,48 @@ class TutorService {
       print(e);
     }
     return [];
+  }
+
+  Future<void> askHelp({
+    required BuildContext context,
+    required String tutorId,
+    required String name,
+    required String location,
+    required String schedule,
+    required Subject subject,
+    required List<SubTopic> subTopics,
+    required String status,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/ask-help/request/$tutorId',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: {
+          "name": name,
+          "status": status,
+          "location": location,
+          "schedule": schedule,
+          "subjectCode": subject.subjectCode,
+          "description": subject.description,
+          "subtopics": subTopicListToMap(subTopics),
+        },
+      );
+
+      if (res.statusCode == 200) {
+        print("Success");
+      } else {
+        print(res.statusCode);
+        print(res.body);
+        print("Failed");
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

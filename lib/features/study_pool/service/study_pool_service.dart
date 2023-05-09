@@ -465,4 +465,72 @@ class StudyPoolService {
     }
     return false;
   }
+
+  Future<void> getTuteeRequests(BuildContext context) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/ask-help/get-request',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        var decoded = json.decode(res.body);
+        userProvider.addRequestsFromMap(decoded);
+      } else {
+        print("ERROR: ${res.statusCode}");
+        print(res.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> respondTuteeRequest({
+    required BuildContext context,
+    required String requestId,
+    required String requestStatus,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentStudyRoomProvider = Provider.of<CurrentStudyRoomProvider>(
+        context,
+        listen: false,
+      );
+      var res = await service.requestApi(
+        path: '/api/ask-help/accept-request/$requestId/$requestStatus',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: {
+          "requestStatus": requestStatus,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        var decoded = json.decode(res.body);
+
+        if (decoded['reqStatus'] == null) {
+          currentStudyRoomProvider.setStudyRoomFromJson(decoded);
+          userProvider.removeRequestById(requestId);
+          print('success, accepted');
+        } else {
+          print("success, rejected");
+        }
+      } else {
+        print("ERROR: ${res.statusCode}");
+        print(res.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }

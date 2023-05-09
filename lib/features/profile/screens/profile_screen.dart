@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     final currentStudyRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     final user = userProvider.user;
-    final ratingAsTutor = userProvider.getRating(isTutor: true);
+    final ratingAsTutor = user.getRating(isTutor: true);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -203,7 +203,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ListTile(
                                   title: AppText(text: "No subjects yet"),
                                 ),
-                              ...userProvider.subjects.map((e) {
+                              ...user.subjects.map((e) {
                                 return ListTile(
                                   title: AppText(text: e.subjectCode),
                                   subtitle: AppText(text: e.description),

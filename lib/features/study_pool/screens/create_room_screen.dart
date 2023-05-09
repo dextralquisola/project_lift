@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_button.dart';
@@ -9,10 +10,17 @@ import 'package:provider/provider.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/styles.dart';
 import '../../../models/subject.dart';
+import '../../../models/user.dart';
 import '../../../providers/user_provider.dart';
 
 class CreateStudyRoomScreen extends StatefulWidget {
-  const CreateStudyRoomScreen({super.key});
+  final bool isAskHelp;
+  final User? tutor;
+  const CreateStudyRoomScreen({
+    super.key,
+    this.tutor,
+    this.isAskHelp = false,
+  });
 
   @override
   State<CreateStudyRoomScreen> createState() => _CreateStudyRoomScreenState();
@@ -20,6 +28,7 @@ class CreateStudyRoomScreen extends StatefulWidget {
 
 class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   final studyPoolService = StudyPoolService();
+  final tutorService = TutorService();
 
   late UserProvider userProvider;
 
@@ -64,7 +73,17 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Study Room'),
+        title: widget.isAskHelp
+            ? AppText(
+                text: 'Request Help',
+                textSize: 20,
+                textColor: Colors.white,
+              )
+            : AppText(
+                text: 'Create Study Room',
+                textSize: 20,
+                textColor: Colors.white,
+              ),
         backgroundColor: primaryColor,
       ),
       body: SafeArea(
@@ -352,19 +371,40 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                                   height: 50,
                                   onPressed: () async {
                                     setState(() => _isLoading = true);
-                                    await studyPoolService.createStudyPool(
-                                      context: context,
-                                      studyPoolName: studyNameController.text,
-                                      status: studyRoomStatus,
-                                      subject: selectedSubject,
-                                      subTopics: selectedSubTopics,
-                                      location: locationController.text,
-                                      schedule: scheduleBuilder(
-                                        selectedDate,
-                                        fromTime,
-                                        toTime,
-                                      ),
-                                    );
+                                    if (widget.isAskHelp) {
+                                      await tutorService.askHelp(
+                                        context: context,
+                                        name: studyNameController.text,
+                                        tutorId: widget.tutor!.userId,
+                                        subject: selectedSubject,
+                                        subTopics: selectedSubTopics,
+                                        location: locationController.text,
+                                        status: studyRoomStatus ==
+                                                StudyRoomStatus.public
+                                            ? 'public'
+                                            : 'private',
+                                        schedule: scheduleBuilder(
+                                          selectedDate,
+                                          fromTime,
+                                          toTime,
+                                        ),
+                                      );
+                                    } else {
+                                      await studyPoolService.createStudyPool(
+                                        context: context,
+                                        studyPoolName: studyNameController.text,
+                                        status: studyRoomStatus,
+                                        subject: selectedSubject,
+                                        subTopics: selectedSubTopics,
+                                        location: locationController.text,
+                                        schedule: scheduleBuilder(
+                                          selectedDate,
+                                          fromTime,
+                                          toTime,
+                                        ),
+                                      );
+                                    }
+
                                     setState(() => _isLoading = false);
                                     Navigator.of(context).pop();
                                   },
@@ -441,7 +481,14 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   }
 
   void setSubTopics(String subjectCode) {
-    availableSubTopics = userProvider.getSubTopics(subjectCode).map(
+    var isAskHelp = widget.isAskHelp;
+    var tutor = widget.tutor;
+
+    var availableSubtopics = isAskHelp
+        ? tutor!.getSubTopics(subjectCode)
+        : userProvider.user.getSubTopics(subjectCode);
+
+    availableSubTopics = availableSubtopics.map(
       (subTopic) {
         if (subTopic.topic == '' && subTopic.description == '') {
           return DropdownMenuItem(
@@ -460,9 +507,13 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   void initialize() {
     userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    selectedSubject = userProvider.firstSubject;
+    var isAskHelp = widget.isAskHelp;
+    var tutor = widget.tutor;
+    var subjects = isAskHelp ? tutor!.subjects : userProvider.user.subjects;
 
-    availableSubjects = userProvider.user.subjects
+    selectedSubject =
+        isAskHelp ? tutor!.firstSubject : userProvider.user.firstSubject;
+    availableSubjects = subjects
         .map(
           (subject) => DropdownMenuItem(
             value: subject,
@@ -473,7 +524,6 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
         .toList();
 
     setSubTopics(selectedSubject.subjectCode);
-
     selectedSubTopic = availableSubTopics[0].value as SubTopic;
   }
 

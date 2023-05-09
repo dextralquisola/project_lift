@@ -193,7 +193,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
     List<Map<String, String>> newFilteredSubjects = [];
 
     for (var subject in computerScience) {
-      if (!userProvider.isSubjectAdded(subject['subjectCode']!)) {
+      if (!userProvider.user.isSubjectAdded(subject['subjectCode']!)) {
         newFilteredSubjects.add(subject);
       }
     }

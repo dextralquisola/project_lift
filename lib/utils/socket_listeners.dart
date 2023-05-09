@@ -16,6 +16,7 @@ class SocketListeners {
     _onUserLeftRoom(context);
     _onRoomDeleted(context);
     _onSessionEnded(context);
+    _onRequestAccepted(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -75,10 +76,12 @@ class SocketListeners {
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
+
       _socket.emit("leave-room", {
         "roomId": currentRoomProvider.studyRoom.roomId,
       });
-      studyRoomProvider.removeStudyRoomById(data['roomId']);
+
+      studyRoomProvider.removeStudyRoomById(currentRoomProvider.studyRoom.roomId);
       currentRoomProvider.clearRoom();
     });
   }
@@ -88,6 +91,14 @@ class SocketListeners {
       final currentRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomSessionEnded();
+    });
+  }
+
+  void _onRequestAccepted(BuildContext context) {
+    _socket.on("request-accepted", (data) {
+      final currentRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+      currentRoomProvider.setStudyRoomFromJson(data);
     });
   }
 }
