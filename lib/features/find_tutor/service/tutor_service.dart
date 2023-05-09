@@ -114,7 +114,9 @@ class TutorService {
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
-        userRequestsProvider.addMyRequestFromMap([decoded['request']], true);
+        print("askHelp");
+        print(res.body);
+        userRequestsProvider.addMyRequestFromMap([decoded], true);
         print("Success");
       } else {
         print(res.statusCode);

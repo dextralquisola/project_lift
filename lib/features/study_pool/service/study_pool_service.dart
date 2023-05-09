@@ -552,14 +552,12 @@ class StudyPoolService {
         print("respond tutee request");
         print(res.body);
 
-        if (decoded['reqStatus'] == "rejected") {
+        if (decoded['reqStatus'] != null) {
           userRequestsProvider.removeTuteeRequestById(requestId);
           print("success, rejected");
           return;
-        }
-
-        if (decoded['request']['reqStatus'] == "accepted") {
-          currentStudyRoomProvider.setStudyRoomFromJson(decoded);
+        } else if (decoded['request']['reqStatus'] != null) {
+          currentStudyRoomProvider.setStudyRoomFromJson(decoded['chatroom']);
           userRequestsProvider.removeTuteeRequestById(requestId);
           print('success, accepted');
           return;

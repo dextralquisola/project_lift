@@ -1,16 +1,24 @@
 {
-  "tutorId": "64595750e70eb74250f36763",
-  "studentId": "6459d087e70eb74250f381c8",
-  "name": "sdfsdf",
-  "status": "public",
-  "location": "sdfdsf",
-  "schedule": "2023-05-08T00:00:00.000+17:26.18:26",
   "subject": {
     "subjectCode": "DCIT 22A",
     "description": "COMPUTER PROGRAMMING 1",
     "subtopics": []
   },
+  "_id": "645a77932bd88ba9c698077e",
+  "tutorId": {
+    "_id": "64595750e70eb74250f36763",
+    "firstName": "Dexter",
+    "lastName": "Alquisola"
+  },
+  "studentId": {
+    "_id": "6459d087e70eb74250f381c8",
+    "firstName": "Chris P",
+    "lastName": "Chicken"
+  },
+  "name": "asd",
+  "status": "public",
+  "location": "asd",
+  "schedule": "2023-05-09T00:00:00.000+16:40.17:40",
   "reqStatus": "pending",
-  "_id": "645a2ddb6c7d118f4d04e6a6",
   "__v": 0
 }

@@ -88,6 +88,10 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
       requestId: requestId,
       requestStatus: requestStatus,
     );
+
+    if (requestStatus == 'accepted') {
+      Navigator.of(context).pop();
+    }
   }
 
   void _showDialog({
