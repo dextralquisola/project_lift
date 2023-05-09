@@ -10,6 +10,7 @@ import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../providers/user_provider.dart';
+import '../../../providers/user_requests_provider.dart';
 import '../../../utils/http_utils.dart' as service;
 
 import 'package:http/http.dart' as http;
@@ -174,6 +175,8 @@ class AuthService {
 
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
       var userData = json.decode(res.body);
 
       if (isFromAutoLogin) {

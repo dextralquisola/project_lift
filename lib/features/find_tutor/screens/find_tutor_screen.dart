@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/find_tutor/screens/find_tutor_search_screen.dart';
+import 'package:project_lift/providers/user_requests_provider.dart';
 import 'package:project_lift/widgets/background_cover.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
     final tutorsProvider = Provider.of<TutorProvider>(context);
     final tutors = tutorsProvider.tutors;
     return SafeArea(
@@ -156,7 +157,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
               : ListView.separated(
                   itemBuilder: (context, index) {
                     var isPendingRequest =
-                        userProvider.isHasRequest(tutors[index].userId);
+                        userRequestsProvider.isHasRequest(tutors[index].userId);
                     if (index == 0) {
                       return Stack(
                         children: [

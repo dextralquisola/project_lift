@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
+import '../../../providers/user_requests_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/background_cover.dart';
 import 'add_subject_screen.dart';
@@ -46,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     final authService = AuthService();
     final userProvider = Provider.of<UserProvider>(context);
     final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
+    final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
     final studyPoolProvider =
         Provider.of<StudyRoomProvider>(context, listen: false);
     final currentStudyRoomProvider =
@@ -134,6 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               tutorsProvider.clearTutors();
                               studyPoolProvider.clearStudyRooms();
                               currentStudyRoomProvider.leaveStudyRoom();
+                              userRequestsProvider.clearRequests();
                               await userProvider.logout();
                             } else {
                               showSnackBar(context, "Something went wrong");

@@ -43,15 +43,16 @@ class Request {
     return result;
   }
 
-  factory Request.fromMap(Map<String, dynamic> map,
-      [bool isMyRequest = false, bool isFromNew = false]) {
+  factory Request.fromMap(
+    Map<String, dynamic> map,
+  ) {
     return Request(
       requestId: map['_id'] ?? '',
       subject: Subject.fromMap(map['subject']),
-      tutorId: isFromNew ? map['tutorId'] : map['tutorId']['_id'],
-      tuteeId: isMyRequest ? map['studentId'] : map['studentId']['_id'] ?? '',
-      tuteeFirstName: isMyRequest ? '' : map['studentId']['firstName'] ?? '',
-      tuteeLastName: isMyRequest ? '' : map['studentId']['lastName'] ?? '',
+      tutorId: map['tutorId']['_id'] ?? '',
+      tuteeId: map['studentId']['_id'] ?? '',
+      tuteeFirstName: map['studentId']['firstName'] ?? '',
+      tuteeLastName: map['studentId']['lastName'] ?? '',
       roomName: map['name'] ?? '',
       status: map['status'] ?? '',
       location: map['location'] ?? '',

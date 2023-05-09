@@ -11,6 +11,7 @@ import '../../../models/subject.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/study_room_providers.dart';
 import '../../../providers/user_provider.dart';
+import '../../../providers/user_requests_provider.dart';
 import '../../../utils/http_utils.dart' as service;
 
 class StudyPoolService {
@@ -469,7 +470,8 @@ class StudyPoolService {
   Future<void> getTuteeRequests(BuildContext context) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
       if (!userProvider.isTutor) return;
 
       var res = await service.requestApi(
@@ -484,7 +486,7 @@ class StudyPoolService {
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
-        userProvider.addTuteeRequestsFromMap(decoded);
+        userRequestsProvider.addTuteeRequestsFromMap(decoded);
       } else {
         print("ERROR: ${res.statusCode}");
         print(res.body);
@@ -497,7 +499,8 @@ class StudyPoolService {
   Future<void> getMyRequests(BuildContext context) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
       var res = await service.requestApi(
         path: '/api/ask-help/my-requests',
         method: 'GET',
@@ -510,7 +513,7 @@ class StudyPoolService {
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
-        userProvider.addMyRequestFromMap(decoded);
+        userRequestsProvider.addMyRequestFromMap(decoded);
       } else {
         print("ERROR: ${res.statusCode}");
         print(res.body);
@@ -527,6 +530,8 @@ class StudyPoolService {
   }) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
       final currentStudyRoomProvider = Provider.of<CurrentStudyRoomProvider>(
         context,
         listen: false,
@@ -539,21 +544,25 @@ class StudyPoolService {
           "fcmToken": userProvider.user.firebaseToken,
           "deviceToken": userProvider.user.deviceToken,
         },
-        body: {
-          "requestStatus": requestStatus,
-        },
       );
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
 
-        if (decoded['reqStatus'] == null) {
-          currentStudyRoomProvider.setStudyRoomFromJson(decoded);
-          userProvider.removeTuteeRequestById(requestId);
-          print('success, accepted');
-        } else {
-          userProvider.removeTuteeRequestById(requestId);
+        print("respond tutee request");
+        print(res.body);
+
+        if (decoded['reqStatus'] == "rejected") {
+          userRequestsProvider.removeTuteeRequestById(requestId);
           print("success, rejected");
+          return;
+        }
+
+        if (decoded['request']['reqStatus'] == "accepted") {
+          currentStudyRoomProvider.setStudyRoomFromJson(decoded);
+          userRequestsProvider.removeTuteeRequestById(requestId);
+          print('success, accepted');
+          return;
         }
       } else {
         print("ERROR: ${res.statusCode}");

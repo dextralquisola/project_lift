@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/current_room_provider.dart';
 import '../providers/user_provider.dart';
+import '../providers/user_requests_provider.dart';
 
 class SocketListeners {
   final _socket = SocketClient.instance.socket!;
@@ -101,23 +102,25 @@ class SocketListeners {
     _socket.on("request-accepted", (data) {
       final currentRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
-      currentRoomProvider.setStudyRoomFromJson(data);
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
+      currentRoomProvider.setStudyRoomFromJson(data['chatroom']);
+      userRequestsProvider.removeMyRequestById(data['request']['_id']);
     });
   }
 
   void _onRequestRejected(BuildContext context) {
     _socket.on("request-rejected", (data) {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      userProvider.removeMyRequestById(data['_id']);
+      final userRequestsProvider = Provider.of<UserRequestsProvider>(context, listen: false);
+      userRequestsProvider.removeMyRequestById(data['_id']);
     });
   }
 
   void _onTuteeRequested(BuildContext context) {
     _socket.on("new-request", (data) {
-      print("New request received");
-      print(data);
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      userProvider.addTuteeRequestsFromMap([data], true, true);
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
+      userRequestsProvider.addTuteeRequestsFromMap([data], true);
     });
   }
 }

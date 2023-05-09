@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../models/request.dart';
 import '../../../providers/user_provider.dart';
+import '../../../providers/user_requests_provider.dart';
 import '../service/study_pool_service.dart';
 
 class TuteeRequestScreen extends StatefulWidget {
@@ -21,7 +22,8 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final requests = userProvider.requests;
+    final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
+    final requests = userRequestsProvider.requests;
 
     return Scaffold(
       appBar: AppBar(
@@ -29,49 +31,53 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: ListView.builder(
-          itemCount: requests.length,
-          itemBuilder: (context, index) {
-            final request = requests[index];
+        child: requests.isEmpty
+            ? Center(
+                child: AppText(text: 'No tutee requests'),
+              )
+            : ListView.builder(
+                itemCount: requests.length,
+                itemBuilder: (context, index) {
+                  final request = requests[index];
 
-            return Card(
-              child: ListTile(
-                title: AppText(
-                    text:
-                        "${index + 1}. ${request.tuteeFirstName} ${request.tuteeLastName}"),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        _showDialog(context: context, request: request);
-                      },
-                      icon: const Icon(Icons.remove_red_eye_outlined),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        await respondTutee(request.requestId, 'accepted');
-                      },
-                      icon: const Icon(
-                        Icons.check,
-                        color: Colors.green,
+                  return Card(
+                    child: ListTile(
+                      title: AppText(
+                          text:
+                              "${index + 1}. ${request.tuteeFirstName} ${request.tuteeLastName}"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              _showDialog(context: context, request: request);
+                            },
+                            icon: const Icon(Icons.remove_red_eye_outlined),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              await respondTutee(request.requestId, 'accepted');
+                            },
+                            icon: const Icon(
+                              Icons.check,
+                              color: Colors.green,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              await respondTutee(request.requestId, 'rejected');
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () async {
-                        await respondTutee(request.requestId, 'rejected');
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }

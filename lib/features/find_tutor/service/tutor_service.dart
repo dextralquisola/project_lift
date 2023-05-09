@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../../models/subject.dart';
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
+import '../../../providers/user_requests_provider.dart';
 import '../../../utils/http_error_handler.dart';
 
 import '../../../utils/http_utils.dart' as service;
@@ -90,6 +91,8 @@ class TutorService {
   }) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
       var res = await service.requestApi(
         path: '/api/ask-help/request/$tutorId',
         method: 'POST',
@@ -111,7 +114,7 @@ class TutorService {
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
-        userProvider.addMyRequestFromMap([decoded], true, true);
+        userRequestsProvider.addMyRequestFromMap([decoded['request']], true);
         print("Success");
       } else {
         print(res.statusCode);
