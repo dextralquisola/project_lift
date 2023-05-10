@@ -449,7 +449,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   }
 
   bool validateTimeOfDay(TimeOfDay timeOfDay) {
-    return timeOfDay.hour < 6 || timeOfDay.hour > 19;
+    return (timeOfDay.hour < 6) || (timeOfDay.hour > 19 && timeOfDay.minute > 0);
   }
 
   bool validateDate(DateTime date) {
