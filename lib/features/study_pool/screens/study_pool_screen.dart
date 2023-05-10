@@ -29,6 +29,8 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
   var _scrollControllerRoom = ScrollController();
   bool _isLoading = false;
 
+  final studyPoolService = StudyPoolService();
+
   @override
   void initState() {
     super.initState();
@@ -71,18 +73,36 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
             ),
             body: studyRooms.isEmpty
                 ? Center(
-                    child: AppText(text: "No study rooms..."),
-                  )
-                : ListView.separated(
-                    controller: _scrollControllerRoom,
-                    itemBuilder: (context, index) => StudyPoolCard(
-                      studyRoom: studyRooms[index],
-                      isStudyRoomPending: studyRoomProvider
-                          .isRoomPending(studyRooms[index].roomId),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppText(
+                          text: "No study rooms...",
+                          textSize: 20,
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            await studyPoolService.fetchStudyRooms(context);
+                          },
+                          child: const Text("Tap to refresh"),
+                        )
+                      ],
                     ),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 10),
-                    itemCount: studyRooms.length,
+                  )
+                : RefreshIndicator(
+                    onRefresh: () async =>
+                        await studyPoolService.fetchStudyRooms(context),
+                    child: ListView.separated(
+                      controller: _scrollControllerRoom,
+                      itemBuilder: (context, index) => StudyPoolCard(
+                        studyRoom: studyRooms[index],
+                        isStudyRoomPending: studyRoomProvider
+                            .isRoomPending(studyRooms[index].roomId),
+                      ),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 10),
+                      itemCount: studyRooms.length,
+                    ),
                   ),
             floatingActionButton: userProvider.isTutor
                 ? SpeedDial(

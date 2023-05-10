@@ -27,6 +27,8 @@ class _FindTutorScreenState extends State<FindTutorScreen>
   late AnimationController _animationController;
   late Animation _animation;
 
+  final tutorService = TutorService();
+
   @override
   void initState() {
     super.initState();
@@ -152,43 +154,58 @@ class _FindTutorScreenState extends State<FindTutorScreen>
           ],
           body: tutors.isEmpty
               ? Center(
-                  child: AppText(text: "There is no tutor available."),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AppText(
+                          text: "There is no tutor available.", textSize: 20),
+                      TextButton(
+                        onPressed: () async =>
+                            await tutorService.fetchTutors(context),
+                        child: const Text("Tap to refresh"),
+                      )
+                    ],
+                  ),
                 )
-              : ListView.separated(
-                  itemBuilder: (context, index) {
-                    var isPendingRequest =
-                        userRequestsProvider.isHasRequest(tutors[index].userId);
-                    if (index == 0) {
-                      return Stack(
-                        children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            child: FadeTransition(
-                              opacity: _animationController,
-                              child: const SizedBox(
-                                height: 75,
-                                child: BackgroundCover(isBottomBg: true),
+              : RefreshIndicator(
+                  onRefresh: () async =>
+                      await tutorService.fetchTutors(context),
+                  child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      var isPendingRequest = userRequestsProvider
+                          .isHasRequest(tutors[index].userId);
+                      if (index == 0) {
+                        return Stack(
+                          children: [
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              child: FadeTransition(
+                                opacity: _animationController,
+                                child: const SizedBox(
+                                  height: 75,
+                                  child: BackgroundCover(isBottomBg: true),
+                                ),
                               ),
                             ),
-                          ),
-                          TutorCard(
-                            tutor: tutors[index],
-                            isPendingRequest: isPendingRequest,
-                          )
-                        ],
-                      );
-                    }
+                            TutorCard(
+                              tutor: tutors[index],
+                              isPendingRequest: isPendingRequest,
+                            )
+                          ],
+                        );
+                      }
 
-                    return TutorCard(
-                      tutor: tutors[index],
-                      isPendingRequest: isPendingRequest,
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
-                  itemCount: tutors.length,
+                      return TutorCard(
+                        tutor: tutors[index],
+                        isPendingRequest: isPendingRequest,
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemCount: tutors.length,
+                  ),
                 ),
         ),
       ),

@@ -6,8 +6,8 @@ import 'package:project_lift/features/study_pool/screens/study_pool_screen.dart'
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
+import '../../auth/service/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,11 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
   ];
 
+  final authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final user = userProvider.user;
-    
+
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
@@ -67,7 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _updatePage(int index) {
+  void _updatePage(int index) async {
+    // if (index == 2) {
+    //   await authService.fetchUser(context);
+    // }
     setState(() {
       pageIndex = index;
     });

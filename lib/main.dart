@@ -47,9 +47,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final authService = AuthService();
-
   final studyRoomService = StudyPoolService();
-
   final tutorService = TutorService();
 
   @override
