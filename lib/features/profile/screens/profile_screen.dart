@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
@@ -138,6 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               currentStudyRoomProvider.leaveStudyRoom();
                               userRequestsProvider.clearRequests();
                               await userProvider.logout();
+                              SystemNavigator.pop();
                             } else {
                               showSnackBar(context, "Something went wrong");
                             }
