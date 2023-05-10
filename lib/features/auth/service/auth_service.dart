@@ -190,8 +190,8 @@ class AuthService {
           "role": userData['user']['role'],
           "token": userData['token'],
           "subjects": userData['user']['subjects'],
-          "ratingAsTutor": userData['user']['ratingAsTutor'],
-          "ratingAsTutee": userData['user']['ratingAsTutee'],
+          "ratingsAsTutor": userData['user']['ratingsAsTutor'],
+          "ratingsAsTutee": userData['user']['ratingsAsTutee'],
           "isEmailVerified": userData['user']['isEmailVerified'] ?? false,
         };
       }

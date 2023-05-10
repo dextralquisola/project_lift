@@ -117,7 +117,7 @@ class User {
       token: map['token'] ?? '',
       isEmailVerified: map['isEmailVerified'] ?? false,
       ratingAsTutor:
-          map['ratingsAsTutor'] == null || map['ratingsAsTutor'].isEmpty
+          map['ratingsAsTutor'] == null
               ? []
               : List<Rating>.from(
                   map['ratingsAsTutor']?.map(
@@ -125,7 +125,7 @@ class User {
                   ),
                 ),
       ratingAsTutee:
-          map['ratingsAsTutee'] == null || map['ratingsAsTutee'].isEmpty
+          map['ratingsAsTutee'] == null
               ? []
               : List<Rating>.from(
                   map['ratingsAsTutee']?.map(
