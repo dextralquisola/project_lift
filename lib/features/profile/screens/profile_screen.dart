@@ -27,6 +27,8 @@ class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
 
+  final authService = AuthService();
+
   @override
   void initState() {
     super.initState();
@@ -43,16 +45,11 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    final authService = AuthService();
     final userProvider = Provider.of<UserProvider>(context);
-    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
-    final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
-    final studyPoolProvider =
-        Provider.of<StudyRoomProvider>(context, listen: false);
-    final currentStudyRoomProvider =
-        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
     final user = userProvider.user;
     final ratingAsTutor = user.getRating(isTutor: true);
+    final ratingAsTutee = user.getRating(isTutor: false);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -110,7 +107,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                               bottom: 0,
                               right: -15,
                               child: AppText(
-                                text: '⭐️ $ratingAsTutor',
+                                text: userProvider.isTutor
+                                    ? '⭐️ $ratingAsTutor'
+                                    : '⭐️ $ratingAsTutee',
                                 textSize: 20,
                                 textColor: Colors.grey,
                                 fontWeight: FontWeight.bold,
@@ -129,18 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         IconButton(
                           constraints: const BoxConstraints(),
                           onPressed: () async {
-                            var isLogoutSuccess =
-                                await authService.logout(context);
-                            if (isLogoutSuccess) {
-                              tutorsProvider.clearTutors();
-                              studyPoolProvider.clearStudyRooms();
-                              currentStudyRoomProvider.leaveStudyRoom();
-                              userRequestsProvider.clearRequests();
-
-                              await userProvider.logout();
-                            } else {
-                              showSnackBar(context, "Something went wrong");
-                            }
+                            await logout(context, userProvider);
                           },
                           icon: const Icon(Icons.exit_to_app,
                               color: Colors.white),
@@ -158,78 +146,119 @@ class _ProfileScreenState extends State<ProfileScreen>
               ),
             ),
             const SizedBox(height: 80),
-            if (userProvider.isTutor)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    AppText(
-                      text: "${user.firstName} ${user.lastName}",
-                      textSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    const SizedBox(height: 20),
-                    Card(
-                      child: Column(
-                        children: [
-                          ExpansionTile(
-                            initiallyExpanded: true,
-                            title: AppText(
-                              text: "Subjects I can help with",
-                              fontWeight: FontWeight.w600,
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  constraints: const BoxConstraints(),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AddSubjectScreen(),
-                                      ),
-                                    );
-                                  },
-                                  icon: Icon(Icons.add, color: primaryColor),
-                                ),
-                                AnimatedIcon(
-                                  icon: AnimatedIcons.menu_close,
-                                  progress: animationController,
-                                ),
-                              ],
-                            ),
-                            children: [
-                              if (userProvider.user.subjects.isEmpty)
-                                ListTile(
-                                  title: AppText(text: "No subjects yet"),
-                                ),
-                              ...user.subjects.map((e) {
-                                return ListTile(
-                                  title: AppText(text: e.subjectCode),
-                                  subtitle: AppText(text: e.description),
-                                );
-                              }).toList(),
-                            ],
-                            onExpansionChanged: (value) {
-                              if (value) {
-                                animationController.forward();
-                              } else {
-                                animationController.reverse();
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            // profile body
+            AppText(
+              text: "${user.firstName} ${user.lastName}",
+              textSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+            const SizedBox(height: 20),
+            if (userProvider.isTutor) _tutorScreenBuilder(userProvider),
+            if (!userProvider.isTutor) _tuteeScreenBuilder(userProvider),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> logout(BuildContext context, UserProvider userProvider) async {
+    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    final studyPoolProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
+    final currentStudyRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    var isLogoutSuccess = await authService.logout(context);
+    if (isLogoutSuccess) {
+      tutorsProvider.clearTutors();
+      studyPoolProvider.clearStudyRooms();
+      currentStudyRoomProvider.leaveStudyRoom();
+      userRequestsProvider.clearRequests();
+      await userProvider.logout();
+    } else {
+      showSnackBar(context, "Something went wrong");
+    }
+  }
+
+  Widget _tuteeScreenBuilder(UserProvider userProvider) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        children: [
+          AppButton(
+            onPressed: () {
+              _showDialog(context);
+            },
+            height: 50,
+            wrapRow: true,
+            text: "Be a tutor!",
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _tutorScreenBuilder(UserProvider userProvider) {
+    final user = userProvider.user;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Card(
+            child: Column(
+              children: [
+                ExpansionTile(
+                  initiallyExpanded: true,
+                  title: AppText(
+                    text: "Subjects I can help with",
+                    fontWeight: FontWeight.w600,
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        constraints: const BoxConstraints(),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const AddSubjectScreen(),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.add, color: primaryColor),
+                      ),
+                      AnimatedIcon(
+                        icon: AnimatedIcons.menu_close,
+                        progress: animationController,
+                      ),
+                    ],
+                  ),
+                  children: [
+                    if (userProvider.user.subjects.isEmpty)
+                      ListTile(
+                        title: AppText(text: "No subjects yet"),
+                      ),
+                    ...user.subjects.map((e) {
+                      return ListTile(
+                        title: AppText(text: e.subjectCode),
+                        subtitle: AppText(text: e.description),
+                      );
+                    }).toList(),
+                  ],
+                  onExpansionChanged: (value) {
+                    if (value) {
+                      animationController.forward();
+                    } else {
+                      animationController.reverse();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -253,8 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               const SizedBox(height: 10),
               AppText(text: "1. Badge"),
               AppText(text: "2. Rated by tutee"),
-              AppText(text: "3. Setup schedule"),
-              AppText(text: "4. Create tutor session"),
+              AppText(text: "3. Create tutor session"),
               const SizedBox(height: 10),
               AppButton(
                 onPressed: () {
