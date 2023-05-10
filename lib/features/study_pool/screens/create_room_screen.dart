@@ -303,12 +303,26 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () async {
+                                      if (fromTimeTextController.text.isEmpty) {
+                                        showSnackBar(context,
+                                            "Please select a 'from' time first");
+                                        return;
+                                      }
+
                                       TimeOfDay? newTime = await showTimePicker(
                                         context: context,
                                         initialTime: toTime,
                                       );
 
                                       if (newTime == null) return;
+
+                                      if (!validateFromTimeOfDay(
+                                          fromTime, newTime)) {
+                                        showSnackBar(context,
+                                            "Please select a time after the 'from' time");
+                                        return;
+                                      }
+
                                       if (validateTimeOfDay(newTime)) {
                                         showSnackBar(context,
                                             "Please select a time between 6:00 AM to 7:00 PM");
@@ -449,7 +463,13 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   }
 
   bool validateTimeOfDay(TimeOfDay timeOfDay) {
-    return (timeOfDay.hour < 6) || (timeOfDay.hour > 19 && timeOfDay.minute > 0);
+    return (timeOfDay.hour < 6) ||
+        (timeOfDay.hour >= 19 && timeOfDay.minute >= 0);
+  }
+
+  bool validateFromTimeOfDay(TimeOfDay from, TimeOfDay to) {
+    return from.hour < to.hour ||
+        (from.hour == to.hour && from.minute < to.minute);
   }
 
   bool validateDate(DateTime date) {
