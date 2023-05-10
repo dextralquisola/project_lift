@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:project_lift/models/subject.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/http_utils.dart' as service;
 
-class ProfileServie {
+class ProfileService {
   Future<void> addSubject({
     required Subject subject,
     required BuildContext context,
@@ -33,6 +35,29 @@ class ProfileServie {
         print("Success");
       } else {
         print("Failed");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchUser(BuildContext context) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/users/me',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        final decoded = json.decode(res.body);
+        decoded.addAll({'token': userProvider.user.token});
+        userProvider.setUserFromMap(decoded, false);
       }
     } catch (e) {
       print(e);

@@ -13,6 +13,7 @@ import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/background_cover.dart';
+import '../../find_tutor/service/tutor_service.dart';
 import 'add_subject_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void initState() {
     super.initState();
+
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
   }

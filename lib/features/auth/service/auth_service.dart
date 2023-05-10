@@ -113,7 +113,7 @@ class AuthService {
     }
   }
 
-  Future<void> fetchUser(BuildContext context) async {
+  Future<void> autoLogin(BuildContext context) async {
     // function here
     try {
       var fcmToken = await _getFCMToken();
@@ -175,8 +175,6 @@ class AuthService {
 
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-      final userRequestsProvider =
-          Provider.of<UserRequestsProvider>(context, listen: false);
       var userData = json.decode(res.body);
 
       if (isFromAutoLogin) {

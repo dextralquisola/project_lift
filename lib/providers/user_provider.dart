@@ -11,7 +11,7 @@ class UserProvider with ChangeNotifier {
   User get user => _user;
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '' && user.isEmailVerified;
-  
+
   void addSubject(Subject subject) {
     _user = _user.copyFrom(
       subjects: [..._user.subjects, subject],
@@ -24,9 +24,9 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setUserFromMap(Map<String, dynamic> user) {
+  void setUserFromMap(Map<String, dynamic> user, [bool notify = true]) {
     _user = User.fromMap(user);
-    notifyListeners();
+    notify ? notifyListeners() : () {};
   }
 
   void setTokens({

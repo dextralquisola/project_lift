@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> {
                     },
                   )
                 : FutureBuilder(
-                    future: authService.fetchUser(context),
+                    future: authService.autoLogin(context),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const SplashScreen();

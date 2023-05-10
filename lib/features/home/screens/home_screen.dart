@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:project_lift/features/find_tutor/screens/find_tutor_screen.dart';
 import 'package:project_lift/features/profile/screens/profile_screen.dart';
+import 'package:project_lift/features/profile/service/profile_service.dart';
 import 'package:project_lift/features/study_pool/screens/study_pool_screen.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/user_provider.dart';
-import '../../auth/service/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
   ];
 
-  final authService = AuthService();
+  final profileService = ProfileService();
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _updatePage(int index) async {
-    // if (index == 2) {
-    //   await authService.fetchUser(context);
-    // }
+    if (index == 2) {
+      await profileService.fetchUser(context);
+    }
     setState(() {
       pageIndex = index;
     });

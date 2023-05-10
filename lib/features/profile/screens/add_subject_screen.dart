@@ -27,7 +27,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
 
   late List<DropdownMenuItem<String>> dropdownItems;
 
-  final profileService = ProfileServie();
+  final profileService = ProfileService();
 
   @override
   void dispose() {
