@@ -39,11 +39,11 @@ class TutorProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearTutors() {
+  void clearTutors([bool notify = true]) {
     _tutors = [];
     _currentPage = 1;
     _totalPages = 1;
-    notifyListeners();
+    notify ? notifyListeners() : () {};
   }
 
   List<User> removeDuplicates(List<User> list) {

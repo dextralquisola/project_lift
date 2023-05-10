@@ -15,15 +15,19 @@ import '../../../utils/http_error_handler.dart';
 import '../../../utils/http_utils.dart' as service;
 
 class TutorService {
-  Future<void> fetchTutors(BuildContext context, [String token = ""]) async {
+  Future<void> fetchTutors(BuildContext context,
+      [bool isRefresh = false]) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final tutorProvider = Provider.of<TutorProvider>(context, listen: false);
+
+      if (isRefresh) tutorProvider.clearTutors(false); // reset tutors
+
       var res = await service.requestApi(
         path: '/home/tutors?page=${tutorProvider.currentPage}&limit=10',
         method: 'GET',
         headers: {
-          "Authorization": token != "" ? token : userProvider.user.token,
+          "Authorization": userProvider.user.token,
           "fcmToken": userProvider.user.firebaseToken,
           "deviceToken": userProvider.user.deviceToken,
         },

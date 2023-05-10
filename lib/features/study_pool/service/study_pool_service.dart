@@ -141,11 +141,14 @@ class StudyPoolService {
     }
   }
 
-  Future<void> fetchStudyRooms(BuildContext context) async {
+  Future<void> fetchStudyRooms(BuildContext context, [bool isRefresh = false]) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
+
+      if(isRefresh) studyRoomProvider.clearStudyRooms(false);
+      
       var res = await service.requestApi(
         path: '/api/studyroom/public?page=${studyRoomProvider.currentPage}',
         method: 'GET',

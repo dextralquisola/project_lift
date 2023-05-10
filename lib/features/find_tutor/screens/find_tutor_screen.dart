@@ -169,7 +169,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                 )
               : RefreshIndicator(
                   onRefresh: () async =>
-                      await tutorService.fetchTutors(context),
+                      await tutorService.fetchTutors(context, true),
                   child: ListView.separated(
                     itemBuilder: (context, index) {
                       var isPendingRequest = userRequestsProvider

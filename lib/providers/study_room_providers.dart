@@ -54,11 +54,11 @@ class StudyRoomProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearStudyRooms() {
+  void clearStudyRooms([bool isNotify = true]) {
     _currentPage = 1;
     _totalPages = 1;
     _studyRooms = [];
-    notifyListeners();
+    isNotify ? notifyListeners() : () {};
   }
 
   List<StudyRoom> removeDuplicates(List<StudyRoom> list) {
