@@ -26,6 +26,7 @@ class SocketListeners {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
     _socket.on('message-sent', (data) {
       if (userProvider.user.userId != data['user']['userId']) {
         currentRoomProvider.addMessage(data);
@@ -36,6 +37,7 @@ class SocketListeners {
   void _onParticipantJoinEvent(BuildContext context) {
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
     _socket.on("new-pending-participant", (data) {
       var participant = data['user']['participants'][0];
       var newParticipant = {
@@ -49,11 +51,11 @@ class SocketListeners {
   }
 
   void _onParticipantAcceptedEvent(BuildContext context) {
+    final studyRoomProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
+    final currentRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("participant-accepted", (data) {
-      final studyRoomProvider =
-          Provider.of<StudyRoomProvider>(context, listen: false);
-      final currentRoomProvider =
-          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomFromJson(data['chatRoom']);
       currentRoomProvider.setMessagesFromJson(data);
       studyRoomProvider.clearPendingRooms();
@@ -61,8 +63,8 @@ class SocketListeners {
   }
 
   void _onUserLeftRoom(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     _socket.on("user-left", (data) {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
       if (userProvider.user.userId != data['user']['userId']) {
         final currentRoomProvider =
             Provider.of<CurrentStudyRoomProvider>(context, listen: false);
@@ -74,12 +76,11 @@ class SocketListeners {
   }
 
   void _onRoomDeleted(BuildContext context) {
+    final currentRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    final studyRoomProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
     _socket.on("room-deleted", (data) {
-      final currentRoomProvider =
-          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
-      final studyRoomProvider =
-          Provider.of<StudyRoomProvider>(context, listen: false);
-
       _socket.emit("leave-room", {
         "roomId": currentRoomProvider.studyRoom.roomId,
       });
@@ -91,35 +92,36 @@ class SocketListeners {
   }
 
   void _onSessionEnded(BuildContext context) {
+    final currentRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("session-ended", (data) {
-      final currentRoomProvider =
-          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomSessionEnded();
     });
   }
 
   void _onRequestAccepted(BuildContext context) {
+    final currentRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("request-accepted", (data) {
-      final currentRoomProvider =
-          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
-      final userRequestsProvider =
-          Provider.of<UserRequestsProvider>(context, listen: false);
       currentRoomProvider.setStudyRoomFromJson(data['chatroom']);
       userRequestsProvider.removeMyRequestById(data['request']['_id']);
     });
   }
 
   void _onRequestRejected(BuildContext context) {
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("request-rejected", (data) {
-      final userRequestsProvider = Provider.of<UserRequestsProvider>(context, listen: false);
       userRequestsProvider.removeMyRequestById(data['_id']);
     });
   }
 
   void _onTuteeRequested(BuildContext context) {
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("new-request", (data) {
-      final userRequestsProvider =
-          Provider.of<UserRequestsProvider>(context, listen: false);
       userRequestsProvider.addTuteeRequestsFromMap([data], true);
     });
   }

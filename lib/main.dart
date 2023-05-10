@@ -59,40 +59,42 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     print("Building MyApp!");
-    final userProvider = Provider.of<UserProvider>(context);
     return MaterialApp(
-      title: 'LFT',
-      theme: ThemeData(
-        fontFamily: 'Oxygen',
-        primarySwatch: getMaterialColor(primaryColor),
-      ),
-      home: userProvider.isAuthenticated
-          ? FutureBuilder(
-              future: Future.wait([
-                tutorService.fetchTutors(context),
-                studyRoomService.getUserRoom(context),
-                studyRoomService.fetchStudyRooms(context),
-                studyRoomService.getPendingChatRoomIds(context),
-                studyRoomService.getTuteeRequests(context),
-                studyRoomService.getMyRequests(context),
-              ]),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SplashScreen();
-                }
-                return const HomeScreen();
-              },
-            )
-          : FutureBuilder(
-              future: authService.fetchUser(context),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SplashScreen();
-                }
+        title: 'LFT',
+        theme: ThemeData(
+          fontFamily: 'Oxygen',
+          primarySwatch: getMaterialColor(primaryColor),
+        ),
+        home: Consumer<UserProvider>(
+          builder: (context, userProvider, _) {
+            return userProvider.isAuthenticated
+                ? FutureBuilder(
+                    future: Future.wait([
+                      tutorService.fetchTutors(context),
+                      studyRoomService.getUserRoom(context),
+                      studyRoomService.fetchStudyRooms(context),
+                      studyRoomService.getPendingChatRoomIds(context),
+                      studyRoomService.getTuteeRequests(context),
+                      studyRoomService.getMyRequests(context),
+                    ]),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SplashScreen();
+                      }
+                      return const HomeScreen();
+                    },
+                  )
+                : FutureBuilder(
+                    future: authService.fetchUser(context),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SplashScreen();
+                      }
 
-                return const LoginScreen();
-              },
-            ),
-    );
+                      return const LoginScreen();
+                    },
+                  );
+          },
+        ));
   }
 }

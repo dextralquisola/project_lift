@@ -32,9 +32,9 @@ class StudyRoomProvider with ChangeNotifier {
   }
 
   void addStudyRoomFromJson(dynamic data, bool isPopulatedParticipant) {
-    if (_currentPage > _totalPages) {
-      return;
-    }
+    // if (_currentPage > _totalPages) {
+    //   return;
+    // }
     _totalPages = data['totalPages'];
 
     List<dynamic> studyRooms = data['rooms'];

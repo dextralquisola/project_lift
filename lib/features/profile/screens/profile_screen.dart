@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
-import 'package:project_lift/main.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/utils.dart';
@@ -138,8 +134,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                               studyPoolProvider.clearStudyRooms();
                               currentStudyRoomProvider.leaveStudyRoom();
                               userRequestsProvider.clearRequests();
+
                               await userProvider.logout();
-                              SystemNavigator.pop();
                             } else {
                               showSnackBar(context, "Something went wrong");
                             }
