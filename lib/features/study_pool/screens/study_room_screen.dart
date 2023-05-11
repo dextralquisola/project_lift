@@ -86,6 +86,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
               icon: const Icon(Icons.pending_actions),
             ),
           PopupMenuButton(
+            icon: const Icon(Icons.more_vert, color: Colors.white),
             itemBuilder: (context) {
               return [
                 PopupMenuItem(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/study_pool/screens/create_room_screen.dart';
 import 'package:project_lift/widgets/app_button.dart';
@@ -38,9 +39,32 @@ class TutorCard extends StatelessWidget {
                         child: SizedBox(
                           width: 100,
                           height: 100,
-                          child: Image.network(
-                              "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                              fit: BoxFit.cover),
+                          child: tutor.avatar == ""
+                              ? CachedNetworkImage(
+                                  imageUrl:
+                                      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+                                  fit: BoxFit.cover,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: progress.progress,
+                                      ),
+                                    );
+                                  },
+                                )
+                              : CachedNetworkImage(
+                                  imageUrl: tutor.avatar,
+                                  fit: BoxFit.cover,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: progress.progress,
+                                      ),
+                                    );
+                                  },
+                                ),
                         ),
                       ),
                       const SizedBox(width: 30),

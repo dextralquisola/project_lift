@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/user_provider.dart';
 import '../../../utils/http_utils.dart' as service;
+import '../../../utils/storage_utils.dart';
 
 class ProfileService {
   Future<void> addSubject({
@@ -58,6 +59,46 @@ class ProfileService {
         final decoded = json.decode(res.body);
         decoded.addAll({'token': userProvider.user.token});
         userProvider.setUserFromMap(decoded, false);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> uploadAvatar({
+    required BuildContext context,
+    required String avatarPath,
+  }) async {
+    try {
+      final storageMethods = StorageMethods();
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      var avatarUrl = await storageMethods.uploadImage(
+        filePath: avatarPath,
+        fileName: userProvider.user.userId,
+      );
+
+      var res = await service.requestApi(
+        path: '/api/users/me/avatar',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: {
+          "image": avatarUrl,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        print("uploaded avatar");
+        print(res.body);
+        final decoded = json.decode(res.body);
+
+        // userProvider.setUserFromModel(
+        //   userProvider.user.copyFrom(avatar: decoded['avatar']),
+        // );
       }
     } catch (e) {
       print(e);

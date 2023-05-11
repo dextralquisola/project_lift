@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
+import 'package:project_lift/features/profile/screens/select_avatar_screen.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/utils.dart';
@@ -80,10 +81,19 @@ class _ProfileScreenState extends State<ProfileScreen>
                           clipBehavior: Clip.none,
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(105),
-                              child: Container(
-                                color: Colors.deepPurple,
-                              ),
+                              borderRadius: BorderRadius.circular(100),
+                              child: user.avatar != ""
+                                  ? SizedBox(
+                                      height: 150,
+                                      width: 150,
+                                      child: Image.network(
+                                        user.avatar,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Container(
+                                      color: Colors.deepPurple,
+                                    ),
                             ),
                             if (userProvider.isTutor)
                               Positioned(
@@ -133,11 +143,36 @@ class _ProfileScreenState extends State<ProfileScreen>
                           icon: const Icon(Icons.exit_to_app,
                               color: Colors.white),
                         ),
-                        IconButton(
-                          constraints: const BoxConstraints(),
-                          onPressed: () {},
+                        PopupMenuButton(
                           icon:
                               const Icon(Icons.more_vert, color: Colors.white),
+                          itemBuilder: (context) {
+                            return [
+                              PopupMenuItem(
+                                value: 0,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.edit, color: Colors.black),
+                                    const SizedBox(width: 5),
+                                    AppText(
+                                      text: "Edit Profile Picture",
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ];
+                          },
+                          onSelected: (value) async {
+                            if (value == 0) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SelectAvatarScreen(),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -150,6 +185,12 @@ class _ProfileScreenState extends State<ProfileScreen>
               text: "${user.firstName} ${user.lastName}",
               textSize: 24,
               fontWeight: FontWeight.bold,
+            ),
+            const SizedBox(height: 5),
+            AppText(
+              text: user.email,
+              textColor: Colors.grey,
+              textSize: 14,
             ),
             const SizedBox(height: 20),
             if (userProvider.isTutor) _tutorScreenBuilder(userProvider),
