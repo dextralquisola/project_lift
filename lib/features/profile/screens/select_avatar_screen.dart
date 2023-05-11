@@ -23,6 +23,8 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
   final imagePicker = ImagePicker();
   XFile? selectedImage;
 
+  var _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -58,27 +60,37 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
                   text: "Clear Image",
                 ),
               ),
-            AppButton(
-              wrapRow: true,
-              height: 50,
-              onPressed: selectedImage == null
-                  ? () async {
-                      var selectImage = await imagePicker.pickImage(
-                        source: ImageSource.gallery,
-                      );
-                      setState(() {
-                        selectedImage = selectImage;
-                      });
-                    }
-                  : () async {
-                      await profileService.uploadAvatar(
-                        context: context,
-                        avatarPath: selectedImage!.path,
-                      );
-                      Navigator.of(context).pop();
-                    },
-              text: selectedImage != null ? "Save" : "Select Image",
-            ),
+            _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : AppButton(
+                    wrapRow: true,
+                    height: 50,
+                    onPressed: selectedImage == null
+                        ? () async {
+                            var selectImage = await imagePicker.pickImage(
+                              source: ImageSource.gallery,
+                            );
+                            setState(() {
+                              selectedImage = selectImage;
+                            });
+                          }
+                        : () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            await profileService.uploadAvatar(
+                              context: context,
+                              avatarPath: selectedImage!.path,
+                            );
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                    text: selectedImage != null ? "Save" : "Select Image",
+                  ),
           ],
         ),
       ),
