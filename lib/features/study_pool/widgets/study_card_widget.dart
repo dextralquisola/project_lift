@@ -19,75 +19,6 @@ class StudyPoolCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _showDialog({
-      required BuildContext context,
-      required StudyRoom studyRoom,
-    }) {
-      final roomSchedule =
-          StudyRoomSchedule(scheduleString: studyRoom.schedule);
-      final date = roomSchedule.scheduleDate;
-      final fromTime = roomSchedule.fromTime;
-      final toTime = roomSchedule.toTime;
-
-      final participantCount = studyRoom.participants.where((participant) {
-        return participant['status'] == 'accepted';
-      }).length;
-
-      print("Showing dialog");
-      print(participantCount);
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              title: AppText(text: studyRoom.roomName),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(text: "Location: ${studyRoom.location}"),
-                  AppText(
-                      text:
-                          "Date: ${DateFormat('MMMM dd, yyyy').format(date)}"),
-                  AppText(
-                      text:
-                          "Time: ${fromTime.format(context)} - ${toTime.format(context)}"),
-                  AppText(text: "Tutor: ${studyRoom.roomOwner}"),
-                  AppText(text: "Tutees: $participantCount"),
-                  const SizedBox(height: 10),
-                  AppText(
-                    text: "Description:",
-                    fontWeight: FontWeight.bold,
-                  ),
-                  AppText(
-                      text:
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc."),
-                  const SizedBox(height: 20),
-                  AppButton(
-                    onPressed: () async {
-                      await studyRoomService.joinRoom(
-                        roomId: studyRoom.roomId,
-                        context: context,
-                      );
-                      Navigator.of(context).pop();
-                    },
-                    isEnabled: !isStudyRoomPending,
-                    height: 50,
-                    wrapRow: true,
-                    text: "Join now!",
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
@@ -115,6 +46,73 @@ class StudyPoolCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showDialog({
+    required BuildContext context,
+    required StudyRoom studyRoom,
+  }) {
+    final roomSchedule = StudyRoomSchedule(scheduleString: studyRoom.schedule);
+    final date = roomSchedule.scheduleDate;
+    final fromTime = roomSchedule.fromTime;
+    final toTime = roomSchedule.toTime;
+
+    final participantCount = studyRoom.participants.where((participant) {
+      return participant['status'] == 'accepted';
+    }).length;
+
+    print("Showing dialog");
+    print(participantCount);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: AppText(text: studyRoom.roomName),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppText(text: "Location: ${studyRoom.location}"),
+                AppText(
+                    text: "Date: ${DateFormat('MMMM dd, yyyy').format(date)}"),
+                AppText(
+                    text:
+                        "Time: ${fromTime.format(context)} - ${toTime.format(context)}"),
+                AppText(text: "Tutor: ${studyRoom.roomOwner}"),
+                AppText(text: "Tutees: $participantCount"),
+                const SizedBox(height: 10),
+                AppText(
+                  text: "Description:",
+                  fontWeight: FontWeight.bold,
+                ),
+                AppText(
+                    text:
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc."),
+                const SizedBox(height: 20),
+                AppButton(
+                  onPressed: () async {
+                    await studyRoomService.joinRoom(
+                      roomId: studyRoom.roomId,
+                      context: context,
+                    );
+                    Navigator.of(context).pop();
+                  },
+                  isEnabled: !isStudyRoomPending,
+                  height: 50,
+                  wrapRow: true,
+                  text: "Join now!",
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
