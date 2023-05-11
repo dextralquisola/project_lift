@@ -92,13 +92,11 @@ class ProfileService {
       );
 
       if (res.statusCode == 200) {
-        print("uploaded avatar");
-        print(res.body);
         final decoded = json.decode(res.body);
-
-        // userProvider.setUserFromModel(
-        //   userProvider.user.copyFrom(avatar: decoded['avatar']),
-        // );
+        userProvider.setUserFromModel(
+          userProvider.user.copyFrom(avatar: decoded['avatar']),
+          false,
+        );
       }
     } catch (e) {
       print(e);

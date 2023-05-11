@@ -185,6 +185,7 @@ class AuthService {
           "firstName": userData['user']['firstName'],
           "lastName": userData['user']['lastName'],
           "email": userData['user']['email'],
+          "avatar": userData['user']['avatar'],
           "role": userData['user']['role'],
           "token": userData['token'],
           "subjects": userData['user']['subjects'],

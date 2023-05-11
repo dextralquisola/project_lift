@@ -19,9 +19,9 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setUserFromModel(User user) {
+  void setUserFromModel(User user, [bool isNotify = true]) {
     _user = user;
-    notifyListeners();
+    isNotify ? notifyListeners() : () {};
   }
 
   void setUserFromMap(Map<String, dynamic> user, [bool notify = true]) {

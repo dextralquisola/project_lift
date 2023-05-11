@@ -161,7 +161,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                           text: "There is no tutor available.", textSize: 20),
                       TextButton(
                         onPressed: () async =>
-                            await tutorService.fetchTutors(context),
+                            await tutorService.fetchTutors(context, true),
                         child: const Text("Tap to refresh"),
                       )
                     ],

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
@@ -49,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     final userProvider = Provider.of<UserProvider>(context);
 
     final user = userProvider.user;
-    final ratingAsTutor = user.getRating(isTutor: true);
+    final ratingAsTutor = user.getRating(isTutor: true).round();
     final ratingAsTutee = user.getRating(isTutor: false);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -86,9 +87,17 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ? SizedBox(
                                       height: 150,
                                       width: 150,
-                                      child: Image.network(
-                                        user.avatar,
+                                      child: CachedNetworkImage(
+                                        imageUrl: user.avatar,
                                         fit: BoxFit.cover,
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) {
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: progress.progress,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     )
                                   : Container(
@@ -165,12 +174,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                           },
                           onSelected: (value) async {
                             if (value == 0) {
-                              Navigator.of(context).push(
+                              await Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const SelectAvatarScreen(),
                                 ),
                               );
+
+                              setState(() {});
                             }
                           },
                         ),
