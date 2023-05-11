@@ -13,15 +13,30 @@ class StudyRoomDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentStudyRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context);
+
+    if (currentStudyRoomProvider.isEmpty) {
+      Navigator.of(context).pop();
+    }
+
     final studyRoom = currentStudyRoomProvider.studyRoom;
     final roomSubject = studyRoom.subject;
     final roomSubTopics = roomSubject.subTopics;
     final participants = studyRoom.participants;
 
     final roomSchedule = StudyRoomSchedule(scheduleString: studyRoom.schedule);
-    final date = roomSchedule.scheduleDate;
-    final fromTime = roomSchedule.fromTime;
-    final toTime = roomSchedule.toTime;
+    late DateTime date;
+    late TimeOfDay fromTime;
+    late TimeOfDay toTime;
+
+    if (currentStudyRoomProvider.isEmpty) {
+      date = DateTime.now();
+      fromTime = TimeOfDay.now();
+      toTime = TimeOfDay.now();
+    } else {
+      date = roomSchedule.scheduleDate;
+      fromTime = roomSchedule.fromTime;
+      toTime = roomSchedule.toTime;
+    }
 
     return Scaffold(
       appBar: AppBar(

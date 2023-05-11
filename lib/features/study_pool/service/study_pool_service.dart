@@ -315,8 +315,6 @@ class StudyPoolService {
           studyRoomProvider
               .removeStudyRoomById(currentRoomProvider.studyRoom.roomId);
         }
-
-        await studyPoolService.fetchStudyRooms(context, true);
         currentRoomProvider.clearRoom();
       } else {
         print("ERROR: ${res.statusCode}");

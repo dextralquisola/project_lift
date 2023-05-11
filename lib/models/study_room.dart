@@ -136,6 +136,8 @@ class StudyRoomSchedule {
         scheduleString.split('+')[0],
       );
 
+  String get scheduleDateAsISOString => scheduleString.split('+')[0];
+
   TimeOfDay get fromTime => TimeOfDay(
         hour:
             int.parse(scheduleString.split('+')[1].split('.')[0].split(':')[0]),

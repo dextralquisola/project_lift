@@ -65,8 +65,6 @@ class SocketListeners {
   void _onUserLeftRoom(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     _socket.on("user-left", (data) {
-      print("userOnleft");
-      print(data);
       if (userProvider.user.userId != data['user']['userId']) {
         final currentRoomProvider =
             Provider.of<CurrentStudyRoomProvider>(context, listen: false);
@@ -82,7 +80,12 @@ class SocketListeners {
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     final studyRoomProvider =
         Provider.of<StudyRoomProvider>(context, listen: false);
+    
     _socket.on("room-deleted", (data) {
+
+      print("on room deleted");
+      print(data);
+
       _socket.emit("leave-room", {
         "roomId": currentRoomProvider.studyRoom.roomId,
       });
