@@ -58,6 +58,9 @@ class StudyPoolCard extends StatelessWidget {
     final fromTime = roomSchedule.fromTime;
     final toTime = roomSchedule.toTime;
 
+    final participantCount = studyRoom.participants.length == 1
+        ? 0
+        : studyRoom.participants.length - 1;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -79,7 +82,7 @@ class StudyPoolCard extends StatelessWidget {
                     text:
                         "Time: ${fromTime.format(context)} - ${toTime.format(context)}"),
                 AppText(text: "Tutor: ${studyRoom.roomOwner}"),
-                AppText(text: "Tutees: ${studyRoom.participantCount}"),
+                AppText(text: "Tutees: $participantCount"),
                 const SizedBox(height: 10),
                 AppText(
                   text: "Description:",

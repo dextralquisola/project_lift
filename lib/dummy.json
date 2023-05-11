@@ -1,24 +1,163 @@
-{
-  "subject": {
-    "subjectCode": "DCIT 22A",
-    "description": "COMPUTER PROGRAMMING 1",
-    "subtopics": []
+[
+  {
+    "where": "fromRealtime",
+    "messages": [
+      {
+        "_id": "645c1bc51cf40350837f9b5d",
+        "roomId": "645c1ba21cf40350837f9aab",
+        "userId": {
+          "_id": "6459d087e70eb74250f381c8",
+          "firstName": " Chris P",
+          "lastName": "Chicken"
+        },
+        "message": "fghfg",
+        "createdAt": "2023-05-10T22:33:41.711Z",
+        "updatedAt": "2023-05-10T22:33:41.711Z",
+        "__v": 0
+      }
+    ],
+    "chatRoom": {
+      "subject": {
+        "subjectCode": "FITT 1",
+        "description": "MOVEMENT ENHANCEMENT",
+        "subtopics": []
+      },
+      "_id": "645c1ba21cf40350837f9aab",
+      "owner": "6459d087e70eb74250f381c8",
+      "name": "testtest",
+      "location": "sdf",
+      "schedule": "2023-05-10T00:00:00.000+16:32.17:32",
+      "sessionEnded": false,
+      "messages": [],
+      "status": "public",
+      "deletedAt": null,
+      "participants": [
+        {
+          "userId": {
+            "_id": "6459d087e70eb74250f381c8",
+            "firstName": "Chris P",
+            "lastName": "Chicken"
+          },
+          "status": "owner"
+        },
+        {
+          "userId": {
+            "_id": "645b9fedc7c4db6a2b5b8db6",
+            "firstName": "Tutee1",
+            "lastName": "Tutee"
+          },
+          "status": "accepted"
+        }
+      ],
+      "__v": 2
+    },
+    "userId": "645b9fedc7c4db6a2b5b8db6"
   },
-  "_id": "645a77932bd88ba9c698077e",
-  "tutorId": {
-    "_id": "64595750e70eb74250f36763",
-    "firstName": "Dexter",
-    "lastName": "Alquisola"
+  {
+    "where": "from studyrom/message",
+    "messages": [
+      {
+        "_id": "645c1bc51cf40350837f9b5d",
+        "roomId": {
+          "_id": "645c1ba21cf40350837f9aab",
+          "name": "testtest"
+        },
+        "userId": {
+          "_id": "6459d087e70eb74250f381c8",
+          "firstName": "Chris P",
+          "lastName": "Chicken"
+        },
+        "message": "fghfg",
+        "createdAt": "2023-05-10T22:33:41.711Z",
+        "updatedAt": "2023-05-10T22:33:41.711Z",
+        "__v": 0
+      }
+    ],
+    "page": 1,
+    "totalPages": 1,
+    "totalCount": 1,
+    "chatRoom": {
+      "_id": "645c1ba21cf40350837f9aab",
+      "name": "testtest"
+    }
   },
-  "studentId": {
-    "_id": "6459d087e70eb74250f381c8",
-    "firstName": "Chris P",
-    "lastName": "Chicken"
+  {
+    "messages": [
+      {
+        "_id": "645c1bc51cf40350837f9b5d",
+        "roomId": { "_id": "645c1ba21cf40350837f9aab", "name": "testtest" },
+        "userId": {
+          "_id": "6459d087e70eb74250f381c8",
+          "firstName": "Chris P",
+          "lastName": "Chicken"
+        },
+        "message": "fghfg",
+        "createdAt": "2023-05-10T22:33:41.711Z",
+        "updatedAt": "2023-05-10T22:33:41.711Z",
+        "__v": 0
+      }
+    ],
+    "page": 1,
+    "totalPages": 1,
+    "totalCount": 1,
+    "chatRoom": { "_id": "645c1ba21cf40350837f9aab", "name": "testtest" }
   },
-  "name": "asd",
-  "status": "public",
-  "location": "asd",
-  "schedule": "2023-05-09T00:00:00.000+16:40.17:40",
-  "reqStatus": "pending",
-  "__v": 0
-}
+  {
+    "subject": {
+      "subjectCode": "FITT 1",
+      "description": "MOVEMENT ENHANCEMENT",
+      "subtopics": []
+    },
+    "_id": "645c1ba21cf40350837f9aab",
+    "owner": "6459d087e70eb74250f381c8",
+    "name": "testtest",
+    "location": "sdf",
+    "schedule": "2023-05-10T00:00:00.000+16:32.17:32",
+    "sessionEnded": false,
+    "messages": [
+      {
+        "_id": "645c1bc51cf40350837f9b5d",
+        "roomId": "645c1ba21cf40350837f9aab",
+        "userId": "6459d087e70eb74250f381c8",
+        "message": "fghfg",
+        "createdAt": "2023-05-10T22:33:41.711Z",
+        "updatedAt": "2023-05-10T22:33:41.711Z",
+        "__v": 0
+      }
+    ],
+    "status": "public",
+    "deletedAt": null,
+    "participants": [
+      {
+        "userId": {
+          "_id": "6459d087e70eb74250f381c8",
+          "firstName": "Chris P",
+          "lastName": "Chicken"
+        },
+        "status": "owner"
+      }
+    ],
+    "__v": 7
+  },
+  {
+    "messages": [
+      {
+        "_id": "645c1bc51cf40350837f9b5d",
+        "roomId": { "_id": "645c1ba21cf40350837f9aab", "name": "testtest" },
+        "userId": {
+          "_id": "6459d087e70eb74250f381c8",
+          "firstName": "Chris P",
+          "lastName": "Chicken"
+        },
+        "message": "fghfg",
+        "createdAt": "2023-05-10T22:33:41.711Z",
+        "updatedAt": "2023-05-10T22:33:41.711Z",
+        "__v": 0
+      }
+    ],
+    "page": 1,
+    "totalPages": 1,
+    "totalCount": 1,
+    "chatRoom": { "_id": "645c1ba21cf40350837f9aab", "name": "testtest" }
+  }
+]

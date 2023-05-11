@@ -20,11 +20,7 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   bool get isEmpty => _studyRoom.roomId.isEmpty;
 
   void setMessagesFromJson(dynamic data) {
-    // _totalMessagePage = data['totalPages'];
-
-    // if (_currentMessagePage > _totalMessagePage) return;
-
-    List<dynamic> messages = data['messages'];
+    List<dynamic> messages = data;
     var newMessages = messages.map((e) => Message.fromMap(e)).toList();
 
     var uniqueMessages = newMessages;

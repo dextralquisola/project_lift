@@ -11,6 +11,10 @@ class StudyRoomProvider with ChangeNotifier {
   List<StudyRoom> get studyRooms => _studyRooms;
   int get currentPage => _currentPage;
 
+  StudyRoom getRoomById(String id) {
+    return _studyRooms.firstWhere((element) => element.roomId == id);
+  }
+
   void clearPendingRooms() {
     _pendingRooms = [];
     notifyListeners();
@@ -32,11 +36,6 @@ class StudyRoomProvider with ChangeNotifier {
   }
 
   void addStudyRoomFromJson(dynamic data, bool isPopulatedParticipant) {
-    // if (_currentPage > _totalPages) {
-    //   return;
-    // }
-    _totalPages = data['totalPages'];
-
     List<dynamic> studyRooms = data['rooms'];
 
     if (studyRooms.length == 10) _currentPage++;
@@ -73,6 +72,13 @@ class StudyRoomProvider with ChangeNotifier {
 
   void removeStudyRoomById(String roomId) {
     _studyRooms.removeWhere((element) => element.roomId == roomId);
+    notifyListeners();
+  }
+
+  void updateStudyRoom(StudyRoom studyRoom) {
+    final index =
+        _studyRooms.indexWhere((element) => element.roomId == studyRoom.roomId);
+    _studyRooms[index] = studyRoom;
     notifyListeners();
   }
 }

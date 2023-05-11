@@ -57,7 +57,7 @@ class SocketListeners {
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("participant-accepted", (data) {
       currentRoomProvider.setStudyRoomFromJson(data['chatRoom']);
-      currentRoomProvider.setMessagesFromJson(data);
+      currentRoomProvider.setMessagesFromJson(data['messages']);
       studyRoomProvider.clearPendingRooms();
     });
   }

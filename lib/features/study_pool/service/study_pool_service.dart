@@ -87,6 +87,9 @@ class StudyPoolService {
         },
       );
 
+      print("ChatROomRes");
+      print(chatRoomRes.body);
+
       if (chatRoomRes.statusCode == 200 && chatRoomRes.statusCode != 404) {
         //fetch the chatroom data
         var decoded = json.decode(chatRoomRes.body);
@@ -104,8 +107,11 @@ class StudyPoolService {
           },
         );
 
+        print("MessageRes");
+        print(resMessages.body);
+
         if (resMessages.statusCode == 200) {
-          var messages = json.decode(resMessages.body);
+          var messages = json.decode(resMessages.body)['messages'];
           currentRoomProvider.setMessagesFromJson(messages);
         }
       }
@@ -133,7 +139,7 @@ class StudyPoolService {
       );
 
       if (resMessages.statusCode == 200) {
-        var messages = json.decode(resMessages.body);
+        var messages = json.decode(resMessages.body)['messages'];
         currentRoomProvider.setMessagesFromJson(messages);
       }
     } catch (e) {
@@ -141,14 +147,15 @@ class StudyPoolService {
     }
   }
 
-  Future<void> fetchStudyRooms(BuildContext context, [bool isRefresh = false]) async {
+  Future<void> fetchStudyRooms(BuildContext context,
+      [bool isRefresh = false]) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
 
-      if(isRefresh) studyRoomProvider.clearStudyRooms(false);
-      
+      if (isRefresh) studyRoomProvider.clearStudyRooms(false);
+
       var res = await service.requestApi(
         path: '/api/studyroom/public?page=${studyRoomProvider.currentPage}',
         method: 'GET',
@@ -284,6 +291,8 @@ class StudyPoolService {
           Provider.of<StudyRoomProvider>(context, listen: false);
       final userProvider = Provider.of<UserProvider>(context, listen: false);
 
+      final studyPoolService = StudyPoolService();
+
       var socket = SocketClient.instance.socket!;
       var res = await service.requestApi(
         path: '/api/studyroom/leave/${currentRoomProvider.studyRoom.roomId}',
@@ -300,8 +309,14 @@ class StudyPoolService {
         socket.emit("leave-room", {
           "roomId": currentRoomProvider.studyRoom.roomId,
         });
-        studyRoomProvider
-            .removeStudyRoomById(currentRoomProvider.studyRoom.roomId);
+
+        if (userProvider.user.userId ==
+            currentRoomProvider.studyRoom.roomOwner) {
+          studyRoomProvider
+              .removeStudyRoomById(currentRoomProvider.studyRoom.roomId);
+        }
+
+        await studyPoolService.fetchStudyRooms(context, true);
         currentRoomProvider.clearRoom();
       } else {
         print("ERROR: ${res.statusCode}");

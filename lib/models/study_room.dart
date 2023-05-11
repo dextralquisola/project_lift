@@ -51,7 +51,14 @@ class StudyRoom {
                 },
               ),
             )
-          : [],
+          : List<Map<String, dynamic>>.from(
+              map['participants']?.map(
+                (x) => {
+                  'userId': x['userId'],
+                  'status': x['status'],
+                },
+              ),
+            ),
       roomName: map['name'] ?? '',
       roomOwner: map['owner'] ?? '',
       location: map['location'] ?? '',
