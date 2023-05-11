@@ -47,6 +47,7 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("Building StudyPoolScreen!" );
     final userProvider = Provider.of<UserProvider>(context);
     final studyRoomProvider = Provider.of<StudyRoomProvider>(context);
     final currentStudyRoomProvider =
@@ -91,7 +92,7 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                   )
                 : RefreshIndicator(
                     onRefresh: () async =>
-                        await studyPoolService.fetchStudyRooms(context),
+                        await studyPoolService.fetchStudyRooms(context, true),
                     child: ListView.separated(
                       controller: _scrollControllerRoom,
                       itemBuilder: (context, index) => StudyPoolCard(

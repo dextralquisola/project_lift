@@ -100,8 +100,7 @@ class StudyRoom {
     print("Room Name: $roomName");
     print("Room Owner: $roomOwner");
     print("Room Messages: $messages");
-    print("Room Participants: $participants");
-    print("participantCount: $participantCount");
+    print("Room Participants: ${participants.length}");
     print("location: $location");
     print("schedule: $schedule");
     print("sessionEnded: $sessionEnded");

@@ -15,6 +15,16 @@ class StudyRoomProvider with ChangeNotifier {
     return _studyRooms.firstWhere((element) => element.roomId == id);
   }
 
+  void printStudyRooms() {
+    print("======= Study Rooms ========");
+    _studyRooms.forEach((element) {
+      print('>>');
+      element.printRoom();
+      print('>>');
+    });
+    print("============================");
+  }
+
   void clearPendingRooms() {
     _pendingRooms = [];
     notifyListeners();
