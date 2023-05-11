@@ -1,46 +1,266 @@
 {
-  "rooms": [
+  "tutors": [
     {
-      "_id": "645c72ab3780fd97cafed80a",
-      "name": "test1",
-      "location": "library",
-      "schedule": "2023-05-10T00:00:00.000+6:30.17:43",
-      "subject": {
-        "subjectCode": "FITT 1",
-        "description": "MOVEMENT ENHANCEMENT",
-        "subtopics": [
-          {
-            "name": "basketball",
-            "description": "ball handling",
-            "_id": "645c72ab3780fd97cafed80b"
-          }
-        ]
-      },
-      "participants": [
-        { "userId": "64586157d05956db88bdeace", "status": "owner" },
-        { "userId": "6459c5127ec638db0ad0df72", "status": "accepted" },
-        { "userId": "645912be8992cf5ed9f0b338", "status": "accepted" }
+      "_id": "64586157d05956db88bdeace",
+      "firstName": "karltest",
+      "lastName": "admin",
+      "email": "karlducta022@gmail.com",
+      "role": "tutor",
+      "isAvailable": true,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [
+        {
+          "value": 4,
+          "feedback": "qweqwe",
+          "tuteeId": "6459c5127ec638db0ad0df72",
+          "_id": "645ba1e31f1db2295faa16be"
+        },
+        {
+          "value": 3,
+          "feedback": "qwewq",
+          "tuteeId": "645912be8992cf5ed9f0b338",
+          "_id": "645ba1f31f1db2295faa1762"
+        },
+        {
+          "value": 3,
+          "feedback": "wqew",
+          "tuteeId": "6459d2cd94a95d14c6dbb807",
+          "_id": "645cb235b9edc0b97b242661"
+        }
       ],
-      "owner": "karltest admin"
+      "ratingsAsTutee": [
+        {
+          "value": 5,
+          "feedback": "sada",
+          "tutorId": "6459c5127ec638db0ad0df72",
+          "_id": "645b9b9c1f1db2295faa06c3"
+        }
+      ],
+      "subjects": [
+        {
+          "subjectCode": "FITT 1",
+          "description": "MOVEMENT ENHANCEMENT",
+          "subtopics": [
+            {
+              "name": "basketball",
+              "description": "ball handling",
+              "_id": "645b9c171f1db2295faa0b15"
+            }
+          ],
+          "_id": "645b9c171f1db2295faa0b14"
+        }
+      ],
+      "createdAt": "2023-05-08T02:41:27.245Z",
+      "updatedAt": "2023-05-11T10:12:58.496Z",
+      "__v": 38,
+      "socketId": "fvVxGt8-9cxVN8qzAAAL",
+      "hasRoom": false
     },
     {
-      "_id": "645c8e9437d7cf6212601c58",
-      "name": "dfg",
-      "location": "dfg",
-      "schedule": "2023-05-10T00:00:00.000+17:43.18:43",
-      "subject": {
-        "subjectCode": "FITT 1",
-        "description": "MOVEMENT ENHANCEMENT",
-        "subtopics": []
-      },
-      "participants": [
-        { "userId": "6459d087e70eb74250f381c8", "status": "owner" },
-        { "userId": "645b9fedc7c4db6a2b5b8db6", "status": "accepted" }
+      "hasRoom": false,
+      "_id": "64595750e70eb74250f36763",
+      "firstName": "Dexter",
+      "lastName": "Alquisola",
+      "email": "djalquisola@gmail.com",
+      "role": "tutor",
+      "isAvailable": true,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [
+        {
+          "value": 2,
+          "feedback": "sdf",
+          "tuteeId": "6459d087e70eb74250f381c8",
+          "_id": "645a5c21a76fee73928f9be5"
+        }
       ],
-      "owner": "Chris P Chicken"
+      "ratingsAsTutee": [],
+      "subjects": [
+        {
+          "subjectCode": "DCIT 22A",
+          "description": "COMPUTER PROGRAMMING 1",
+          "subtopics": [
+            {
+              "name": "yup",
+              "description": "yup",
+              "_id": "6459ca54e70eb74250f36c40"
+            }
+          ],
+          "_id": "6459ca54e70eb74250f36c3f"
+        }
+      ],
+      "createdAt": "2023-05-08T20:10:56.533Z",
+      "updatedAt": "2023-05-10T13:42:59.724Z",
+      "__v": 38,
+      "socketId": ""
+    },
+    {
+      "_id": "6459c5127ec638db0ad0df72",
+      "firstName": "python",
+      "lastName": "test",
+      "email": "pythontesting0223@gmail.com",
+      "role": "tutor",
+      "isAvailable": true,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [
+        {
+          "value": 3,
+          "feedback": "das",
+          "tuteeId": "645912be8992cf5ed9f0b338",
+          "_id": "645a77bbfd6b70459a79313e"
+        },
+        {
+          "value": 2,
+          "feedback": "asdasd",
+          "tuteeId": "64586157d05956db88bdeace",
+          "_id": "645b9bb01f1db2295faa0770"
+        }
+      ],
+      "ratingsAsTutee": [
+        {
+          "value": 4,
+          "feedback": "ewqeqe",
+          "tutorId": "64586157d05956db88bdeace",
+          "_id": "645ba1ec1f1db2295faa170f"
+        }
+      ],
+      "subjects": [
+        {
+          "subjectCode": "COSC 50A",
+          "description": "DISCRETE STRUCTURE",
+          "subtopics": [
+            {
+              "name": "test",
+              "description": "test",
+              "_id": "6459c5f67ec638db0ad0dff5"
+            }
+          ],
+          "_id": "6459c5f67ec638db0ad0dff4"
+        },
+        {
+          "subjectCode": "GNED 11",
+          "description": "KONTEKSTWALISADONG KOMUNIKASYON SA FILIPINO",
+          "subtopics": [
+            {
+              "name": "test",
+              "description": "test",
+              "_id": "6459c98a7ec638db0ad0e3ba"
+            }
+          ],
+          "_id": "6459c98a7ec638db0ad0e3b9"
+        }
+      ],
+      "createdAt": "2023-05-09T03:59:14.127Z",
+      "updatedAt": "2023-05-11T10:12:57.918Z",
+      "__v": 103,
+      "socketId": "YRRZhs3R6ADub4DfAAAP",
+      "hasRoom": false
+    },
+    {
+      "_id": "6459d087e70eb74250f381c8",
+      "firstName": "Chris P",
+      "lastName": "Chicken",
+      "email": "dexterjay.alquisola@cvsu.edu.ph",
+      "role": "tutor",
+      "isAvailable": true,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [
+        {
+          "value": 4,
+          "feedback": "sd",
+          "tuteeId": "645b9fedc7c4db6a2b5b8db6",
+          "_id": "645cc39c36a0c3941dc04ba0"
+        }
+      ],
+      "ratingsAsTutee": [
+        {
+          "value": 5,
+          "feedback": "dsf",
+          "tutorId": "64595750e70eb74250f36763",
+          "_id": "645a5c1ca76fee73928f9bb4"
+        }
+      ],
+      "subjects": [
+        {
+          "subjectCode": "FITT 1",
+          "description": "MOVEMENT ENHANCEMENT",
+          "subtopics": [
+            {
+              "name": "To be a chicken",
+              "description": "crispy",
+              "_id": "6459d128e70eb74250f38343"
+            }
+          ],
+          "_id": "6459d128e70eb74250f38342"
+        }
+      ],
+      "createdAt": "2023-05-09T04:48:07.902Z",
+      "updatedAt": "2023-05-11T10:50:45.140Z",
+      "__v": 36,
+      "socketId": "",
+      "hasRoom": true
+    },
+    {
+      "_id": "6459d2cd94a95d14c6dbb807",
+      "firstName": "python",
+      "lastName": "python",
+      "email": "pythontesting02234@gmail.com",
+      "role": "tutor",
+      "isAvailable": true,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [],
+      "ratingsAsTutee": [
+        {
+          "value": 4,
+          "feedback": "ewqeqe",
+          "tutorId": "64586157d05956db88bdeace",
+          "_id": "645cb219b9edc0b97b242590"
+        }
+      ],
+      "subjects": [
+        {
+          "subjectCode": "GNED 01",
+          "description": "ART APPRECIATION",
+          "subtopics": [
+            {
+              "name": "design",
+              "description": "architectural design",
+              "_id": "6459e36a94a95d14c6dbba2f"
+            }
+          ],
+          "_id": "6459e36a94a95d14c6dbba2e"
+        }
+      ],
+      "createdAt": "2023-05-09T04:57:49.835Z",
+      "updatedAt": "2023-05-11T10:12:30.306Z",
+      "__v": 17,
+      "socketId": "YYP5K7wcKkT110RiAAAR",
+      "hasRoom": false
+    },
+    {
+      "hasRoom": false,
+      "_id": "645b9f82c7c4db6a2b5b8d2d",
+      "firstName": "Test ",
+      "lastName": "Tutee",
+      "email": "bydewa@finews.biz",
+      "role": "tutor",
+      "isAvailable": true,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [],
+      "ratingsAsTutee": [],
+      "subjects": [],
+      "createdAt": "2023-05-10T13:43:30.852Z",
+      "updatedAt": "2023-05-10T13:44:34.536Z",
+      "__v": 2,
+      "socketId": ""
     }
   ],
-  "totalPages": 1,
   "currentPage": 1,
-  "totalRooms": 2
+  "totalPages": 1,
+  "totalTutors": 6
 }

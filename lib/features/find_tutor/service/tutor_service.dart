@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:project_lift/models/study_room.dart';
 import 'package:project_lift/models/user.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +38,8 @@ class TutorService {
         response: res,
         context: context,
         onSuccess: () {
+          print("tutors fetched");
+          print(res.body);
           final decoded = json.decode(res.body);
           tutorProvider.setTutorsFromJson(decoded, userProvider.user.userId);
         },

@@ -76,7 +76,7 @@ class TutorCard extends StatelessWidget {
                   const SizedBox(height: 20),
                   AppButton(
                     height: 50,
-                    isEnabled: isPendingRequest,
+                    isEnabled: isPendingRequest && !tutor.hasRoom,
                     onPressed: () async {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -88,7 +88,7 @@ class TutorCard extends StatelessWidget {
                       );
                     },
                     wrapRow: true,
-                    text: "Ask Help",
+                    text: tutor.hasRoom ? "Currently in session" : "Ask Help",
                   ),
                 ],
               ),
@@ -147,7 +147,7 @@ class TutorCard extends StatelessWidget {
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,
-                  isEnabled: isPendingRequest,
+                  isEnabled: isPendingRequest && !tutor.hasRoom,
                   onPressed: () async {
                     await Navigator.of(context).push(
                       MaterialPageRoute(
@@ -160,7 +160,7 @@ class TutorCard extends StatelessWidget {
                     Navigator.of(context).pop();
                   },
                   wrapRow: true,
-                  text: "Ask Help",
+                  text: tutor.hasRoom ? "Currently in session" : "Ask Help",
                 ),
               ],
             ),

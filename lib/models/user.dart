@@ -17,6 +17,7 @@ class User {
   final List<Rating> ratingAsTutor;
   final List<Rating> ratingAsTutee;
   final bool isEmailVerified;
+  final bool hasRoom;
 
   User({
     required this.userId,
@@ -29,6 +30,7 @@ class User {
     required this.ratingAsTutor,
     required this.ratingAsTutee,
     required this.isEmailVerified,
+    this.hasRoom = false,
     this.firebaseToken = '',
     this.deviceToken = '',
   });
@@ -58,6 +60,7 @@ class User {
     List<Rating>? ratingAsTutor,
     List<Rating>? ratingAsTutee,
     bool? isEmailVerified,
+    bool? hasRoom,
   }) {
     return User(
       userId: userId ?? this.userId,
@@ -72,6 +75,7 @@ class User {
       ratingAsTutor: ratingAsTutor ?? this.ratingAsTutor,
       ratingAsTutee: ratingAsTutee ?? this.ratingAsTutee,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+      hasRoom: hasRoom ?? this.hasRoom,
     );
   }
 
@@ -116,6 +120,7 @@ class User {
       role: map['role'] ?? '',
       token: map['token'] ?? '',
       isEmailVerified: map['isEmailVerified'] ?? false,
+      hasRoom: map['hasRoom'] ?? false,
       ratingAsTutor:
           map['ratingsAsTutor'] == null
               ? []

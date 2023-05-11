@@ -12,11 +12,6 @@ class TutorProvider with ChangeNotifier {
   int get currentPage => _currentPage;
 
   void setTutorsFromJson(dynamic data, String userId) {
-    if (_currentPage > _totalPages) {
-      return;
-    }
-    _totalPages = data['totalPages'];
-
     List<dynamic> tutors = data['tutors'];
 
     if (tutors.length == 10) _currentPage++;
