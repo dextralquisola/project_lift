@@ -422,6 +422,7 @@ class StudyPoolService {
     required String feedback,
   }) async {
     try {
+      final studyRoomService = StudyPoolService();
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final currentSudyRoom =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
@@ -473,6 +474,7 @@ class StudyPoolService {
 
       if (res.statusCode == 200) {
         print("Success");
+        studyRoomService.fetchStudyRooms(context, true);
         return true;
       } else {
         print("ERROR: ${res.statusCode}");

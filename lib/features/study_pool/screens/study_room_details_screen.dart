@@ -14,7 +14,7 @@ class StudyRoomDetailsScreen extends StatelessWidget {
     final currentStudyRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context);
 
-    if (currentStudyRoomProvider.isEmpty) {
+    if (currentStudyRoomProvider.isEmpty || currentStudyRoomProvider.studyRoom.sessionEnded) {
       Navigator.of(context).pop();
     }
 
