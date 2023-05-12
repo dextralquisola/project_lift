@@ -80,6 +80,18 @@ class CurrentStudyRoomProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateParticipantById(String userId){
+    _studyRoom = _studyRoom.copyWith(
+      participants: _studyRoom.participants
+          .map(
+            (e) =>
+                e['userId'] == userId ? {...e, 'status': 'accepted'} : {...e},
+          )
+          .toList(),
+    );
+    notifyListeners();
+  }
+
   void acceptParticipant(String userId) {
     _studyRoom = _studyRoom.copyWith(
       participants: _studyRoom.participants
