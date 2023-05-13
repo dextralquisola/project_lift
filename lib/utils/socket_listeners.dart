@@ -24,6 +24,7 @@ class SocketListeners {
     _onAcceptedAsTutor(context);
     _onRejectedAsTutor(context);
     _onParticipantRejected(context);
+    _onParticipantCancelled(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -81,6 +82,16 @@ class SocketListeners {
       print("Onparticipant rejected");
       print(data);
       studyRoomProvider.removePendingRoomById(data['chatRoom']['_id']);
+    });
+  }
+
+  void _onParticipantCancelled(BuildContext context) {
+    final currentRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    _socket.on("participant-cancelled", (data) {
+      print("Onparticipant cancelled");
+      print(data);
+      currentRoomProvider.removeParticipantById(data['userId']);
     });
   }
 
