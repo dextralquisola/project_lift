@@ -13,6 +13,7 @@ import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/rating.dart';
+import '../../../models/user.dart';
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
@@ -218,16 +219,14 @@ class _ProfileScreenState extends State<ProfileScreen>
             if (userProvider.isTutor)
               Column(
                 children: [
-                  _userRatingsBuilder(
-                      userProvider.user.ratingAsTutor, "Tutor ratings"),
+                  _userRatingsBuilder(user, "Tutor ratings", true),
                   const SizedBox(height: 20),
                 ],
               ),
             if (!userProvider.isTutor)
               Column(
                 children: [
-                  _userRatingsBuilder(
-                      userProvider.user.ratingAsTutee, "Tutee ratings"),
+                  _userRatingsBuilder(user, "Tutee ratings", false),
                   const SizedBox(height: 20),
                 ],
               ),
@@ -350,7 +349,9 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-  Widget _userRatingsBuilder(List<Rating> ratings, String title) {
+  Widget _userRatingsBuilder(User user, String title, bool isTutor) {
+    var ratings = isTutor ? user.ratingAsTutor : user.ratingAsTutee;
+    var totalRatings = user.parsedRating(isTutor);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
@@ -359,7 +360,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             ExpansionTile(
               initiallyExpanded: true,
               title: AppText(
-                text: title,
+                text: "$title ⭐️ $totalRatings",
                 fontWeight: FontWeight.w600,
               ),
               children: [
