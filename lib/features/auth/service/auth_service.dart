@@ -92,7 +92,6 @@ class AuthService {
           "password": password,
           "deviceToken": deviceToken,
           "fcmToken": fcmToken,
-          "role": "tutor",
         },
       );
 

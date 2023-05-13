@@ -21,6 +21,8 @@ class SocketListeners {
     _onRequestRejected(context);
     _onTuteeRequested(context);
     _onParticipantJoined(context);
+    _onAcceptedAsTutor(context);
+    _onRejectedAsTutor(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -131,6 +133,29 @@ class SocketListeners {
         Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("new-request", (data) {
       userRequestsProvider.addTuteeRequestsFromMap([data], true);
+    });
+  }
+
+  void _onAcceptedAsTutor(BuildContext context) {
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    _socket.on(
+      "tutor-application-approved",
+      (data) {
+        userProvider.setUserFromModel(userProvider.user.copyFrom(
+          role: "tutor",
+        ));
+        userRequestsProvider.clearRequests();
+      },
+    );
+  }
+
+  void _onRejectedAsTutor(BuildContext context) {
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    _socket.on("tutor-application-rejected", (data) {
+      userRequestsProvider.clearTutorApplication();
     });
   }
 }

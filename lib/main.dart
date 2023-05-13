@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'constants/styles.dart';
 import 'features/auth/service/auth_service.dart';
 import 'features/home/screens/home_screen.dart';
+import 'features/profile/service/profile_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +50,7 @@ class _MyAppState extends State<MyApp> {
   final authService = AuthService();
   final studyRoomService = StudyPoolService();
   final tutorService = TutorService();
+  final profileService = ProfileService();
 
   @override
   void dispose() {
@@ -76,6 +78,7 @@ class _MyAppState extends State<MyApp> {
                       studyRoomService.getPendingChatRoomIds(context),
                       studyRoomService.getTuteeRequests(context),
                       studyRoomService.getMyRequests(context),
+                      profileService.getUserApplication(context),
                     ]),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

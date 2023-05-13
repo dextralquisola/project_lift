@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
 import 'package:project_lift/features/profile/screens/select_avatar_screen.dart';
+import 'package:project_lift/features/profile/screens/tutor_application_screen.dart';
+import 'package:project_lift/models/tutor_application.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/utils.dart';
@@ -15,7 +17,6 @@ import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/background_cover.dart';
-import '../../find_tutor/service/tutor_service.dart';
 import 'add_subject_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -48,6 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
 
     final user = userProvider.user;
     final ratingAsTutor = user.getRating(isTutor: true).round();
@@ -205,7 +207,11 @@ class _ProfileScreenState extends State<ProfileScreen>
             ),
             const SizedBox(height: 20),
             if (userProvider.isTutor) _tutorScreenBuilder(userProvider),
-            if (!userProvider.isTutor) _tuteeScreenBuilder(userProvider),
+            if (!userProvider.isTutor)
+              _tuteeScreenBuilder(
+                userProvider,
+                userRequestsProvider,
+              ),
           ],
         ),
       ),
@@ -232,18 +238,29 @@ class _ProfileScreenState extends State<ProfileScreen>
     }
   }
 
-  Widget _tuteeScreenBuilder(UserProvider userProvider) {
+  Widget _tuteeScreenBuilder(
+      UserProvider userProvider, UserRequestsProvider userRequestsProvider) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
           AppButton(
-            onPressed: () {
-              _showDialog(context);
-            },
+            onPressed: userRequestsProvider.tutorApplication.id.isNotEmpty
+                ? () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const TutotApplicationScreen(),
+                      ),
+                    );
+                  }
+                : () {
+                    _showDialog(context);
+                  },
             height: 50,
             wrapRow: true,
-            text: "Be a tutor!",
+            text: userRequestsProvider.tutorApplication.id.isNotEmpty
+                ? "View application"
+                : "Be a tutor!",
           ),
         ],
       ),
@@ -337,7 +354,12 @@ class _ProfileScreenState extends State<ProfileScreen>
               AppText(text: "3. Create tutor session"),
               const SizedBox(height: 10),
               AppButton(
-                onPressed: () {
+                onPressed: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TutotApplicationScreen(),
+                    ),
+                  );
                   Navigator.of(context).pop();
                 },
                 height: 50,

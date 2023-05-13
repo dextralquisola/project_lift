@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:project_lift/models/subject.dart';
+import 'package:project_lift/models/tutor_application.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/user_provider.dart';
+import '../../../providers/user_requests_provider.dart';
 import '../../../utils/http_utils.dart' as service;
 import '../../../utils/storage_utils.dart';
 
@@ -98,6 +100,132 @@ class ProfileService {
           false,
         );
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> submitTutorApplication({
+    required BuildContext context,
+    required String gradePath,
+    required String briefIntro,
+    required String teachingExperience,
+  }) async {
+    try {
+      final storageMethods = StorageMethods();
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
+
+      var gradeUrl = await storageMethods.uploadImage(
+        filePath: gradePath,
+        fileName: "grades_${userProvider.user.userId}",
+      );
+
+      var res = await service.requestApi(
+        path: '/api/tutor-application/create',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: {
+          "image": gradeUrl,
+          "briefIntro": briefIntro,
+          "teachingExperience": teachingExperience,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        print("success");
+        var decoded = json.decode(res.body);
+        userRequestsProvider.setTutorApplicationFromMap(decoded);
+      } else {
+        print("Failed: ${res.statusCode}");
+        print(res.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> updateTutorApplication({
+    required BuildContext context,
+    required String gradePath,
+    required String briefIntro,
+    required String teachingExperience,
+  }) async {
+    try {
+      final storageMethods = StorageMethods();
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
+
+      var gradeUrl = gradePath.contains(
+              'https://firebasestorage.googleapis.com/v0/b/project-lift-f75f9.appspot.com')
+          ? gradePath
+          : await storageMethods.uploadImage(
+              filePath: gradePath,
+              fileName: "grades_${userProvider.user.userId}",
+            );
+
+      var res = await service.requestApi(
+        path: '/api/tutor-application/update',
+        method: 'PATCH',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: {
+          "image": gradeUrl,
+          "briefIntro": briefIntro,
+          "teachingExperience": teachingExperience,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        print("success");
+        var decoded = json.decode(res.body);
+        userRequestsProvider.setTutorApplicationFromMap(decoded);
+      } else {
+        print("Failed: ${res.statusCode}");
+        print(res.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getUserApplication(BuildContext context) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      if(userProvider.user.role == 'tutor') return;
+
+      final userRequestsProvider =
+          Provider.of<UserRequestsProvider>(context, listen: false);
+
+      var res = await service.requestApi(
+        path: '/api/tutor-application/me',
+        method: 'GET',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
+
+      if(res.statusCode == 200) {
+        print("user get user application");
+        print(res.body);
+        var decoded = json.decode(res.body);
+        userRequestsProvider.setTutorApplicationFromMap(decoded);
+      } else if(res.statusCode == 404) {
+        userRequestsProvider.setTutorApplicationFromModel(TutorApplication.empty());
+      }
+
     } catch (e) {
       print(e);
     }
