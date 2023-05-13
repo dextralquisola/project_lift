@@ -49,17 +49,24 @@ class _PendingTuteesScreenState extends State<PendingTuteesScreen> {
                           children: [
                             IconButton(
                               onPressed: () async {
-                                print("Accepting tutee");
-                                await studyRoomService.acceptTutee(
+                                await studyRoomService.respondToStudyRoomTuteeRequest(
                                   context: context,
                                   roomId: currentRoomProvider.studyRoom.roomId,
+                                  status: "accepted",
                                   userId: participant['userId'],
                                 );
                               },
                               icon: const Icon(Icons.check),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await studyRoomService.respondToStudyRoomTuteeRequest(
+                                  context: context,
+                                  roomId: currentRoomProvider.studyRoom.roomId,
+                                  status: "rejected",
+                                  userId: participant['userId'],
+                                );
+                              },
                               icon: const Icon(Icons.close),
                             ),
                           ],

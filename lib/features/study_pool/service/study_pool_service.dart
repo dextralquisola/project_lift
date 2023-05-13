@@ -245,9 +245,10 @@ class StudyPoolService {
     }
   }
 
-  Future<void> acceptTutee({
+  Future<void> respondToStudyRoomTuteeRequest({
     required String roomId,
     required String userId,
+    required String status,
     required BuildContext context,
   }) async {
     try {
@@ -257,7 +258,7 @@ class StudyPoolService {
       );
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
-          path: '/api/studyroom/accept-participant/$roomId/$userId',
+          path: '/api/studyroom/accept-participant/$roomId/$userId/$status',
           method: 'PATCH',
           headers: {
             "Authorization": userProvider.user.token,
@@ -271,8 +272,16 @@ class StudyPoolService {
 
       if (res.statusCode == 200) {
         // success
-        currentStudyRoomProvider.acceptParticipant(userId);
-        showSnackBar(context, "Tutee accepted!");
+        print("response to study room tutee request success");
+        print(res.body);
+
+        if (res.body == "User accepted successfully.") {
+          currentStudyRoomProvider.acceptParticipant(userId);
+          showSnackBar(context, "Tutee accepted!");
+        } else if (res.body == "User rejected successfully.") {
+          currentStudyRoomProvider.removeParticipantById(userId);
+          showSnackBar(context, "Tutee rejected!");
+        }
       } else {
         print("ERROR: ${res.statusCode}");
       }

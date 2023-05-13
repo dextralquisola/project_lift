@@ -30,6 +30,11 @@ class StudyRoomProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void removePendingRoomById(String id){
+    _pendingRooms.removeWhere((element) => element == id);
+    notifyListeners();
+  }
+
   bool isRoomPending(String roomId) {
     return _pendingRooms.contains(roomId);
   }

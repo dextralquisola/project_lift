@@ -23,6 +23,7 @@ class SocketListeners {
     _onParticipantJoined(context);
     _onAcceptedAsTutor(context);
     _onRejectedAsTutor(context);
+    _onParticipantRejected(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -70,6 +71,15 @@ class SocketListeners {
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("participant-joined", (data) {
       currentRoomProvider.updateParticipantById(data['userId']);
+    });
+  }
+
+  void _onParticipantRejected(BuildContext context) {
+    final studyRoomProvider = Provider.of<StudyRoomProvider>(context, listen: false);
+    _socket.on("participant-rejected", (data) {
+      print("Onparticipant rejected");
+      print(data);
+      studyRoomProvider.removePendingRoomById(data['chatRoom']['_id']);
     });
   }
 

@@ -221,6 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 children: [
                   _userRatingsBuilder(user, "Tutor ratings", true),
                   const SizedBox(height: 20),
+                  _userRatingsBuilder(user, "Tutee ratings", false),
                 ],
               ),
             if (!userProvider.isTutor)
