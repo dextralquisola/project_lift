@@ -12,6 +12,7 @@ import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/rating.dart';
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
@@ -52,8 +53,9 @@ class _ProfileScreenState extends State<ProfileScreen>
     final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
 
     final user = userProvider.user;
-    final ratingAsTutor = user.getRating(isTutor: true).round();
-    final ratingAsTutee = user.getRating(isTutor: false);
+    final ratingAsTutor = user.parsedRating(true);
+    final ratingAsTutee = user.parsedRating(false);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -125,8 +127,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ),
                               ),
                             Positioned(
-                              bottom: 0,
-                              right: -15,
+                              bottom: 1,
+                              right: -0,
                               child: AppText(
                                 text: userProvider.isTutor
                                     ? '⭐️ $ratingAsTutor'
@@ -206,7 +208,29 @@ class _ProfileScreenState extends State<ProfileScreen>
               textSize: 14,
             ),
             const SizedBox(height: 20),
-            if (userProvider.isTutor) _tutorScreenBuilder(userProvider),
+            if (userProvider.isTutor)
+              Column(
+                children: [
+                  _tutorScreenBuilder(userProvider),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            if (userProvider.isTutor)
+              Column(
+                children: [
+                  _userRatingsBuilder(
+                      userProvider.user.ratingAsTutor, "Tutor ratings"),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            if (!userProvider.isTutor)
+              Column(
+                children: [
+                  _userRatingsBuilder(
+                      userProvider.user.ratingAsTutee, "Tutee ratings"),
+                  const SizedBox(height: 20),
+                ],
+              ),
             if (!userProvider.isTutor)
               _tuteeScreenBuilder(
                 userProvider,
@@ -271,63 +295,96 @@ class _ProfileScreenState extends State<ProfileScreen>
     final user = userProvider.user;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Card(
-            child: Column(
-              children: [
-                ExpansionTile(
-                  initiallyExpanded: true,
-                  title: AppText(
-                    text: "Subjects I can help with",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        constraints: const BoxConstraints(),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const AddSubjectScreen(),
-                            ),
-                          );
-                        },
-                        icon: Icon(Icons.add, color: primaryColor),
-                      ),
-                      AnimatedIcon(
-                        icon: AnimatedIcons.menu_close,
-                        progress: animationController,
-                      ),
-                    ],
-                  ),
-                  children: [
-                    if (userProvider.user.subjects.isEmpty)
-                      ListTile(
-                        title: AppText(text: "No subjects yet"),
-                      ),
-                    ...user.subjects.map((e) {
-                      return ListTile(
-                        title: AppText(text: e.subjectCode),
-                        subtitle: AppText(text: e.description),
+      child: Card(
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: AppText(
+                text: "Subjects I can help with",
+                fontWeight: FontWeight.w600,
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AddSubjectScreen(),
+                        ),
                       );
-                    }).toList(),
-                  ],
-                  onExpansionChanged: (value) {
-                    if (value) {
-                      animationController.forward();
-                    } else {
-                      animationController.reverse();
-                    }
-                  },
-                ),
+                    },
+                    icon: Icon(Icons.add, color: primaryColor),
+                  ),
+                  AnimatedIcon(
+                    icon: AnimatedIcons.menu_close,
+                    progress: animationController,
+                  ),
+                ],
+              ),
+              children: [
+                if (userProvider.user.subjects.isEmpty)
+                  ListTile(
+                    title: AppText(text: "No subjects yet"),
+                  ),
+                ...user.subjects.map((e) {
+                  return ListTile(
+                    title: AppText(text: e.subjectCode),
+                    subtitle: AppText(text: e.description),
+                  );
+                }).toList(),
+              ],
+              onExpansionChanged: (value) {
+                if (value) {
+                  animationController.forward();
+                } else {
+                  animationController.reverse();
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _userRatingsBuilder(List<Rating> ratings, String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Card(
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: AppText(
+                text: title,
+                fontWeight: FontWeight.w600,
+              ),
+              children: [
+                if (ratings.isEmpty)
+                  ListTile(
+                    title: AppText(text: "No ratings yet"),
+                  ),
+                ...ratings.map((e) {
+                  return ListTile(
+                    title: Row(
+                      children: [
+                        AppText(text: "Anon user"),
+                        const SizedBox(width: 10),
+                        AppText(text: e.rating.toString()),
+                      ],
+                    ),
+                    subtitle: AppText(
+                      text: e.feedback,
+                    ),
+                  );
+                }).toList(),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

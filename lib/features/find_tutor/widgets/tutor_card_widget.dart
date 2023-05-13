@@ -1,9 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/study_pool/screens/create_room_screen.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:badges/badges.dart' as badges;
 
+import '../../study_pool/screens/create_room_screen.dart';
+import '../../../widgets/app_button.dart';
+import '../../../widgets/app_text.dart';
 import '../../../models/user.dart';
 
 class TutorCard extends StatelessWidget {
@@ -34,37 +35,55 @@ class TutorCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: tutor.avatar == ""
-                              ? CachedNetworkImage(
-                                  imageUrl:
-                                      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                                  fit: BoxFit.cover,
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        value: progress.progress,
-                                      ),
-                                    );
-                                  },
-                                )
-                              : CachedNetworkImage(
-                                  imageUrl: tutor.avatar,
-                                  fit: BoxFit.cover,
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        value: progress.progress,
-                                      ),
-                                    );
-                                  },
-                                ),
+                      badges.Badge(
+                        position: badges.BadgePosition.topEnd(),
+                        badgeStyle: const badges.BadgeStyle(
+                          shape: badges.BadgeShape.square,
+                          badgeColor: Colors.green,
+                        ),
+                        badgeContent: AppText(
+                          text: '${tutor.parsedRating(true)} ⭐️',
+                          textColor: Colors.white,
+                        ),
+                        badgeAnimation: const badges.BadgeAnimation.size(
+                          animationDuration: Duration(seconds: 1),
+                          colorChangeAnimationDuration: Duration(seconds: 1),
+                          loopAnimation: false,
+                          curve: Curves.fastOutSlowIn,
+                          colorChangeAnimationCurve: Curves.easeInCubic,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: tutor.avatar == ""
+                                ? CachedNetworkImage(
+                                    imageUrl:
+                                        "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+                                    fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: progress.progress,
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : CachedNetworkImage(
+                                    imageUrl: tutor.avatar,
+                                    fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: progress.progress,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 30),

@@ -49,22 +49,21 @@ class User {
     return result;
   }
 
-  User copyFrom({
-    String? userId,
-    String? firstName,
-    String? lastName,
-    String? email,
-    String? token,
-    String? role,
-    String? deviceToken,
-    String? firebaseToken,
-    List<Subject>? subjects,
-    List<Rating>? ratingAsTutor,
-    List<Rating>? ratingAsTutee,
-    bool? isEmailVerified,
-    bool? hasRoom,
-    String? avatar
-  }) {
+  User copyFrom(
+      {String? userId,
+      String? firstName,
+      String? lastName,
+      String? email,
+      String? token,
+      String? role,
+      String? deviceToken,
+      String? firebaseToken,
+      List<Subject>? subjects,
+      List<Rating>? ratingAsTutor,
+      List<Rating>? ratingAsTutee,
+      bool? isEmailVerified,
+      bool? hasRoom,
+      String? avatar}) {
     return User(
       userId: userId ?? this.userId,
       firstName: firstName ?? this.firstName,
@@ -127,22 +126,20 @@ class User {
       token: map['token'] ?? '',
       isEmailVerified: map['isEmailVerified'] ?? false,
       hasRoom: map['hasRoom'] ?? false,
-      ratingAsTutor:
-          map['ratingsAsTutor'] == null
-              ? []
-              : List<Rating>.from(
-                  map['ratingsAsTutor']?.map(
-                    (x) => Rating.fromMap(x),
-                  ),
-                ),
-      ratingAsTutee:
-          map['ratingsAsTutee'] == null
-              ? []
-              : List<Rating>.from(
-                  map['ratingsAsTutee']?.map(
-                    (x) => Rating.fromMap(x),
-                  ),
-                ),
+      ratingAsTutor: map['ratingsAsTutor'] == null
+          ? []
+          : List<Rating>.from(
+              map['ratingsAsTutor']?.map(
+                (x) => Rating.fromMap(x),
+              ),
+            ),
+      ratingAsTutee: map['ratingsAsTutee'] == null
+          ? []
+          : List<Rating>.from(
+              map['ratingsAsTutee']?.map(
+                (x) => Rating.fromMap(x),
+              ),
+            ),
       subjects: map['subjects'].isEmpty
           ? []
           : List<Subject>.from(
@@ -155,6 +152,8 @@ class User {
 
   Subject get firstSubject => subjects.first;
   List<Subject> get getSubjects => subjects;
+  List<Rating> get tutorRatings => ratingAsTutor;
+  List<Rating> get tuteeRatings => ratingAsTutee;
 
   Subject getSubject(String subjectCode) {
     return subjects.firstWhere((subject) => subject.subjectCode == subjectCode);
@@ -183,6 +182,21 @@ class User {
     return isTutor
         ? totalRating / (ratingAsTutor.isEmpty ? 1 : ratingAsTutor.length)
         : totalRating / (ratingAsTutee.isEmpty ? 1 : ratingAsTutee.length);
+  }
+
+  String parsedRating(bool isTutor) {
+    var rating = getRating(isTutor: isTutor);
+
+    if (rating == 0) return '0';
+
+    int wholeNumber = rating.toInt();
+    double decimalValue = rating - wholeNumber;
+
+    if (decimalValue > 0) {
+      return rating.toStringAsFixed(1);
+    }
+
+    return getRating(isTutor: isTutor).toStringAsFixed(0);
   }
 
   String toJson() => json.encode(toMap());
