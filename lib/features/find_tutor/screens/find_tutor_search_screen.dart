@@ -44,7 +44,8 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userRequestsProvider = Provider.of<UserRequestsProvider>(context, listen: false);
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         // The search area here
@@ -105,6 +106,7 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
                       return TutorCard(
                         tutor: tutor,
                         isPendingRequest: isPendingRequest,
+                        isEnabled: true,
                       );
                     },
                   );

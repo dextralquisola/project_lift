@@ -6,6 +6,7 @@ import 'package:project_lift/widgets/background_cover.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/current_room_provider.dart';
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../service/tutor_service.dart';
@@ -50,6 +51,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
 
   @override
   Widget build(BuildContext context) {
+    final currentRoomProvider = Provider.of<CurrentStudyRoomProvider>(context);
     final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
     final tutorsProvider = Provider.of<TutorProvider>(context);
     final tutors = tutorsProvider.tutors;
@@ -190,17 +192,17 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                               ),
                             ),
                             TutorCard(
-                              tutor: tutors[index],
-                              isPendingRequest: isPendingRequest,
-                            )
+                                tutor: tutors[index],
+                                isPendingRequest: isPendingRequest,
+                                isEnabled: currentRoomProvider.isEmpty)
                           ],
                         );
                       }
 
                       return TutorCard(
-                        tutor: tutors[index],
-                        isPendingRequest: isPendingRequest,
-                      );
+                          tutor: tutors[index],
+                          isPendingRequest: isPendingRequest,
+                          isEnabled: currentRoomProvider.isEmpty);
                     },
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 10),

@@ -10,10 +10,12 @@ import '../../../models/user.dart';
 class TutorCard extends StatelessWidget {
   final User tutor;
   final bool isPendingRequest;
+  final bool isEnabled;
   const TutorCard({
     super.key,
     required this.tutor,
     required this.isPendingRequest,
+    required this.isEnabled,
   });
 
   @override
@@ -42,7 +44,7 @@ class TutorCard extends StatelessWidget {
                           badgeColor: Colors.green,
                         ),
                         badgeContent: AppText(
-                          text: '${tutor.parsedRating(true)} ⭐️',
+                          text: '⭐️ ${tutor.parsedRating(true)}',
                           textColor: Colors.white,
                         ),
                         badgeAnimation: const badges.BadgeAnimation.size(
@@ -119,7 +121,7 @@ class TutorCard extends StatelessWidget {
                   const SizedBox(height: 20),
                   AppButton(
                     height: 50,
-                    isEnabled: isPendingRequest && !tutor.hasRoom,
+                    isEnabled: isEnabled && isPendingRequest && !tutor.hasRoom,
                     onPressed: () async {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -190,7 +192,7 @@ class TutorCard extends StatelessWidget {
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,
-                  isEnabled: isPendingRequest && !tutor.hasRoom,
+                  isEnabled: isEnabled && isPendingRequest && !tutor.hasRoom,
                   onPressed: () async {
                     await Navigator.of(context).push(
                       MaterialPageRoute(

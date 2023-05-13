@@ -75,7 +75,8 @@ class SocketListeners {
   }
 
   void _onParticipantRejected(BuildContext context) {
-    final studyRoomProvider = Provider.of<StudyRoomProvider>(context, listen: false);
+    final studyRoomProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
     _socket.on("participant-rejected", (data) {
       print("Onparticipant rejected");
       print(data);
@@ -87,7 +88,9 @@ class SocketListeners {
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("user-left", (data) {
-      currentRoomProvider.removeParticipantById(data['user']['userId']);
+      if (currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
+        currentRoomProvider.removeParticipantById(data['user']['userId']);
+      }
     });
   }
 
