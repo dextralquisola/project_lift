@@ -330,12 +330,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                 children: [
                   IconButton(
                     constraints: const BoxConstraints(),
-                    onPressed: () {
-                      Navigator.of(context).push(
+                    onPressed: () async {
+                      await Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const AddSubjectScreen(),
                         ),
                       );
+                      setState(() {});
                     },
                     icon: Icon(Icons.add, color: primaryColor),
                   ),
@@ -352,9 +353,21 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                 ...user.subjects.map((e) {
                   return ListTile(
-                    title: AppText(text: e.subjectCode),
-                    subtitle: AppText(text: e.description),
-                  );
+                      title: AppText(text: e.subjectCode),
+                      subtitle: AppText(text: e.description),
+                      trailing: IconButton(
+                        onPressed: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => AddSubjectScreen(
+                                subject: e,
+                              ),
+                            ),
+                          );
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.edit, color: Colors.green),
+                      ));
                 }).toList(),
               ],
               onExpansionChanged: (value) {

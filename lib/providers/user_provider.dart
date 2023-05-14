@@ -12,11 +12,30 @@ class UserProvider with ChangeNotifier {
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '' && user.isEmailVerified;
 
-  void addSubject(Subject subject) {
+  void updateSubject(Subject subject, [bool isNotify = true]) {
+    var subjects = _user.subjects;
+
+    var index = subjects
+        .indexWhere((element) => element.subjectCode == subject.subjectCode);
+
+    subjects[index] = subject;
+
+    _user = _user.copyFrom(subjects: subjects);
+    isNotify ? notifyListeners() : () {};
+  }
+
+  void addSubject(Subject subject, [bool isNotify = true]) {
     _user = _user.copyFrom(
       subjects: [..._user.subjects, subject],
     );
-    notifyListeners();
+    isNotify ? notifyListeners() : () {};
+  }
+
+  void deleteSubject(Subject subject, [bool isNotify = true]){
+    var subjects = _user.subjects;
+    subjects.removeWhere((element) => element.subjectCode == subject.subjectCode);
+    _user = _user.copyFrom(subjects: subjects);
+    isNotify ? notifyListeners() : () {};
   }
 
   void setUserFromModel(User user, [bool isNotify = true]) {

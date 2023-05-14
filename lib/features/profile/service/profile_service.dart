@@ -34,10 +34,10 @@ class ProfileService {
       if (!context.mounted) return;
 
       if (res.statusCode == 200) {
-        userProvider.addSubject(subject);
-        print("Success");
+        userProvider.addSubject(subject, false);
       } else {
-        print("Failed");
+        print("Failed: ${res.statusCode}");
+        print(res.body);
       }
     } catch (e) {
       print(e);
@@ -274,6 +274,62 @@ class ProfileService {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> updateSubject({
+    required BuildContext context,
+    required Subject subject,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/tutor/update-subject/${subject.subjectCode}',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: {
+          "description": subject.description,
+          "subtopics": subject.subTopicsToListMap(),
+        },
+      );
+
+      if (res.statusCode == 200) {
+        userProvider.updateSubject(subject, false);
+      } else {
+        print("Failed: ${res.statusCode}");
+        print(res.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteSubject({
+    required BuildContext context,
+    required Subject subject,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/tutor/delete-subject/${subject.subjectCode}',
+        method: 'DELETE',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        userProvider.deleteSubject(subject, false);
+      } else {
+        print("Failed: ${res.statusCode}");
+        print(res.body);
+      }
     } catch (e) {
       print(e);
     }

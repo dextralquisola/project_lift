@@ -68,6 +68,16 @@ class SubTopic {
     required this.description,
   });
 
+  SubTopic copyWith({
+    String? topic,
+    String? description,
+  }) {
+    return SubTopic(
+      topic: topic ?? this.topic,
+      description: description ?? this.description,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
@@ -91,7 +101,7 @@ class SubTopic {
     );
   }
 
-  void printSubTopic(){
+  void printSubTopic() {
     print('SubTopic:');
     print('topic: $topic');
     print('description: $description');
