@@ -94,7 +94,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.info, color: Colors.black),
+                      const Icon(Icons.info, color: Colors.amber),
                       const SizedBox(width: 5),
                       AppText(text: "Studyroom Details"),
                     ],

@@ -202,7 +202,7 @@ class ProfileService {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-      if(userProvider.user.role == 'tutor') return;
+      if (userProvider.user.role == 'tutor') return;
 
       final userRequestsProvider =
           Provider.of<UserRequestsProvider>(context, listen: false);
@@ -217,15 +217,63 @@ class ProfileService {
         },
       );
 
-      if(res.statusCode == 200) {
+      if (res.statusCode == 200) {
         print("user get user application");
         print(res.body);
         var decoded = json.decode(res.body);
         userRequestsProvider.setTutorApplicationFromMap(decoded);
-      } else if(res.statusCode == 404) {
-        userRequestsProvider.setTutorApplicationFromModel(TutorApplication.empty());
+      } else if (res.statusCode == 404) {
+        userRequestsProvider
+            .setTutorApplicationFromModel(TutorApplication.empty());
       }
+    } catch (e) {
+      print(e);
+    }
+  }
 
+  Future<void> updateUser({
+    required BuildContext context,
+    required String firstName,
+    required String lastName,
+    required String password,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      var res = await service.requestApi(
+        path: '/api/users/me',
+        method: 'PATCH',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: password.isEmpty
+            ? {
+                "firstName": firstName,
+                "lastName": lastName,
+              }
+            : {
+                "firstName": firstName,
+                "lastName": lastName,
+                "password": password,
+              },
+      );
+
+      if (res.statusCode == 200) {
+        userProvider.setUserFromModel(
+          userProvider.user.copyFrom(
+            firstName: firstName,
+            lastName: lastName,
+          ),
+          false,
+        );
+      } else {
+        print("Failed: ${res.statusCode}");
+        print(res.body);
+      }
+    } catch (e) {
+      print(e);
     } catch (e) {
       print(e);
     }

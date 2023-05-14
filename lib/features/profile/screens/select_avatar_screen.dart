@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_lift/widgets/app_button.dart';
@@ -28,6 +29,7 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final user = userProvider.user;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Avatar'),
@@ -40,13 +42,23 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
         child: Column(
           children: [
             Expanded(
-              child: Card(
-                child: selectedImage == null
-                    ? const Placeholder()
-                    : Image.file(
-                        File(selectedImage!.path),
+              child: user.avatar.isNotEmpty && selectedImage == null
+                  ? CachedNetworkImage(
+                      imageUrl: user.avatar,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                        child: CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                        ),
                       ),
-              ),
+                    )
+                  : Card(
+                      child: selectedImage == null
+                          ? const Placeholder()
+                          : Image.file(
+                              File(selectedImage!.path),
+                            ),
+                    ),
             ),
             const SizedBox(height: 20),
             if (selectedImage != null)

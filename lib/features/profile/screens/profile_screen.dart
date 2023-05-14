@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
+import 'package:project_lift/features/profile/screens/profile_edit_screen.dart';
 import 'package:project_lift/features/profile/screens/select_avatar_screen.dart';
 import 'package:project_lift/features/profile/screens/tutor_application_screen.dart';
 import 'package:project_lift/models/tutor_application.dart';
@@ -167,10 +168,23 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(Icons.edit, color: Colors.black),
+                                    const Icon(Icons.edit, color: Colors.green),
                                     const SizedBox(width: 5),
                                     AppText(
-                                      text: "Edit Profile Picture",
+                                      text: "Edit profile details",
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                value: 1,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.edit, color: Colors.green),
+                                    const SizedBox(width: 5),
+                                    AppText(
+                                      text: "Change avatar",
                                     ),
                                   ],
                                 ),
@@ -182,10 +196,17 @@ class _ProfileScreenState extends State<ProfileScreen>
                               await Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
+                                      const ProfileEditScreen(),
+                                ),
+                              );
+                              setState(() {});
+                            } else if (value == 1) {
+                              await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
                                       const SelectAvatarScreen(),
                                 ),
                               );
-
                               setState(() {});
                             }
                           },
