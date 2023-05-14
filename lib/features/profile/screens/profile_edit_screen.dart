@@ -25,6 +25,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   var _isLoading = false;
 
   @override
+  void dispose() {
+    super.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
 

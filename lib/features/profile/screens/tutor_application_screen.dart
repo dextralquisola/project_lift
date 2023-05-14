@@ -66,169 +66,172 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                if (hasTutorApplication)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: AppText(
-                      text: "Status: ${tutorApplication.status}",
-                      textSize: 20,
-                      textColor: Colors.amber,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  if (hasTutorApplication)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: AppText(
+                        text: "Status: ${tutorApplication.status}",
+                        textSize: 20,
+                        textColor: Colors.amber,
+                      ),
                     ),
+                  const SizedBox(height: 10),
+                  AppTextField(
+                    hintText: 'e.g I am a 2nd year college student in CvSU',
+                    labelText: "Brief Introduction",
+                    controller: briefIntroController,
+                    isEnabled: _isEnabledForEditing || _isEdit,
                   ),
-                const SizedBox(height: 10),
-                AppTextField(
-                  hintText: 'e.g I am a 2nd year college student in CvSU',
-                  labelText: "Brief Introduction",
-                  controller: briefIntroController,
-                  isEnabled: _isEnabledForEditing || _isEdit,
-                ),
-                const SizedBox(height: 10),
-                AppTextField(
-                  hintText: 'e.g I have been teaching for 2 years',
-                  labelText: "Teaching Experience",
-                  maxLines: 3,
-                  controller: teachingExperienceController,
-                  isEnabled: _isEnabledForEditing || _isEdit,
-                ),
-                const SizedBox(height: 10),
-                if (_isEnabledForEditing || _isEdit)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
+                  const SizedBox(height: 10),
+                  AppTextField(
+                    hintText: 'e.g I have been teaching for 2 years',
+                    labelText: "Teaching Experience",
+                    maxLines: 3,
+                    controller: teachingExperienceController,
+                    isEnabled: _isEnabledForEditing || _isEdit,
+                  ),
+                  const SizedBox(height: 10),
+                  if (_isEnabledForEditing || _isEdit)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        children: [
+                          AppText(
+                            textSize: 20,
+                            text: "Select Grade",
+                          ),
+                          const SizedBox(width: 10),
+                          TextButton(
+                            onPressed: () async {
+                              var pickedImage = await imagePicker.pickImage(
+                                  source: ImageSource.gallery);
+                              setState(() {
+                                selectedImage = pickedImage!;
+                              });
+                            },
+                            child: const Text("Pick image"),
+                          )
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 10),
+                  if (selectedImage != null || hasTutorApplication)
+                    Column(
                       children: [
-                        AppText(
-                          textSize: 20,
-                          text: "Select Grade",
+                        AppText(text: "Preview", textSize: 20),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: 150,
+                          width: 150,
+                          child: (_isEdit || _isEnabledForEditing) &&
+                                  selectedImage != null
+                              ? Image.file(
+                                  File(selectedImage!.path),
+                                )
+                              : CachedNetworkImage(
+                                  imageUrl: tutorApplication.grades,
+                                  fit: BoxFit.cover,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: progress.progress,
+                                      ),
+                                    );
+                                  },
+                                ),
                         ),
-                        const SizedBox(width: 10),
-                        TextButton(
-                          onPressed: () async {
-                            var pickedImage = await imagePicker.pickImage(
-                                source: ImageSource.gallery);
-                            setState(() {
-                              selectedImage = pickedImage!;
-                            });
-                          },
-                          child: const Text("Pick image"),
-                        )
+                        const SizedBox(height: 20),
                       ],
                     ),
-                  ),
-                const SizedBox(height: 10),
-                if (selectedImage != null || hasTutorApplication)
-                  Column(
-                    children: [
-                      AppText(text: "Preview", textSize: 20),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        height: 150,
-                        width: 150,
-                        child: (_isEdit || _isEnabledForEditing) &&
-                                selectedImage != null
-                            ? Image.file(
-                                File(selectedImage!.path),
-                              )
-                            : CachedNetworkImage(
-                                imageUrl: tutorApplication.grades,
-                                fit: BoxFit.cover,
-                                progressIndicatorBuilder:
-                                    (context, url, progress) {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      value: progress.progress,
-                                    ),
-                                  );
-                                },
-                              ),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
-            if (!_isEnabledForEditing && !_isEdit)
-              AppButton(
-                height: 50,
-                wrapRow: true,
-                onPressed: () {
-                  setState(() {
-                    _isEdit = true;
-                  });
-                  print("pressed!");
-                  print(_isEnabledForEditing);
-                },
-                text: "Edit Applicaton",
+                ],
               ),
-            if (hasTutorApplication && _isEdit)
-              Container(
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : AppButton(
-                        height: 50,
-                        wrapRow: true,
-                        onPressed: () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          await profileService.updateTutorApplication(
-                            context: context,
-                            gradePath: selectedImage != null
-                                ? selectedImage!.path
-                                : tutorApplication.grades,
-                            briefIntro: briefIntroController.text,
-                            teachingExperience:
-                                teachingExperienceController.text,
-                          );
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          Navigator.pop(context);
-                        },
-                        text: "Update Application",
-                      ),
-              ),
-            if (_isEnabledForEditing && !hasTutorApplication)
-              Container(
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : AppButton(
-                        height: 50,
-                        wrapRow: true,
-                        onPressed: () async {
-                          if (validateForm()) {
+              if (!_isEnabledForEditing && !_isEdit)
+                AppButton(
+                  height: 50,
+                  wrapRow: true,
+                  onPressed: () {
+                    setState(() {
+                      _isEdit = true;
+                    });
+                    print("pressed!");
+                    print(_isEnabledForEditing);
+                  },
+                  text: "Edit Applicaton",
+                ),
+              if (hasTutorApplication && _isEdit)
+                Container(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : AppButton(
+                          height: 50,
+                          wrapRow: true,
+                          onPressed: () async {
                             setState(() {
                               _isLoading = true;
                             });
-
-                            await profileService.submitTutorApplication(
+                            await profileService.updateTutorApplication(
                               context: context,
-                              gradePath: selectedImage!.path,
+                              gradePath: selectedImage != null
+                                  ? selectedImage!.path
+                                  : tutorApplication.grades,
                               briefIntro: briefIntroController.text,
                               teachingExperience:
                                   teachingExperienceController.text,
                             );
-
                             setState(() {
                               _isLoading = false;
                             });
-
                             Navigator.pop(context);
-                          }
-                        },
-                        text: "Submit",
-                      ),
-              ),
-          ],
+                          },
+                          text: "Update Application",
+                        ),
+                ),
+              if (_isEnabledForEditing && !hasTutorApplication)
+                Container(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : AppButton(
+                          height: 50,
+                          wrapRow: true,
+                          onPressed: () async {
+                            if (validateForm()) {
+                              setState(() {
+                                _isLoading = true;
+                              });
+      
+                              await profileService.submitTutorApplication(
+                                context: context,
+                                gradePath: selectedImage!.path,
+                                briefIntro: briefIntroController.text,
+                                teachingExperience:
+                                    teachingExperienceController.text,
+                              );
+      
+                              setState(() {
+                                _isLoading = false;
+                              });
+      
+                              Navigator.pop(context);
+                            }
+                          },
+                          text: "Submit",
+                        ),
+                ),
+            ],
+          ),
         ),
       ),
     );
