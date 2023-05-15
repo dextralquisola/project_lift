@@ -199,20 +199,22 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ],
                                 ),
                               ),
-                              PopupMenuItem(
-                                value: 2,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.edit, color: Colors.green),
-                                    const SizedBox(width: 5),
-                                    AppText(
-                                      text: "Change schedule/availability",
-                                      textSize: 12,
-                                    ),
-                                  ],
+                              if (userProvider.isTutor)
+                                PopupMenuItem(
+                                  value: 2,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.edit,
+                                          color: Colors.green),
+                                      const SizedBox(width: 5),
+                                      AppText(
+                                        text: "Change schedule/availability",
+                                        textSize: 12,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
                             ];
                           },
                           onSelected: (value) async {
