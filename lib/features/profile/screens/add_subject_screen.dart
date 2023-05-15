@@ -106,7 +106,6 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                                   : "Select subject",
                               textSize: 20),
                           DropdownButton(
-                            dropdownColor: primaryColor,
                             isExpanded: true,
                             menuMaxHeight: 300,
                             value: selectedValue,
@@ -235,10 +234,6 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                                         );
                                       }
 
-                                      setState(() {
-                                        _isLoadingAddUpdate = false;
-                                      });
-
                                       Navigator.pop(context);
                                     } else {
                                       ScaffoldMessenger.of(context)
@@ -263,9 +258,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                           if (widget.subject != null)
                             _isLoadingDelete
                                 ? const Center(
-                                    child: SizedBox(
-                                        height: 50,
-                                        child: CircularProgressIndicator()),
+                                    child: CircularProgressIndicator(),
                                   )
                                 : Padding(
                                     padding: const EdgeInsets.only(top: 10.0),

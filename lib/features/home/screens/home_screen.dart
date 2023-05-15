@@ -47,6 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(
+                Icons.home,
+              ),
+              activeIcon: Icon(
                 Icons.home_outlined,
               ),
               label: 'Home',
@@ -55,11 +58,17 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(
                 Icons.group,
               ),
+              activeIcon: Icon(
+                Icons.group_outlined,
+              ),
               label: 'Chat Room',
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.person_outline,
+                Icons.person,
+              ),
+              activeIcon: Icon(
+                Icons.person_outlined,
               ),
               label: 'Profile',
             ),

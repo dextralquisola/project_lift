@@ -233,9 +233,10 @@ class ProfileService {
 
   Future<void> updateUser({
     required BuildContext context,
-    required String firstName,
-    required String lastName,
-    required String password,
+    String firstName = "",
+    String lastName = "",
+    String password = "",
+    String dateTimeAvailability = "",
   }) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -248,26 +249,37 @@ class ProfileService {
           "fcmToken": userProvider.user.firebaseToken,
           "deviceToken": userProvider.user.deviceToken,
         },
-        body: password.isEmpty
+        body: dateTimeAvailability.isNotEmpty
             ? {
-                "firstName": firstName,
-                "lastName": lastName,
+                "timeAndDateAvailability": dateTimeAvailability,
               }
-            : {
-                "firstName": firstName,
-                "lastName": lastName,
-                "password": password,
-              },
+            : password.isEmpty
+                ? {
+                    "firstName": firstName,
+                    "lastName": lastName,
+                  }
+                : {
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "password": password,
+                  },
       );
 
       if (res.statusCode == 200) {
-        userProvider.setUserFromModel(
-          userProvider.user.copyFrom(
-            firstName: firstName,
-            lastName: lastName,
-          ),
-          false,
-        );
+        dateTimeAvailability.isNotEmpty
+            ? userProvider.setUserFromModel(
+                userProvider.user.copyFrom(
+                  dateTimeAvailability: dateTimeAvailability,
+                ),
+                false,
+              )
+            : userProvider.setUserFromModel(
+                userProvider.user.copyFrom(
+                  firstName: firstName,
+                  lastName: lastName,
+                ),
+                false,
+              );
       } else {
         print("Failed: ${res.statusCode}");
         print(res.body);

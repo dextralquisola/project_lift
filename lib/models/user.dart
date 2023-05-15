@@ -19,6 +19,7 @@ class User {
   final bool isEmailVerified;
   final bool hasRoom;
   final String avatar;
+  final String dateTimeAvailability;
 
   User({
     required this.userId,
@@ -32,6 +33,7 @@ class User {
     required this.ratingAsTutee,
     required this.isEmailVerified,
     required this.avatar,
+    required this.dateTimeAvailability,
     this.hasRoom = false,
     this.firebaseToken = '',
     this.deviceToken = '',
@@ -63,7 +65,8 @@ class User {
       List<Rating>? ratingAsTutee,
       bool? isEmailVerified,
       bool? hasRoom,
-      String? avatar}) {
+      String? avatar,
+      String? dateTimeAvailability}) {
     return User(
       userId: userId ?? this.userId,
       firstName: firstName ?? this.firstName,
@@ -79,6 +82,7 @@ class User {
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       hasRoom: hasRoom ?? this.hasRoom,
       avatar: avatar ?? this.avatar,
+      dateTimeAvailability: dateTimeAvailability ?? this.dateTimeAvailability,
     );
   }
 
@@ -108,6 +112,7 @@ class User {
       deviceToken: '',
       firebaseToken: '',
       avatar: '',
+      dateTimeAvailability: '',
       isEmailVerified: false,
       subjects: [],
       ratingAsTutor: [],
@@ -124,6 +129,7 @@ class User {
       email: map['email'] ?? '',
       role: map['role'] ?? '',
       token: map['token'] ?? '',
+      dateTimeAvailability: map['timeAndDateAvailability'] ?? '',
       isEmailVerified: map['isEmailVerified'] ?? false,
       hasRoom: map['hasRoom'] ?? false,
       ratingAsTutor: map['ratingsAsTutor'] == null

@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
+import 'package:project_lift/features/profile/screens/edit_availability_screen.dart';
 import 'package:project_lift/features/profile/screens/profile_edit_screen.dart';
 import 'package:project_lift/features/profile/screens/select_avatar_screen.dart';
 import 'package:project_lift/features/profile/screens/tutor_application_screen.dart';
-import 'package:project_lift/models/tutor_application.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/rating.dart';
 import '../../../models/user.dart';
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
@@ -189,6 +188,20 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ],
                                 ),
                               ),
+                              PopupMenuItem(
+                                value: 2,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.edit, color: Colors.green),
+                                    const SizedBox(width: 5),
+                                    AppText(
+                                      text: "Change schedule/availability",
+                                      textSize: 12,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ];
                           },
                           onSelected: (value) async {
@@ -205,6 +218,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const SelectAvatarScreen(),
+                                ),
+                              );
+                              setState(() {});
+                            } else if (value == 2) {
+                              await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const EditAvailabilityScreen(),
                                 ),
                               );
                               setState(() {});
@@ -405,15 +426,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                 ...ratings.map((e) {
                   return ListTile(
-                    title: Row(
-                      children: [
-                        AppText(text: "Anon user"),
-                        const SizedBox(width: 10),
-                        AppText(text: e.rating.toString()),
-                      ],
-                    ),
+                    title: AppText(text: "Anon user: ${e.rating} ⭐️"),
                     subtitle: AppText(
-                      text: e.feedback,
+                      text: "Comment: ${e.feedback}",
                     ),
                   );
                 }).toList(),

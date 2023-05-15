@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:project_lift/constants/styles.dart';
+import 'package:project_lift/utils/date_time_utils.dart';
 
 import '../../study_pool/screens/create_room_screen.dart';
 import '../../../widgets/app_button.dart';
@@ -39,9 +41,9 @@ class TutorCard extends StatelessWidget {
                     children: [
                       badges.Badge(
                         position: badges.BadgePosition.topEnd(),
-                        badgeStyle: const badges.BadgeStyle(
+                        badgeStyle: badges.BadgeStyle(
                           shape: badges.BadgeShape.square,
-                          badgeColor: Colors.green,
+                          badgeColor: primaryColor.withOpacity(0.8),
                         ),
                         badgeContent: AppText(
                           text: '⭐️ ${tutor.parsedRating(true)}',
@@ -117,7 +119,14 @@ class TutorCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   _textBuilder(text: "Schedule"),
-                  _textBuilder(text: "Monday - Friday: 8:00 AM - 5:00 PM"),
+                  tutor.dateTimeAvailability.isEmpty
+                      ? _textBuilder(text: "No schedule available")
+                      : _textBuilder(
+                          text: dateTimeAvailabilityFormatter(
+                            context,
+                            tutor.dateTimeAvailability,
+                          ),
+                        ),
                   const SizedBox(height: 20),
                   AppButton(
                     height: 50,

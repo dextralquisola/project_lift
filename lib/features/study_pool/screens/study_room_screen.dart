@@ -66,6 +66,11 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
         scheduleString: currentStudyRoomProvider.studyRoom.schedule);
     final date = roomSchedule.scheduleDate;
 
+    final isEndSessionEnabled = DateTime.now().isAfter(date) &&
+        currentStudyRoomProvider.studyRoom.participants
+            .where((participant) => participant['status'] == 'accepted')
+            .isNotEmpty;
+
     return Scaffold(
       appBar: AppBar(
         title: AppText(
@@ -115,15 +120,17 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                     currentStudyRoomProvider.studyRoom.roomOwner)
                   PopupMenuItem(
                     value: 2,
-                    enabled: DateTime.now().isAfter(date) &&
-                        currentStudyRoomProvider.studyRoom.participants.length >
-                            1,
+                    enabled: isEndSessionEnabled,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const Icon(Icons.exit_to_app, color: Colors.red),
                         const SizedBox(width: 5),
-                        AppText(text: "End session"),
+                        AppText(
+                          text: "End session",
+                          textColor:
+                              isEndSessionEnabled ? Colors.black : Colors.grey,
+                        ),
                       ],
                     ),
                   ),
