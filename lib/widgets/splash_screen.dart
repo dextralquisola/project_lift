@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/widgets/app_text.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -8,15 +6,16 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AppText(
-              text: "Looking For Tutor",
-              textSize: 28,
-              textColor: primaryColor,
-              fontWeight: FontWeight.w600,
+            Image.asset(
+              'assets/images/lft_splash.png',
+              height: 200,
+              width: 200,
+              fit: BoxFit.cover,
             ),
             const SizedBox(height: 20),
             const CircularProgressIndicator(),

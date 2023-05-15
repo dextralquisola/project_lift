@@ -30,10 +30,13 @@ class TutorCard extends StatelessWidget {
     final fromTime = getFromTime(tutor.dateTimeAvailability.split('+')[1]);
     final toTime = getToTime(tutor.dateTimeAvailability.split('+')[1]);
 
-    if (daysAvail.contains(DateFormat('EEEE').format(DateTime.now()))) {
-      if (DateTime.now().hour >= fromTime.hour &&
-          (DateTime.now().hour < toTime.hour ||
-              DateTime.now().minute < toTime.minute)) {
+    //(from.hour == to.hour && from.minute < to.minute)
+
+    var now = DateTime.now();
+    if (daysAvail.contains(DateFormat('EEEE').format(now))) {
+      if (now.hour >= fromTime.hour &&
+              ((now.hour < toTime.hour && now.minute < toTime.minute)) ||
+          (now.hour == toTime.hour && now.minute < toTime.minute)) {
         isAvailable = true;
       }
     }

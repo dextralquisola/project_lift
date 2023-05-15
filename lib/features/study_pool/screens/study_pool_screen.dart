@@ -56,7 +56,7 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
     return currentStudyRoomProvider.isEmpty
         ? Scaffold(
             appBar: AppBar(
-              title: const Text('Study Pool'),
+              title: const Text('Study pool 💻'),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.search),
