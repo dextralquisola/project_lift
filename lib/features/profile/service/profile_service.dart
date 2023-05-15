@@ -237,6 +237,7 @@ class ProfileService {
     String lastName = "",
     String password = "",
     String dateTimeAvailability = "",
+    bool? isAvailable,
   }) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -252,6 +253,7 @@ class ProfileService {
         body: dateTimeAvailability.isNotEmpty
             ? {
                 "timeAndDateAvailability": dateTimeAvailability,
+                "isAvailable": isAvailable!,
               }
             : password.isEmpty
                 ? {
@@ -270,6 +272,7 @@ class ProfileService {
             ? userProvider.setUserFromModel(
                 userProvider.user.copyFrom(
                   dateTimeAvailability: dateTimeAvailability,
+                  isAvailable: isAvailable!,
                 ),
                 false,
               )

@@ -190,6 +190,9 @@ class AuthService {
           "ratingsAsTutor": userData['user']['ratingsAsTutor'],
           "ratingsAsTutee": userData['user']['ratingsAsTutee'],
           "isEmailVerified": userData['user']['isEmailVerified'] ?? false,
+          "isAvailable": userData['user']['isAvailable'] ?? false,
+          "timeAndDateAvailability":
+              userData['user']['timeAndDateAvailability'] ?? "",
         };
       }
 

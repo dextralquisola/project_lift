@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:project_lift/features/find_tutor/screens/find_tutor_search_screen.dart';
 import 'package:project_lift/providers/user_requests_provider.dart';
 import 'package:project_lift/widgets/background_cover.dart';
@@ -55,6 +56,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
     final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
     final tutorsProvider = Provider.of<TutorProvider>(context);
     final tutors = tutorsProvider.tutors;
+
     return SafeArea(
       child: Scaffold(
         body: NestedScrollView(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
@@ -152,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         IconButton(
                           constraints: const BoxConstraints(),
                           onPressed: () async {
-                            await logout(context, userProvider);
+                            await logoutDialog(context, userProvider);
                           },
                           icon: const Icon(Icons.exit_to_app,
                               color: Colors.white),
@@ -280,6 +281,30 @@ class _ProfileScreenState extends State<ProfileScreen>
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> logoutDialog(
+      BuildContext context, UserProvider userProvider) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: AppText(text: 'Are you sure?'),
+        content: AppText(text: 'Do you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: AppText(text: 'No'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await logout(context, userProvider);
+              Navigator.of(context).pop(true);
+            },
+            child: AppText(text: 'Yes'),
+          ),
+        ],
       ),
     );
   }

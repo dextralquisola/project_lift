@@ -18,6 +18,7 @@ class User {
   final List<Rating> ratingAsTutee;
   final bool isEmailVerified;
   final bool hasRoom;
+  final bool isAvailable;
   final String avatar;
   final String dateTimeAvailability;
 
@@ -34,6 +35,7 @@ class User {
     required this.isEmailVerified,
     required this.avatar,
     required this.dateTimeAvailability,
+    required this.isAvailable,
     this.hasRoom = false,
     this.firebaseToken = '',
     this.deviceToken = '',
@@ -66,7 +68,8 @@ class User {
       bool? isEmailVerified,
       bool? hasRoom,
       String? avatar,
-      String? dateTimeAvailability}) {
+      String? dateTimeAvailability,
+        bool? isAvailable,}) {
     return User(
       userId: userId ?? this.userId,
       firstName: firstName ?? this.firstName,
@@ -82,6 +85,7 @@ class User {
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       hasRoom: hasRoom ?? this.hasRoom,
       avatar: avatar ?? this.avatar,
+      isAvailable: isAvailable ?? this.isAvailable,
       dateTimeAvailability: dateTimeAvailability ?? this.dateTimeAvailability,
     );
   }
@@ -98,6 +102,8 @@ class User {
     print('subjects: $subjects');
     print('ratingAsTutor: ${[...ratingAsTutor.map((e) => e.rating).toList()]}');
     print('ratingAsTutee: $ratingAsTutee');
+    print('dateTimeAvailability: $dateTimeAvailability');
+    print('isAvailable: $isAvailable');
     print('isEmailVerified: $isEmailVerified');
   }
 
@@ -114,6 +120,7 @@ class User {
       avatar: '',
       dateTimeAvailability: '',
       isEmailVerified: false,
+      isAvailable: false,
       subjects: [],
       ratingAsTutor: [],
       ratingAsTutee: [],
@@ -129,6 +136,7 @@ class User {
       email: map['email'] ?? '',
       role: map['role'] ?? '',
       token: map['token'] ?? '',
+      isAvailable: map['isAvailable'] ?? false,
       dateTimeAvailability: map['timeAndDateAvailability'] ?? '',
       isEmailVerified: map['isEmailVerified'] ?? false,
       hasRoom: map['hasRoom'] ?? false,

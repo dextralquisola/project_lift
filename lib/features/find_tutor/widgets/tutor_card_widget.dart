@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:intl/intl.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/utils/date_time_utils.dart';
 
@@ -8,6 +9,8 @@ import '../../study_pool/screens/create_room_screen.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_text.dart';
 import '../../../models/user.dart';
+
+import '../../../utils/date_time_utils.dart';
 
 class TutorCard extends StatelessWidget {
   final User tutor;
@@ -22,11 +25,24 @@ class TutorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isAvailable = false;
+    final daysAvail = getFilledDays(tutor.dateTimeAvailability.split('+')[0]);
+    final fromTime = getFromTime(tutor.dateTimeAvailability.split('+')[1]);
+    final toTime = getToTime(tutor.dateTimeAvailability.split('+')[1]);
+
+    if (daysAvail.contains(DateFormat('EEEE').format(DateTime.now()))) {
+      if (DateTime.now().hour >= fromTime.hour &&
+          (DateTime.now().hour < toTime.hour ||
+              DateTime.now().minute < toTime.minute)) {
+        isAvailable = true;
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GestureDetector(
         onTap: () {
-          _showDialog(context: context, tutor: tutor);
+          _showDialog(context: context, tutor: tutor, isAvailable: isAvailable);
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -130,7 +146,10 @@ class TutorCard extends StatelessWidget {
                   const SizedBox(height: 20),
                   AppButton(
                     height: 50,
-                    isEnabled: isEnabled && isPendingRequest && !tutor.hasRoom,
+                    isEnabled: isAvailable &&
+                        isEnabled &&
+                        isPendingRequest &&
+                        !tutor.hasRoom,
                     onPressed: () async {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -142,7 +161,11 @@ class TutorCard extends StatelessWidget {
                       );
                     },
                     wrapRow: true,
-                    text: tutor.hasRoom ? "Currently in session" : "Ask Help",
+                    text: tutor.hasRoom
+                        ? "Currently in session"
+                        : !isAvailable
+                            ? "Not Available"
+                            : "Ask Help",
                   ),
                 ],
               ),
@@ -169,6 +192,7 @@ class TutorCard extends StatelessWidget {
   void _showDialog({
     required BuildContext context,
     required User tutor,
+    required bool isAvailable,
   }) {
     showDialog(
       context: context,
@@ -201,7 +225,10 @@ class TutorCard extends StatelessWidget {
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,
-                  isEnabled: isEnabled && isPendingRequest && !tutor.hasRoom,
+                  isEnabled: isAvailable &&
+                      isEnabled &&
+                      isPendingRequest &&
+                      !tutor.hasRoom,
                   onPressed: () async {
                     await Navigator.of(context).push(
                       MaterialPageRoute(

@@ -1,5 +1,3 @@
-
-
 List<bool> daysSelectedBuilder(List<String> days) {
   List<bool> daysSelected = [false, false, false, false, false, false, false];
 
@@ -20,7 +18,9 @@ String selectedDaysBuilder(List<bool> sd) {
     }
   }
 
-  return selectedDays.substring(0, selectedDays.length - 1);
+  return selectedDays.isEmpty
+      ? ""
+      : selectedDays.substring(0, selectedDays.length - 1);
 }
 
 String dateIndexConvertToDay(int index) {

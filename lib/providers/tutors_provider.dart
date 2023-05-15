@@ -7,8 +7,10 @@ class TutorProvider with ChangeNotifier {
   int _currentPage = 1;
   int _totalPages = 1;
 
-  List<User> get tutors =>
-      _tutors.where((tutor) => tutor.subjects.isNotEmpty).toList();
+  List<User> get tutors => _tutors
+      .where((tutor) =>
+          tutor.subjects.isNotEmpty && tutor.dateTimeAvailability.isNotEmpty)
+      .toList();
   int get currentPage => _currentPage;
 
   void setTutorsFromJson(dynamic data, String userId) {

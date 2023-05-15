@@ -42,10 +42,12 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
   var col = 0;
 
   final fromTimeController = TextEditingController();
-  var fromTime = TimeOfDay.now();
+  TimeOfDay? fromTime;
 
   final toTimeController = TextEditingController();
-  var toTime = TimeOfDay.now();
+  TimeOfDay? toTime;
+
+  var _isAvailable = true;
 
   var _isLoading = false;
 
@@ -57,18 +59,24 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
   void initState() {
     super.initState();
     userProvider = Provider.of<UserProvider>(context, listen: false);
-    if(userProvider.user.dateTimeAvailability.isNotEmpty) {
+    if (userProvider.user.dateTimeAvailability.isNotEmpty) {
       initialize();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if(userProvider.user.dateTimeAvailability.isNotEmpty) {
-      fromTimeController.text = fromTime.format(context);
-      toTimeController.text = toTime.format(context);
+    if (userProvider.user.dateTimeAvailability.isNotEmpty) {
+      fromTimeController.text = fromTime!.format(context);
+      toTimeController.text = toTime!.format(context);
     }
+
+    // if (_selectedDays.every((element) => element == false)) {
+    //   toTime = null;
+    //   fromTime = null;
+    //   toTimeController.clear();
+    //   fromTimeController.clear();
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -116,7 +124,7 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
                     onTap: () async {
                       TimeOfDay? newTime = await showTimePicker(
                         context: context,
-                        initialTime: toTime,
+                        initialTime: TimeOfDay.now(),
                       );
 
                       if (newTime == null) return;
@@ -129,7 +137,7 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
 
                       setState(() {
                         fromTime = newTime;
-                        fromTimeController.text = fromTime.format(context);
+                        fromTimeController.text = fromTime!.format(context);
                       });
                     },
                     child: AppTextField(
@@ -151,7 +159,7 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
 
                       TimeOfDay? newTime = await showTimePicker(
                         context: context,
-                        initialTime: toTime,
+                        initialTime: TimeOfDay.now(),
                       );
 
                       if (newTime == null) return;
@@ -164,7 +172,7 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
 
                       setState(() {
                         toTime = newTime;
-                        toTimeController.text = toTime.format(context);
+                        toTimeController.text = toTime!.format(context);
                       });
                     },
                     child: AppTextField(
@@ -178,31 +186,65 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            AppButton(
-              wrapRow: true,
-              height: 50,
-              onPressed: () async {
-                if (checkIfEmpty()) {
-                  _showSnackbar("Please select at least one day and time");
-                  return;
-                }
-
-                var dateTimeAvailability =
-                    scheduleBuilder(_selectedDays, fromTime, toTime);
-
-                setState(() {
-                  _isLoading = true;
-                });
-
-                await profileService.updateUser(
-                  context: context,
-                  dateTimeAvailability: dateTimeAvailability,
-                );
-
-                Navigator.of(context).pop();
-              },
-              text: "Save Availability",
+            Row(
+              children: [
+                AppText(text: "On/Off Availability"),
+                PopupMenuButton(
+                  icon: const Icon(
+                    Icons.info,
+                    color: Colors.blueAccent,
+                  ),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: AppText(
+                        text:
+                            "Set visibility of your profile to tutees. If you are not available, your profile will not be visible to tutees.",
+                      ),
+                    ),
+                  ],
+                ),
+                Switch(
+                  activeColor: primaryColor,
+                  value: _isAvailable,
+                  onChanged: (value) {
+                    setState(() {
+                      _isAvailable = value;
+                    });
+                  },
+                ),
+              ],
             ),
+            const SizedBox(height: 20),
+            _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : AppButton(
+                    wrapRow: true,
+                    height: 50,
+                    onPressed: () async {
+                      if (checkIfEmpty()) {
+                        _showSnackbar("Please select your availability");
+                        return;
+                      }
+
+                      var dateTimeAvailability =
+                          scheduleBuilder(_selectedDays, fromTime, toTime);
+
+                      setState(() {
+                        _isLoading = true;
+                      });
+
+                      await profileService.updateUser(
+                        context: context,
+                        dateTimeAvailability: dateTimeAvailability,
+                        isAvailable: _isAvailable,
+                      );
+
+                      Navigator.of(context).pop();
+                    },
+                    text: "Save",
+                  ),
           ],
         ),
       ),
@@ -210,7 +252,8 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
   }
 
   void initialize() {
-    final timeDayAvailableList = userProvider.user.dateTimeAvailability.split("+");
+    final timeDayAvailableList =
+        userProvider.user.dateTimeAvailability.split("+");
 
     final daysAvailable = timeDayAvailableList[0].split(".");
     final timeAvailable = timeDayAvailableList[1];
@@ -226,17 +269,23 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
         hour: int.parse(tt.split(":")[0]), minute: int.parse(tt.split(":")[1]));
 
     _selectedDays = daysSelectedBuilder(daysAvailable);
+    _isAvailable = userProvider.user.isAvailable;
   }
 
   String scheduleBuilder(
     List<bool> selectedDays,
-    TimeOfDay from,
-    TimeOfDay to,
+    TimeOfDay? from,
+    TimeOfDay? to,
   ) {
+    if (from == null || to == null) return "";
+
     var fromTime = '${from.hour}:${from.minute}';
     var toTime = '${to.hour}:${to.minute}';
+    var availableDays = selectedDaysBuilder(selectedDays);
 
-    return "${selectedDaysBuilder(selectedDays)}+$fromTime-$toTime";
+    return availableDays.isEmpty
+        ? ""
+        : "${selectedDaysBuilder(selectedDays)}+$fromTime-$toTime";
   }
 
   _showSnackbar(String text) {
@@ -299,12 +348,20 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
         toTimeController.text.isEmpty;
   }
 
-  bool validateTimeOfDay(TimeOfDay timeOfDay) {
-    return (timeOfDay.hour < 6) ||
-        (timeOfDay.hour >= 19 && timeOfDay.minute >= 0);
+  bool validateTimeOfDay(TimeOfDay? timeOfDay) {
+    if (timeOfDay == null) return false;
+
+    //? enabled for time after 7:00 PM for testing
+    return (timeOfDay.hour < 6);
+
+    //? Uncomment this if you want to disable time after 7:00 PM
+    //? return (timeOfDay.hour < 6) ||
+    //?     (timeOfDay.hour >= 19 && timeOfDay.minute >= 0);
   }
 
-  bool validateFromTimeOfDay(TimeOfDay from, TimeOfDay to) {
+  bool validateFromTimeOfDay(TimeOfDay? from, TimeOfDay to) {
+    if (from == null) return false;
+
     return from.hour < to.hour ||
         (from.hour == to.hour && from.minute < to.minute);
   }
