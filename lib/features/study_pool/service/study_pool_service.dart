@@ -441,8 +441,8 @@ class StudyPoolService {
 
       if (userProvider.user.userId == currentSudyRoom.studyRoom.roomOwner) {
         print("rate participants");
-        path = '/api/rate-participants';
 
+        path = '/api/rate-participants';
         var participantsMapped = currentSudyRoom.studyRoom.participants
             .map((e) {
               if (e['status'] == 'accepted') {

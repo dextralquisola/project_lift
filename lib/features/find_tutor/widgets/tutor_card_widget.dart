@@ -227,7 +227,14 @@ class TutorCard extends StatelessWidget {
                     .take(3),
                 const SizedBox(height: 10),
                 _textBuilder(text: "Schedule"),
-                _textBuilder(text: "Monday - Friday: 8:00 AM - 5:00 PM"),
+                tutor.dateTimeAvailability.isEmpty
+                    ? _textBuilder(text: "No schedule available")
+                    : _textBuilder(
+                        text: dateTimeAvailabilityFormatter(
+                          context,
+                          tutor.dateTimeAvailability,
+                        ),
+                      ),
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,

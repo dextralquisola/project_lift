@@ -26,7 +26,7 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
     super.initState();
 
     _searchController.stream.listen((searchQuery) async {
-      await Future.delayed(const Duration(milliseconds: 700));
+      await Future.delayed(const Duration(seconds: 3));
       if (searchQuery == _searchQuery) {
         setState(() {
           _searchQuery = searchQuery;
