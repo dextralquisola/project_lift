@@ -96,18 +96,28 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       child: CachedNetworkImage(
                                         imageUrl: user.avatar,
                                         fit: BoxFit.cover,
-                                        progressIndicatorBuilder:
-                                            (context, url, progress) {
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              value: progress.progress,
+                                        placeholder: (context, url) =>
+                                            Container(
+                                          color: Colors.green,
+                                          child: const Center(
+                                            child: Icon(
+                                              Icons.person,
+                                              color: Colors.white,
+                                              size: 100,
                                             ),
-                                          );
-                                        },
+                                          ),
+                                        ),
                                       ),
                                     )
                                   : Container(
-                                      color: Colors.deepPurple,
+                                      color: Colors.green,
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.person,
+                                          color: Colors.white,
+                                          size: 100,
+                                        ),
+                                      ),
                                     ),
                             ),
                             if (userProvider.isTutor)

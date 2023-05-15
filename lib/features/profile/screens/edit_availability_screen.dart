@@ -224,7 +224,7 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
                     height: 50,
                     onPressed: () async {
                       if (checkIfEmpty()) {
-                        _showSnackbar("Please select your availability");
+                        _showSnackbar("Please select your availability!");
                         return;
                       }
 

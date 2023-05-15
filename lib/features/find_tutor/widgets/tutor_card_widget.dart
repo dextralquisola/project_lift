@@ -78,18 +78,21 @@ class TutorCard extends StatelessWidget {
                             width: 100,
                             height: 100,
                             child: tutor.avatar == ""
-                                ? CachedNetworkImage(
-                                    imageUrl:
-                                        "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                                    fit: BoxFit.cover,
-                                    progressIndicatorBuilder:
-                                        (context, url, progress) {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: progress.progress,
-                                        ),
-                                      );
-                                    },
+                                ? Container(
+                                    color: Colors.green,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: const [
+                                          Icon(
+                                            Icons.person,
+                                            color: Colors.white,
+                                            size: 100,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   )
                                 : CachedNetworkImage(
                                     imageUrl: tutor.avatar,

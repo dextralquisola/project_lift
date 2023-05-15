@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:project_lift/models/subject.dart';
 import 'package:project_lift/models/tutor_application.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/user_provider.dart';
@@ -283,9 +284,10 @@ class ProfileService {
                 ),
                 false,
               );
+      } else if (res.statusCode == 400) {
+        showSnackBar(context, "Invalid Input");
       } else {
-        print("Failed: ${res.statusCode}");
-        print(res.body);
+        showSnackBar(context, "Something went wrong");
       }
     } catch (e) {
       print(e);
