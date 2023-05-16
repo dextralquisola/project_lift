@@ -16,7 +16,7 @@ class TutorCard extends StatelessWidget {
   final User tutor;
   final bool isPendingRequest;
   final bool isEnabled;
-  const TutorCard({
+  TutorCard({
     super.key,
     required this.tutor,
     required this.isPendingRequest,
@@ -26,18 +26,37 @@ class TutorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isAvailable = false;
+
+    print("days avail");
+    print(tutor.dateTimeAvailability.split('+')[0]);
+
     final daysAvail = getFilledDays(tutor.dateTimeAvailability.split('+')[0]);
     final fromTime = getFromTime(tutor.dateTimeAvailability.split('+')[1]);
     final toTime = getToTime(tutor.dateTimeAvailability.split('+')[1]);
 
     //(from.hour == to.hour && from.minute < to.minute)
 
-    var now = DateTime.now();
-    if (daysAvail.contains(DateFormat('EEEE').format(now))) {
+    var now = TimeOfDay.now();
+    if (daysAvail.contains(DateFormat('EEEE').format(DateTime.now()))) {
       if (now.hour >= fromTime.hour &&
-              ((now.hour < toTime.hour && now.minute < toTime.minute)) ||
+              now.hour < toTime.hour &&
+              now.minute >= fromTime.minute ||
           (now.hour == toTime.hour && now.minute < toTime.minute)) {
         isAvailable = true;
+      } else {
+        print("------------------");
+        print("${tutor.firstName} ${tutor.lastName} is not available");
+        print("DaysAvail: ");
+        print(daysAvail);
+        print(daysAvail.contains(DateFormat('EEEE').format(DateTime.now())));
+        print("DateNow: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}");
+        print(DateFormat('EEEE').format(DateTime.now()));
+        print("Time Now: ${now.format(context)} - ${now.hour}:${now.minute}");
+        print(
+            "From Time: ${fromTime.format(context)} - ${fromTime.hour}:${fromTime.minute}");
+        print(
+            "To Time: ${toTime.format(context)} - ${toTime.hour}:${toTime.minute}");
+        print("------------------");
       }
     }
 

@@ -39,7 +39,7 @@ String dateTimeAvailabilityFormatter(
   final tt = timeAvailableList[1];
 
   if (daysAvailable.length == 6) {
-    days = "M - S";
+    days = "Mon - Sat";
   } else {
     days = timeDayAvailableList[0].replaceAll(".", ", ");
   }
@@ -65,7 +65,7 @@ String fillDay(String dayInitial) {
       return "Thursday";
     case "F":
       return "Friday";
-    case "S":
+    case "Sat":
       return "Saturday";
     default:
       return "";
