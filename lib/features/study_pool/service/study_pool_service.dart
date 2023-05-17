@@ -88,7 +88,7 @@ class StudyPoolService {
         },
       );
 
-      print("ChatROomRes");
+      print("Chat room res");
       print(chatRoomRes.body);
 
       if (chatRoomRes.statusCode == 200 && chatRoomRes.statusCode != 404) {

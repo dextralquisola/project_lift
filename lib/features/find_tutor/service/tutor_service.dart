@@ -34,16 +34,13 @@ class TutorService {
 
       if (!context.mounted) return;
 
-      httpErrorHandler(
-        response: res,
-        context: context,
-        onSuccess: () {
-          print("tutors fetched");
-          print(res.body);
-          final decoded = json.decode(res.body);
-          tutorProvider.setTutorsFromJson(decoded, userProvider.user.userId);
-        },
-      );
+      if (res.statusCode == 200) {
+        final decoded = json.decode(res.body);
+        tutorProvider.setTutorsFromJson(decoded, userProvider.user.userId);
+      } else {
+        print(res.statusCode);
+        print(res.body);
+      }
     } catch (e) {
       print(e);
     }
