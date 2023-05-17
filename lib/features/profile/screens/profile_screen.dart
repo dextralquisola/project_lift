@@ -444,6 +444,8 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   Widget _userRatingsBuilder(User user, String title, bool isTutor) {
     var ratings = isTutor ? user.ratingAsTutor : user.ratingAsTutee;
+    ratings.sort((a, b) => b.rating.compareTo(a.rating));
+
     var totalRatings = user.parsedRating(isTutor);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -452,23 +454,37 @@ class _ProfileScreenState extends State<ProfileScreen>
           children: [
             ExpansionTile(
               initiallyExpanded: true,
-              title: AppText(
-                text: "$title ⭐️ $totalRatings",
-                fontWeight: FontWeight.w600,
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppText(
+                    text: "$title ⭐️ $totalRatings ",
+                    fontWeight: FontWeight.w600,
+                  ),
+                  AppText(
+                    text: "(${ratings.length})",
+                    textColor: Colors.grey,
+                  )
+                ],
               ),
               children: [
                 if (ratings.isEmpty)
                   ListTile(
                     title: AppText(text: "No ratings yet"),
                   ),
-                ...ratings.map((e) {
-                  return ListTile(
-                    title: AppText(text: "Anon user: ${e.rating} ⭐️"),
-                    subtitle: AppText(
-                      text: "Comment: ${e.feedback}",
-                    ),
-                  );
-                }).toList(),
+                ...ratings
+                    .map((e) {
+                      return ListTile(
+                        title: AppText(
+                            text:
+                                "${e.firstName} ${e.lastName}: ${e.rating} ⭐️"),
+                        subtitle: AppText(
+                          text: "Comment: ${e.feedback}",
+                        ),
+                      );
+                    })
+                    .toList()
+                    .take(5),
               ],
             ),
           ],

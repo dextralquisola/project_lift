@@ -21,7 +21,6 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
     final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
     final requests = userRequestsProvider.requests;
 
@@ -106,6 +105,10 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
     final date = requestedSchedule.scheduleDate;
     final fromTime = requestedSchedule.fromTime;
     final toTime = requestedSchedule.toTime;
+
+    final rating = request.parsedRating();
+    final ratings = request.getRatingsAsTutee;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -117,6 +120,7 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
             ),
             title: AppText(
               text: "${request.tuteeFirstName} ${request.tuteeLastName}",
+              fontWeight: FontWeight.w600,
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -137,6 +141,23 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
                   text:
                       "Time: ${fromTime.format(context)} - ${toTime.format(context)}",
                 ),
+                const SizedBox(height: 10),
+                AppText(
+                  text: "Rating: $rating ⭐️ (${ratings.length})",
+                ),
+                const SizedBox(height: 10),
+                AppText(
+                  text: "Comments: ",
+                ),
+                ...ratings
+                    .map(
+                      (rating) => AppText(
+                        text:
+                            "Anon user: ${rating.feedback} (${rating.rating} ⭐️)",
+                      ),
+                    )
+                    .toList()
+                    .take(3),
               ],
             ),
           ),

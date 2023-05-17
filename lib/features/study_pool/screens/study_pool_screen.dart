@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/styles.dart';
 
@@ -145,8 +146,30 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                 : null,
           )
         : currentStudyRoomProvider.studyRoom.sessionEnded
-            ? const RateScreen()
+            ? FutureBuilder(
+                future: getResBody(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return RateScreen(
+                      resBody: snapshot.data!,
+                    );
+                  }
+
+                  return const SizedBox();
+                },
+              )
             : const CurrentRoomScreen();
+  }
+
+  Future<String> getResBody() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('toRateParticipants') ?? '';
   }
 
   _scrollListenerRoom() async {

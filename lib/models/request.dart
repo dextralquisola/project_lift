@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:project_lift/models/rating.dart';
 import 'package:project_lift/models/subject.dart';
 
 class Request {
@@ -13,6 +14,7 @@ class Request {
   final String status;
   final String location;
   final String schedule;
+  final List<Rating> ratingsAsTutee;
 
   Request({
     required this.requestId,
@@ -25,6 +27,7 @@ class Request {
     required this.status,
     required this.location,
     required this.schedule,
+    required this.ratingsAsTutee,
   });
 
   Map<String, dynamic> toMap() {
@@ -57,7 +60,39 @@ class Request {
       status: map['status'] ?? '',
       location: map['location'] ?? '',
       schedule: map['schedule'] ?? '',
+      ratingsAsTutee: List<Rating>.from(
+        map['studentId']['ratingsAsTutee']?.map(
+          (x) => Rating.fromMap(x, false),
+        ),
+      ),
     );
+  }
+
+  List<Rating> get getRatingsAsTutee => ratingsAsTutee;
+
+  double getRating() {
+    double totalRating = 0;
+
+    for (var rating in ratingsAsTutee) {
+      totalRating += rating.rating;
+    }
+
+    return totalRating / (ratingsAsTutee.isEmpty ? 1 : ratingsAsTutee.length);
+  }
+
+  String parsedRating() {
+    var rating = getRating();
+
+    if (rating == 0) return '0';
+
+    int wholeNumber = rating.toInt();
+    double decimalValue = rating - wholeNumber;
+
+    if (decimalValue > 0) {
+      return rating.toStringAsFixed(1);
+    }
+
+    return getRating().toStringAsFixed(0);
   }
 
   String toJson() => json.encode(toMap());

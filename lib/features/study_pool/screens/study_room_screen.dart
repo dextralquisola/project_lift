@@ -349,14 +349,8 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
     Widget continueButton = TextButton(
       child: AppText(text: "End session", textColor: Colors.red),
       onPressed: () async {
-        setState(() {
-          _isLoading = true;
-        });
-        await studyRoomService.endStudySession(context: context);
-        setState(() {
-          _isLoading = false;
-        });
         Navigator.of(context).pop();
+        await studyRoomService.endStudySession(context: context);
       },
     );
 

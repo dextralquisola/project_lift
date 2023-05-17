@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:project_lift/constants/styles.dart';
 import 'package:project_lift/utils/date_time_utils.dart';
@@ -16,7 +17,7 @@ class TutorCard extends StatelessWidget {
   final User tutor;
   final bool isPendingRequest;
   final bool isEnabled;
-  TutorCard({
+  const TutorCard({
     super.key,
     required this.tutor,
     required this.isPendingRequest,
@@ -27,36 +28,17 @@ class TutorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isAvailable = false;
 
-    print("days avail");
-    print(tutor.dateTimeAvailability.split('+')[0]);
-
     final daysAvail = getFilledDays(tutor.dateTimeAvailability.split('+')[0]);
     final fromTime = getFromTime(tutor.dateTimeAvailability.split('+')[1]);
     final toTime = getToTime(tutor.dateTimeAvailability.split('+')[1]);
 
-    //(from.hour == to.hour && from.minute < to.minute)
-
     var now = TimeOfDay.now();
     if (daysAvail.contains(DateFormat('EEEE').format(DateTime.now()))) {
-      if (now.hour >= fromTime.hour &&
-              now.hour < toTime.hour &&
-              now.minute >= fromTime.minute ||
-          (now.hour == toTime.hour && now.minute < toTime.minute)) {
+      if ((now.hour > fromTime.hour ||
+              (now.hour == fromTime.hour && now.minute >= fromTime.minute)) &&
+          (now.hour < toTime.hour ||
+              (now.hour == toTime.hour && now.minute < toTime.minute))) {
         isAvailable = true;
-      } else {
-        print("------------------");
-        print("${tutor.firstName} ${tutor.lastName} is not available");
-        print("DaysAvail: ");
-        print(daysAvail);
-        print(daysAvail.contains(DateFormat('EEEE').format(DateTime.now())));
-        print("DateNow: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}");
-        print(DateFormat('EEEE').format(DateTime.now()));
-        print("Time Now: ${now.format(context)} - ${now.hour}:${now.minute}");
-        print(
-            "From Time: ${fromTime.format(context)} - ${fromTime.hour}:${fromTime.minute}");
-        print(
-            "To Time: ${toTime.format(context)} - ${toTime.hour}:${toTime.minute}");
-        print("------------------");
       }
     }
 
@@ -105,12 +87,12 @@ class TutorCard extends StatelessWidget {
                                     child: Center(
                                       child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.center,
                                         children: const [
                                           Icon(
-                                            Icons.person,
+                                            FontAwesomeIcons.chalkboardUser,
                                             color: Colors.white,
-                                            size: 100,
+                                            size: 50,
                                           ),
                                         ],
                                       ),
@@ -219,6 +201,10 @@ class TutorCard extends StatelessWidget {
     required User tutor,
     required bool isAvailable,
   }) {
+    var rating = tutor.parsedRating(true);
+    var ratings = tutor.ratingAsTutor;
+    ratings.sort((a, b) => b.rating.compareTo(a.rating));
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -228,7 +214,10 @@ class TutorCard extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            title: AppText(text: "${tutor.firstName} ${tutor.lastName}"),
+            title: AppText(
+              text: "${tutor.firstName} ${tutor.lastName}",
+              fontWeight: FontWeight.w600,
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,6 +243,20 @@ class TutorCard extends StatelessWidget {
                           tutor.dateTimeAvailability,
                         ),
                       ),
+                const SizedBox(height: 20),
+                _textBuilder(text: "Rating: $rating ⭐️ (${ratings.length})"),
+                const SizedBox(height: 10),
+                _textBuilder(text: "Comments: "),
+                ...ratings
+                    .map(
+                      (e) => _textBuilder(
+                        text:
+                            '${e.firstName} ${e.lastName}: ${e.feedback}  (${e.rating} ⭐️)',
+                        textSize: 12,
+                      ),
+                    )
+                    .toList()
+                    .take(3),
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,

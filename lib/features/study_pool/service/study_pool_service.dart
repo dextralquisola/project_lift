@@ -5,6 +5,7 @@ import 'package:project_lift/constants/constants.dart';
 import 'package:project_lift/utils/socket_client.dart';
 import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/study_room.dart';
 import '../../../models/subject.dart';
@@ -299,6 +300,7 @@ class StudyPoolService {
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final sharedPref = await SharedPreferences.getInstance();
 
       final studyPoolService = StudyPoolService();
 
@@ -315,6 +317,7 @@ class StudyPoolService {
 
       if (res.statusCode == 200) {
         // success
+        sharedPref.remove('toRateParticipants');
         socket.emit("leave-room", {
           "roomId": currentRoomProvider.studyRoom.roomId,
         });
@@ -407,6 +410,8 @@ class StudyPoolService {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final currentSudyRoom =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+      final sharedPref = await SharedPreferences.getInstance();
+
       var res = await service.requestApi(
         path: '/api/studyroom/end-session/${currentSudyRoom.studyRoom.roomId}',
         method: 'PATCH',
@@ -418,14 +423,14 @@ class StudyPoolService {
       );
 
       if (res.statusCode == 200) {
-        showSnackBar(context, "Study session ended!");
+        await sharedPref.setString('toRateParticipants', res.body);
       }
     } catch (e) {
       print(e);
     }
   }
 
-  Future<bool> rateUsers({
+  Future<bool> rateTutor({
     required BuildContext context,
     required int rating,
     required String feedback,
@@ -479,6 +484,51 @@ class StudyPoolService {
           "deviceToken": userProvider.user.deviceToken,
         },
         body: body,
+      );
+
+      if (res.statusCode == 200) {
+        print("Success");
+        studyRoomService.fetchStudyRooms(context, true);
+        return true;
+      } else {
+        print("ERROR: ${res.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+  Future<bool> rateTutees({
+    required BuildContext context,
+    required List<dynamic> participants,
+    required List<TextEditingController> feedbackControllers,
+    required List<int> ratings,
+  }) async {
+    try {
+      final studyRoomService = StudyPoolService();
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      var participantsMapped = [];
+      for (var i = 0; i < participants.length; i++) {
+        participantsMapped.add({
+          "_id": participants[i]['userId'],
+          "rating": ratings[i],
+          "feedback": feedbackControllers[i].text,
+        });
+      }
+
+      var res = await service.requestApi(
+        path: '/api/rate-participants',
+        method: 'POST',
+        headers: {
+          "Authorization": userProvider.user.token,
+          "fcmToken": userProvider.user.firebaseToken,
+          "deviceToken": userProvider.user.deviceToken,
+        },
+        body: {
+          "participants": participantsMapped,
+        },
       );
 
       if (res.statusCode == 200) {

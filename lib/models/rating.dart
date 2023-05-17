@@ -3,10 +3,14 @@ import 'dart:convert';
 class Rating {
   final int rating;
   final String feedback;
+  final String firstName;
+  final String lastName;
 
   Rating({
     required this.rating,
     required this.feedback,
+    required this.firstName,
+    required this.lastName,
   });
 
   Map<String, dynamic> toMap() {
@@ -18,10 +22,20 @@ class Rating {
     return result;
   }
 
-  factory Rating.fromMap(Map<String, dynamic> map) {
+  factory Rating.fromMap(Map<String, dynamic> map, [bool isUserMapped = true]) {
     return Rating(
       rating: map['value']?.toInt() ?? 0,
       feedback: map['feedback'] ?? '',
+      firstName: isUserMapped
+          ? map['tuteeId'] == null
+              ? map['tutorId']['firstName'] ?? ''
+              : map['tuteeId']['firstName'] ?? ''
+          : '',
+      lastName: isUserMapped
+          ? map['tuteeId'] == null
+              ? map['tutorId']['lastName'] ?? ''
+              : map['tuteeId']['lastName'] ?? ''
+          : '',
     );
   }
 
