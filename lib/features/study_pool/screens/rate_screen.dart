@@ -46,7 +46,7 @@ class _RateScreenState extends State<RateScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final currentStudyRoom = Provider.of<CurrentStudyRoomProvider>(context);
+    final currentStudyRoom = Provider.of<CurrentStudyRoomProvider>(context, listen: false);
 
     final user = userProvider.user;
     final studyRoom = currentStudyRoom.studyRoom;

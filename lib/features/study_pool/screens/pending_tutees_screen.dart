@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
-import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
@@ -49,25 +48,33 @@ class _PendingTuteesScreenState extends State<PendingTuteesScreen> {
                           children: [
                             IconButton(
                               onPressed: () async {
-                                await studyRoomService.respondToStudyRoomTuteeRequest(
+                                await studyRoomService
+                                    .respondToStudyRoomTuteeRequest(
                                   context: context,
                                   roomId: currentRoomProvider.studyRoom.roomId,
                                   status: "accepted",
                                   userId: participant['userId'],
                                 );
                               },
-                              icon: const Icon(Icons.check),
+                              icon: const Icon(
+                                Icons.check,
+                                color: Colors.green,
+                              ),
                             ),
                             IconButton(
                               onPressed: () async {
-                                await studyRoomService.respondToStudyRoomTuteeRequest(
+                                await studyRoomService
+                                    .respondToStudyRoomTuteeRequest(
                                   context: context,
                                   roomId: currentRoomProvider.studyRoom.roomId,
                                   status: "rejected",
                                   userId: participant['userId'],
                                 );
                               },
-                              icon: const Icon(Icons.close),
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.red,
+                              ),
                             ),
                           ],
                         ),

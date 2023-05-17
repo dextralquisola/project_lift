@@ -80,7 +80,7 @@ class CurrentStudyRoomProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateParticipantById(String userId){
+  void updateParticipantById(String userId) {
     _studyRoom = _studyRoom.copyWith(
       participants: _studyRoom.participants
           .map(
@@ -104,13 +104,13 @@ class CurrentStudyRoomProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeParticipantById(String userId) {
+  void removeParticipantById(String userId, [bool isNotify = true]) {
     _studyRoom = _studyRoom.copyWith(
       participants: _studyRoom.participants
           .where((element) => element['userId'] != userId)
           .toList(),
     );
-    notifyListeners();
+    isNotify ? notifyListeners() : () {};
   }
 
   void clearRoom() {

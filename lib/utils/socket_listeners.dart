@@ -100,7 +100,10 @@ class SocketListeners {
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("user-left", (data) {
       if (currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
-        currentRoomProvider.removeParticipantById(data['user']['userId']);
+        currentRoomProvider.removeParticipantById(
+          data['user']['userId'],
+          !data['sessionEnded'],
+        );
       }
     });
   }
