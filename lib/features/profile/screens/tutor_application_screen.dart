@@ -106,7 +106,7 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
                         children: [
                           AppText(
                             textSize: 20,
-                            text: "Select Grade",
+                            text: "Select grade(from CvSU student portal)",
                           ),
                           const SizedBox(width: 10),
                           TextButton(
