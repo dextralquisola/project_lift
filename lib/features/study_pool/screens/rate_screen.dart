@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/utils/utils.dart';
@@ -16,7 +15,7 @@ import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
 
 class RateScreen extends StatefulWidget {
-  final String resBody;
+  final String? resBody;
   const RateScreen({super.key, required this.resBody});
 
   @override
@@ -52,12 +51,14 @@ class _RateScreenState extends State<RateScreen> {
     final user = userProvider.user;
     final studyRoom = currentStudyRoom.studyRoom;
 
-    List<dynamic> toRateParticipants =
-        json.decode(widget.resBody)['ratedParticipants'];
+    List<dynamic> toRateParticipants = [];
+    if (widget.resBody != null) {
+      toRateParticipants = json.decode(widget.resBody!)['ratedParticipants'];
+    }
 
     final size = MediaQuery.of(context).size;
 
-    if (user.userId == studyRoom.roomOwner) {
+    if (user.userId == studyRoom.roomOwner && widget.resBody != null) {
       print("toRateParticipants.length ${toRateParticipants.length}");
       for (var i = 0; i < toRateParticipants.length; i++) {
         _feedbackControllers.add(TextEditingController());

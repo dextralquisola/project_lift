@@ -157,7 +157,7 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
 
                   if (snapshot.connectionState == ConnectionState.done) {
                     return RateScreen(
-                      resBody: snapshot.data!,
+                      resBody: snapshot.data,
                     );
                   }
 
@@ -167,9 +167,9 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
             : const CurrentRoomScreen();
   }
 
-  Future<String> getResBody() async {
+  Future<String?> getResBody() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('toRateParticipants') ?? '';
+    return prefs.getString('toRateParticipants');
   }
 
   _scrollListenerRoom() async {
