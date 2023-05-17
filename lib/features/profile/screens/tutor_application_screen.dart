@@ -102,11 +102,12 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
                   if (_isEnabledForEditing || _isEdit)
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: Row(
+                      child: Column(
                         children: [
                           AppText(
-                            textSize: 20,
-                            text: "Select grade(from CvSU student portal)",
+                            textSize: 18,
+                            text: "Select grade (from CvSU student portal)",
+                            textOverflow: TextOverflow.clip,
                           ),
                           const SizedBox(width: 10),
                           TextButton(
