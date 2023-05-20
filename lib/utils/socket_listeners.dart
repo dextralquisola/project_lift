@@ -99,7 +99,9 @@ class SocketListeners {
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("user-left", (data) {
-      if (currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
+      print("on user left");
+      print(data);
+      if (data['sessionEnded'] != null && currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
         currentRoomProvider.removeParticipantById(
           data['user']['userId'],
           !data['sessionEnded'],

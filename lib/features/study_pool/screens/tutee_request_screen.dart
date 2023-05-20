@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:project_lift/models/study_room.dart';
-import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
+import '../../../models/study_room.dart';
+import '../../../widgets/app_text.dart';
 import '../../../models/request.dart';
-import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
 import '../service/study_pool_service.dart';
 

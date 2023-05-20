@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:project_lift/features/study_pool/screens/pending_tutees_screen.dart';
 import 'package:project_lift/features/study_pool/screens/study_room_details_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
 
 import '../../../constants/styles.dart';
 import '../../../models/study_room.dart';
@@ -71,109 +72,134 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
             .where((participant) => participant['status'] == 'accepted')
             .isNotEmpty;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: AppText(
-          text: currentStudyRoomProvider.studyRoom.roomName,
-          textColor: Colors.white,
-        ),
-        backgroundColor: primaryColor,
-        actions: [
-          if (user.userId == currentStudyRoomProvider.studyRoom.roomOwner)
-            IconButton(
-              onPressed: () async {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const PendingTuteesScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.pending_actions),
-            ),
-          PopupMenuButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                  value: 0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.info, color: Colors.amber),
-                      const SizedBox(width: 5),
-                      AppText(text: "Studyroom Details"),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 1,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.exit_to_app, color: Colors.redAccent),
-                      const SizedBox(width: 5),
-                      AppText(text: "Leave Room"),
-                    ],
-                  ),
-                ),
-                if (userProvider.user.userId ==
-                    currentStudyRoomProvider.studyRoom.roomOwner)
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: AppText(
+            text: currentStudyRoomProvider.studyRoom.roomName,
+            textColor: Colors.white,
+          ),
+          backgroundColor: primaryColor,
+          actions: [
+            if (user.userId == currentStudyRoomProvider.studyRoom.roomOwner)
+              currentStudyRoomProvider.pendingParticipants.isNotEmpty
+                  ? badges.Badge(
+                      badgeContent: AppText(
+                        text:
+                            "${currentStudyRoomProvider.pendingParticipants.length}",
+                        textColor: Colors.white,
+                      ),
+                      badgeStyle: const badges.BadgeStyle(
+                        badgeColor: Colors.redAccent,
+                        shape: badges.BadgeShape.circle,
+                        elevation: 1,
+                      ),
+                      child: IconButton(
+                        onPressed: () async {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const PendingTuteesScreen(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.pending_actions),
+                      ),
+                    )
+                  : IconButton(
+                      onPressed: () async {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const PendingTuteesScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.pending_actions),
+                    ),
+            PopupMenuButton(
+              icon: const Icon(Icons.more_vert, color: Colors.white),
+              itemBuilder: (context) {
+                return [
                   PopupMenuItem(
-                    value: 2,
-                    enabled: isEndSessionEnabled,
+                    value: 0,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.exit_to_app, color: Colors.red),
+                        const Icon(Icons.info, color: Colors.amber),
                         const SizedBox(width: 5),
-                        AppText(
-                          text: "End session",
-                          textColor:
-                              isEndSessionEnabled ? Colors.black : Colors.grey,
-                        ),
+                        AppText(text: "Studyroom Details"),
                       ],
                     ),
                   ),
-              ];
-            },
-            onSelected: (value) async {
-              if (value == 0) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const StudyRoomDetailsScreen(),
-                  ),
-                );
-              } else if (value == 1) {
-                await _showAlertDialog(
-                  context: context,
-                  studyRoom: currentStudyRoomProvider.studyRoom,
-                  user: userProvider.user,
-                );
-              } else if (value == 2) {
-                await _showEndSessionDialog(
-                  context: context,
-                  studyRoom: currentStudyRoomProvider.studyRoom,
-                  user: userProvider.user,
-                );
-              }
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          chats.isEmpty
-              ? Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: AppText(
-                      text: "Send hello to get started! 😊",
-                      textSize: 20,
+                  PopupMenuItem(
+                    value: 1,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.exit_to_app, color: Colors.redAccent),
+                        const SizedBox(width: 5),
+                        AppText(text: "Leave Room"),
+                      ],
                     ),
                   ),
-                )
-              : Expanded(
-                  child: ListView.separated(
+                  if (userProvider.user.userId ==
+                      currentStudyRoomProvider.studyRoom.roomOwner)
+                    PopupMenuItem(
+                      value: 2,
+                      enabled: isEndSessionEnabled,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.exit_to_app, color: Colors.red),
+                          const SizedBox(width: 5),
+                          AppText(
+                            text: "End session",
+                            textColor: isEndSessionEnabled
+                                ? Colors.black
+                                : Colors.grey,
+                          ),
+                        ],
+                      ),
+                    ),
+                ];
+              },
+              onSelected: (value) async {
+                if (value == 0) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const StudyRoomDetailsScreen(),
+                    ),
+                  );
+                } else if (value == 1) {
+                  await _showAlertDialog(
+                    context: context,
+                    studyRoom: currentStudyRoomProvider.studyRoom,
+                    user: userProvider.user,
+                  );
+                } else if (value == 2) {
+                  await _showEndSessionDialog(
+                    context: context,
+                    studyRoom: currentStudyRoomProvider.studyRoom,
+                    user: userProvider.user,
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            chats.isEmpty
+                ? Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: AppText(
+                        text: "Send hello to get started! 😊",
+                        textSize: 20,
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.separated(
                       reverse: true,
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(16),
@@ -230,48 +256,50 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                         );
                       },
                       separatorBuilder: (_, index) => const SizedBox(
-                            height: 5,
-                          ),
-                      itemCount: chats.length),
-                ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            child: SafeArea(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _messageInputController,
-                      decoration: const InputDecoration(
-                        hintText: 'Type your message here...',
-                        border: InputBorder.none,
+                        height: 5,
                       ),
+                      itemCount: chats.length,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      if (_messageInputController.text.trim().isNotEmpty) {
-                        await studyRoomService.sendMessage(
-                          roomId: currentStudyRoomProvider.studyRoom.roomId,
-                          context: context,
-                          message: _messageInputController.text,
-                        );
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        _messageInputController.clear();
-                      }
-                    },
-                    icon: const Icon(Icons.send),
-                  )
-                ],
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
               ),
-            ),
-          )
-        ],
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              child: SafeArea(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _messageInputController,
+                        decoration: const InputDecoration(
+                          hintText: 'Type your message here...',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        if (_messageInputController.text.trim().isNotEmpty) {
+                          await studyRoomService.sendMessage(
+                            roomId: currentStudyRoomProvider.studyRoom.roomId,
+                            context: context,
+                            message: _messageInputController.text,
+                          );
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          _messageInputController.clear();
+                        }
+                      },
+                      icon: const Icon(Icons.send),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
