@@ -6,33 +6,52 @@ import '../models/message.dart';
 class CurrentStudyRoomProvider with ChangeNotifier {
   StudyRoom _studyRoom = StudyRoom.empty();
 
-  int _currentMessagePage = 1;
-  int _totalMessagePage = 1;
-
-  int get currentMessagePage => _currentMessagePage;
-
   StudyRoom get studyRoom => _studyRoom;
-  List<Message> get messages => _studyRoom.messages;
+
   List<Map<String, dynamic>> get pendingParticipants => _studyRoom.participants
       .where((element) => element['status'] == 'pending')
       .toList();
-
   bool get isEmpty => _studyRoom.roomId.isEmpty;
+
+  List<Message> get messages => _studyRoom.messages;
+
+  int _currentMessagePage = 1;
+  int get currentMessagePage => _currentMessagePage;
+
+  List<Message> tempMessages = [];
 
   void setMessagesFromJson(dynamic data) {
     List<dynamic> messages = data;
-    var newMessages = messages.map((e) => Message.fromMap(e)).toList();
 
+    var newMessages = messages.map((e) => Message.fromMap(e)).toList();
     var uniqueMessages = newMessages;
 
     if (messages.length == 10) {
       _currentMessagePage++;
+      tempMessages = [];
     } else if (messages.length < 10) {
       uniqueMessages = removeDuplicatedMessages(newMessages);
+      tempMessages = [...tempMessages, ...uniqueMessages];
     }
 
     _studyRoom = _studyRoom
         .copyWith(messages: [..._studyRoom.messages, ...uniqueMessages]);
+
+    notifyListeners();
+  }
+
+  void addMessage(dynamic data) {
+    var message = Message.fromMap(data, true);
+
+    if (tempMessages.length <= 10) {
+      tempMessages = [...tempMessages, message];
+    } else {
+      tempMessages = [message];
+      _currentMessagePage++;
+    }
+
+    _studyRoom = _studyRoom.copyWith(messages: [message, ...messages]);
+
     notifyListeners();
   }
 
@@ -60,16 +79,8 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   }
 
   void leaveStudyRoom() {
-    _totalMessagePage = 1;
     _currentMessagePage = 1;
     _studyRoom = StudyRoom.empty();
-    notifyListeners();
-  }
-
-  void addMessage(dynamic data) {
-    var message = Message.fromMap(data, true);
-    _studyRoom =
-        _studyRoom.copyWith(messages: [message, ..._studyRoom.messages]);
     notifyListeners();
   }
 
@@ -114,7 +125,6 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   }
 
   void clearRoom() {
-    _totalMessagePage = 1;
     _currentMessagePage = 1;
     _studyRoom = StudyRoom.empty();
     notifyListeners();
