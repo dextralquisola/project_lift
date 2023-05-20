@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/styles.dart';
 
+import '../../../providers/user_requests_provider.dart';
 import './create_room_screen.dart';
 import './rate_screen.dart';
 import './study_room_screen.dart';
@@ -19,6 +21,8 @@ import '../../../providers/study_room_providers.dart';
 import '../../../providers/user_provider.dart';
 import '../../../widgets/app_text.dart';
 
+import 'package:badges/badges.dart' as badges;
+
 class StudyPoolScreen extends StatefulWidget {
   const StudyPoolScreen({super.key});
 
@@ -29,8 +33,10 @@ class StudyPoolScreen extends StatefulWidget {
 class _StudyPoolScreenState extends State<StudyPoolScreen> {
   var _scrollControllerRoom = ScrollController();
   bool _isLoading = false;
+  bool _isDisposed = false;
 
   final studyPoolService = StudyPoolService();
+  ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   @override
   void initState() {
@@ -41,9 +47,21 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
   }
 
   @override
+  void deactivate() {
+    if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
+      _isDisposed = true;
+      _scrollControllerRoom.dispose();
+    }
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
+    if (!_isDisposed) {
+      _scrollControllerRoom.dispose();
+    }
     super.dispose();
-    _scrollControllerRoom.dispose();
+    isDialOpen.value = false;
   }
 
   @override
@@ -52,6 +70,9 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
     final studyRoomProvider = Provider.of<StudyRoomProvider>(context);
     final currentStudyRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context);
+    final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
+    final tuteeRequests = userRequestsProvider.requests;
+
     final studyRooms = studyRoomProvider.studyRooms;
 
     return currentStudyRoomProvider.isEmpty
@@ -106,43 +127,97 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                     ),
                   ),
             floatingActionButton: userProvider.isTutor
-                ? SpeedDial(
-                    animatedIcon: AnimatedIcons.menu_close,
-                    animatedIconTheme: const IconThemeData(size: 22.0),
-                    backgroundColor: primaryColor,
-                    children: [
-                      SpeedDialChild(
-                        child: const Icon(Icons.add),
-                        label: 'Create Study Room',
-                        onTap: () {
-                          if (userProvider.user.subjects.isEmpty) {
-                            showSnackBar(
-                              context,
-                              "Please add subjects to your profile first",
-                            );
-                            return;
-                          }
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const CreateStudyRoomScreen(),
+                ? tuteeRequests.isNotEmpty
+                    ? badges.Badge(
+                        badgeContent: AppText(
+                          text: "${tuteeRequests.length}",
+                          textColor: Colors.white,
+                        ),
+                        child: SpeedDial(
+                          animatedIcon: AnimatedIcons.menu_close,
+                          animatedIconTheme: const IconThemeData(size: 22.0),
+                          backgroundColor: primaryColor,
+                          openCloseDial: isDialOpen,
+                          children: [
+                            SpeedDialChild(
+                              child: const Icon(Icons.add),
+                              label: 'Create Study Room',
+                              onTap: () {
+                                if (userProvider.user.subjects.isEmpty) {
+                                  showSnackBar(
+                                    context,
+                                    "Please add subjects to your profile first",
+                                  );
+                                  return;
+                                }
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CreateStudyRoomScreen(),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                      SpeedDialChild(
-                        child: const Icon(Icons.list),
-                        label: 'Tutee Requests',
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (contxt) => const TuteeRequestScreen(),
+                            SpeedDialChild(
+                              child: badges.Badge(
+                                badgeContent: Text(
+                                  "${tuteeRequests.length}",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                child: const Icon(Icons.list),
+                              ),
+                              label: 'Tutee Requests',
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (contxt) =>
+                                        const TuteeRequestScreen(),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  )
+                          ],
+                        ),
+                      )
+                    : SpeedDial(
+                        animatedIcon: AnimatedIcons.menu_close,
+                        animatedIconTheme: const IconThemeData(size: 22.0),
+                        backgroundColor: primaryColor,
+                        openCloseDial: isDialOpen,
+                        children: [
+                          SpeedDialChild(
+                            child: const Icon(Icons.add),
+                            label: 'Create Study Room',
+                            onTap: () {
+                              if (userProvider.user.subjects.isEmpty) {
+                                showSnackBar(
+                                  context,
+                                  "Please add subjects to your profile first",
+                                );
+                                return;
+                              }
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const CreateStudyRoomScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          SpeedDialChild(
+                            child: const Icon(Icons.list),
+                            label: 'Tutee Requests',
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (contxt) =>
+                                      const TuteeRequestScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      )
                 : null,
           )
         : currentStudyRoomProvider.studyRoom.sessionEnded
@@ -185,9 +260,11 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
         await StudyPoolService().fetchStudyRooms(context);
       }
 
-      setState(() {
-        _isLoading = false;
-      });
+      if (context.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }

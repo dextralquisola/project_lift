@@ -39,7 +39,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_rating_bar: ^4.0.1
-  flutter_speed_dial: ^6.2.0
+  flutter_speed_dial: ^6.3.0
   font_awesome_flutter: ^10.4.0
   google_sign_in: ^6.0.1
   http: ^0.13.5
