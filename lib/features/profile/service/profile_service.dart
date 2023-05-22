@@ -1,15 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:project_lift/models/subject.dart';
-import 'package:project_lift/models/tutor_application.dart';
-import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
+
+import '../../../models/subject.dart';
+import '../../../models/tutor_application.dart';
 
 import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
-import '../../../utils/http_utils.dart' as service;
+
+import '../../../utils/utils.dart';
 import '../../../utils/storage_utils.dart';
+import '../../../utils/http_utils.dart' as service;
 
 class ProfileService {
   Future<void> addSubject({
@@ -20,11 +22,7 @@ class ProfileService {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
         path: '/api/tutor/add-subject',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           "subjectCode": subject.subjectCode,
           "description": subject.description,
@@ -51,11 +49,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/users/me',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -84,11 +78,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/users/me/avatar',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           "image": avatarUrl,
         },
@@ -126,11 +116,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor-application/create',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           "image": gradeUrl,
           "briefIntro": briefIntro,
@@ -174,11 +160,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor-application/update',
         method: 'PATCH',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           "image": gradeUrl,
           "briefIntro": briefIntro,
@@ -211,11 +193,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor-application/me',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -246,11 +224,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/users/me',
         method: 'PATCH',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: dateTimeAvailability.isNotEmpty
             ? {
                 "timeAndDateAvailability": dateTimeAvailability,
@@ -303,11 +277,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor/update-subject/${subject.subjectCode}',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           "description": subject.description,
           "subtopics": subject.subTopicsToListMap(),
@@ -334,11 +304,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor/delete-subject/${subject.subjectCode}',
         method: 'DELETE',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {

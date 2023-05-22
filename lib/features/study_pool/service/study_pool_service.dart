@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:project_lift/constants/constants.dart';
-import 'package:project_lift/utils/socket_client.dart';
-import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../constants/constants.dart';
+import '../../../utils/socket_client.dart';
+import '../../../utils/utils.dart';
 
 import '../../../models/study_room.dart';
 import '../../../models/subject.dart';
@@ -37,11 +38,7 @@ class StudyPoolService {
 
       var res = await service.requestApi(
         path: '/api/studyroom/create',
-        headers: {
-          'Authorization': userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           'name': studyPoolName,
           'status': status == StudyRoomStatus.public ? 'public' : 'private',
@@ -81,11 +78,7 @@ class StudyPoolService {
       var chatRoomRes = await service.requestApi(
         path: '/api/studyroom/user-room',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       print("Chat room res");
@@ -160,11 +153,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/public?page=${studyRoomProvider.currentPage}',
         method: 'GET',
-        headers: {
-          'Authorization': userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -190,11 +179,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/messages',
         method: 'POST',
-        headers: {
-          'Authorization': userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           'roomId': roomId,
           'message': message,
@@ -228,11 +213,7 @@ class StudyPoolService {
       var joinResRoom = await service.requestApi(
         path: '/api/studyroom/join/$roomId',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (joinResRoom.statusCode == 202) {
@@ -259,17 +240,10 @@ class StudyPoolService {
       );
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
-          path: '/api/studyroom/accept-participant/$roomId/$userId/$status',
-          method: 'PATCH',
-          headers: {
-            "Authorization": userProvider.user.token,
-            "fcmToken": userProvider.user.firebaseToken,
-            "deviceToken": userProvider.user.deviceToken,
-          },
-          body: {
-            "fcmToken": userProvider.user.firebaseToken,
-            "deviceToken": userProvider.user.deviceToken,
-          });
+        path: '/api/studyroom/accept-participant/$roomId/$userId/$status',
+        method: 'PATCH',
+        userAuthHeader: userProvider.user,
+      );
 
       if (res.statusCode == 200) {
         // success
@@ -308,11 +282,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/leave/${currentRoomProvider.studyRoom.roomId}',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -350,11 +320,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/public?search=$search',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -385,11 +351,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/pending',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -415,11 +377,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/end-session/${currentSudyRoom.studyRoom.roomId}',
         method: 'PATCH',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -478,11 +436,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: path,
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: body,
       );
 
@@ -521,11 +475,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/rate-participants',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           "participants": participantsMapped,
         },
@@ -554,11 +504,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/ask-help/get-request',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -581,11 +527,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/ask-help/my-requests',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {
@@ -616,11 +558,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/ask-help/accept-request/$requestId/$requestStatus',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {

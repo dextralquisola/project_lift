@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/utils/date_time_utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../constants/styles.dart';
+import '../../../utils/date_time_utils.dart';
 import '../../study_pool/screens/create_room_screen.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_text.dart';
 import '../../../models/user.dart';
-
-import '../../../utils/date_time_utils.dart';
 
 class TutorCard extends StatelessWidget {
   final User tutor;

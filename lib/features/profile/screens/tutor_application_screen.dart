@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_textfield.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../../../widgets/app_button.dart';
+import '../../../widgets/app_textfield.dart';
 import '../../../providers/user_requests_provider.dart';
 import '../../../widgets/app_text.dart';
 import '../service/profile_service.dart';

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_text.dart';
-import 'package:project_lift/widgets/app_textfield.dart';
+
+import '../../../constants/styles.dart';
+import '../../../widgets/app_button.dart';
+import '../../../widgets/app_text.dart';
+import '../../../widgets/app_textfield.dart';
 
 import '../service/auth_service.dart';
 

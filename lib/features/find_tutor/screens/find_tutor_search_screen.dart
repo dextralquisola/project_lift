@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../providers/user_requests_provider.dart';
+
 import '../widgets/tutor_card_widget.dart';
+import '../service/tutor_service.dart';
 import '../../../models/user.dart';
 import '../../../widgets/app_text.dart';
-import '../service/tutor_service.dart';
+import '../../../providers/user_requests_provider.dart';
 
 class FindTutorSearchScreen extends StatefulWidget {
   const FindTutorSearchScreen({super.key});

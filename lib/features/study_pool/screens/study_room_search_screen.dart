@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/study_pool/widgets/study_card_widget.dart';
-import 'package:project_lift/models/study_room.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/study_card_widget.dart';
+import '../../../models/study_room.dart';
 import '../../../providers/study_room_providers.dart';
 import '../../../widgets/app_text.dart';
 import '../service/study_pool_service.dart';

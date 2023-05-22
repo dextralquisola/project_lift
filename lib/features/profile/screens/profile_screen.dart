@@ -1,18 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/features/auth/service/auth_service.dart';
-import 'package:project_lift/features/profile/screens/edit_availability_screen.dart';
-import 'package:project_lift/features/profile/screens/profile_edit_screen.dart';
-import 'package:project_lift/features/profile/screens/select_avatar_screen.dart';
-import 'package:project_lift/features/profile/screens/tutor_application_screen.dart';
-import 'package:project_lift/providers/current_room_provider.dart';
-import 'package:project_lift/providers/study_room_providers.dart';
-import 'package:project_lift/utils/utils.dart';
-import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
+
+import '../../../constants/styles.dart';
+import '../../auth/service/auth_service.dart';
+import './edit_availability_screen.dart';
+import './profile_edit_screen.dart';
+import './select_avatar_screen.dart';
+import './tutor_application_screen.dart';
+import '../../../providers/current_room_provider.dart';
+import '../../../providers/study_room_providers.dart';
+import '../../../utils/utils.dart';
+import '../../../widgets/app_text.dart';
 
 import '../../../models/user.dart';
 import '../../../providers/tutors_provider.dart';
@@ -20,7 +20,7 @@ import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/background_cover.dart';
-import 'add_subject_screen.dart';
+import './add_subject_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

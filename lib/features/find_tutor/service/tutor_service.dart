@@ -9,7 +9,6 @@ import '../../../models/subject.dart';
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
-import '../../../utils/http_error_handler.dart';
 
 import '../../../utils/http_utils.dart' as service;
 
@@ -25,11 +24,7 @@ class TutorService {
       var res = await service.requestApi(
         path: '/home/tutors?page=${tutorProvider.currentPage}&limit=10',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (!context.mounted) return;
@@ -56,11 +51,7 @@ class TutorService {
       var res = await service.requestApi(
         path: '/home/tutors?search=$search',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       List<User> listOfTutors = [];
@@ -98,11 +89,7 @@ class TutorService {
       var res = await service.requestApi(
         path: '/api/ask-help/request/$tutorId',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
         body: {
           "name": name,
           "status": status,
@@ -116,8 +103,6 @@ class TutorService {
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
-        print("askHelp");
-        print(res.body);
         userRequestsProvider.addMyRequestFromMap([decoded], true);
         print("Success");
       } else {

@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:project_lift/features/find_tutor/screens/find_tutor_search_screen.dart';
-import 'package:project_lift/providers/user_requests_provider.dart';
-import 'package:project_lift/widgets/background_cover.dart';
-import 'package:project_lift/widgets/app_text.dart';
+
 import 'package:provider/provider.dart';
 
+import './find_tutor_search_screen.dart';
+import '../../../providers/user_requests_provider.dart';
+import '../../../widgets/background_cover.dart';
+import '../../../widgets/app_text.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/tutors_provider.dart';
-import '../../../providers/user_provider.dart';
 import '../service/tutor_service.dart';
 import '../widgets/tutor_card_widget.dart';
 

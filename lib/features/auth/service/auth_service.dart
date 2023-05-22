@@ -228,11 +228,7 @@ class AuthService {
       var res = await service.requestApi(
         path: '/api/users/logout',
         method: 'POST',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider.user,
       );
 
       if (res.statusCode == 200) {

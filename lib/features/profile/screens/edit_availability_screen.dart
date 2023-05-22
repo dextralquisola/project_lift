@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/widgets/app_text.dart';
-import 'package:project_lift/widgets/app_textfield.dart';
+
 import 'package:provider/provider.dart';
+
+import '../../../constants/styles.dart';
+import '../../../widgets/app_text.dart';
+import '../../../widgets/app_textfield.dart';
 import '../../../providers/user_provider.dart';
 import '../service/profile_service.dart';
 import '../utils/profle_utils.dart';

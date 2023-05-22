@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
-import 'package:project_lift/features/study_pool/screens/pending_tutees_screen.dart';
-import 'package:project_lift/features/study_pool/screens/study_room_details_screen.dart';
+
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
 
+import './pending_tutees_screen.dart';
+import './study_room_details_screen.dart';
 import '../../../constants/styles.dart';
 import '../../../models/study_room.dart';
 import '../../../models/user.dart';

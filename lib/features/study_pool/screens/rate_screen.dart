@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
-import 'package:project_lift/utils/utils.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_text.dart';
-import 'package:project_lift/widgets/app_textfield.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
+import '../service/study_pool_service.dart';
+import '../../../utils/utils.dart';
+import '../../../widgets/app_button.dart';
+import '../../../widgets/app_text.dart';
+import '../../../widgets/app_textfield.dart';
 
 import '../../../models/study_room.dart';
 import '../../../models/user.dart';

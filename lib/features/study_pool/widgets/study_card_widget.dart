@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
-import 'package:project_lift/models/study_room.dart';
 
+import '../service/study_pool_service.dart';
+import '../../../models/study_room.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_text.dart';
 

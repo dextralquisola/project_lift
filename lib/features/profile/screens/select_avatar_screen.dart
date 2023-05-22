@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:project_lift/widgets/app_button.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widgets/app_button.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/storage_utils.dart';
 import '../service/profile_service.dart';

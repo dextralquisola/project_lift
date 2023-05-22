@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
-import 'package:project_lift/models/study_room.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/study_room.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../widgets/app_text.dart';
 

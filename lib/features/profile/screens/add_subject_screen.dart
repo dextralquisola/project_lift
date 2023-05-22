@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/features/profile/service/profile_service.dart';
-import 'package:project_lift/models/subject.dart';
-import 'package:project_lift/utils/utils.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_text.dart';
-import 'package:project_lift/widgets/app_textfield.dart';
 import 'package:provider/provider.dart';
+
+import '../../../constants/styles.dart';
+import '../service/profile_service.dart';
+import '../../../models/subject.dart';
+import '../../../utils/utils.dart';
+import '../../../widgets/app_button.dart';
+import '../../../widgets/app_text.dart';
+import '../../../widgets/app_textfield.dart';
 
 import '../../../constants/subjects.dart';
 import '../../../providers/user_provider.dart';

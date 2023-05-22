@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:project_lift/features/auth/screens/sign_up_screen.dart';
-import 'package:project_lift/utils/utils.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_text.dart';
-import 'package:project_lift/widgets/app_textfield.dart';
+
+import './sign_up_screen.dart';
+import '../../../utils/utils.dart';
+import '../../../widgets/app_button.dart';
+import '../../../widgets/app_text.dart';
+import '../../../widgets/app_textfield.dart';
 
 import '../../../constants/styles.dart';
 import '../service/auth_service.dart';
@@ -20,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final authService = AuthService();
+
+  var _isLoading = false;
 
   @override
   void dispose() {
@@ -64,12 +67,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                 ),
                 const SizedBox(height: 20),
-                AppButton(
-                  onPressed: () => _login(context),
-                  height: 50,
-                  text: "Login",
-                  wrapRow: true,
-                ),
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : AppButton(
+                        onPressed: () => _login(context),
+                        height: 50,
+                        text: "Login",
+                        wrapRow: true,
+                      ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _login(BuildContext context) async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (!verifyFields()) return;
+    setState(() => _isLoading = true);
     await authService.login(
       email: emailController.text,
       password: passwordController.text,

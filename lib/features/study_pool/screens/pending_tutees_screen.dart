@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
-import 'package:project_lift/providers/current_room_provider.dart';
-import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
+
+import '../service/study_pool_service.dart';
+import '../../../providers/current_room_provider.dart';
+import '../../../widgets/app_text.dart';
 
 import '../../../constants/styles.dart';
 
