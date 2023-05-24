@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:project_lift/models/message.dart';
-import 'package:project_lift/models/subject.dart';
+import './message.dart';
+import './subject.dart';
 
 class StudyRoom {
   final String roomId;

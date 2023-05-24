@@ -1,20 +1,20 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:project_lift/utils/http_error_handler.dart';
-import 'package:project_lift/utils/socket_listeners.dart';
-import 'package:project_lift/utils/utils.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../providers/user_provider.dart';
-import '../../../utils/http_utils.dart' as service;
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../../utils/http_error_handler.dart';
+import '../../../providers/user_provider.dart';
+import '../../../utils/socket_listeners.dart';
 import '../../../utils/socket_client.dart';
+import '../../../utils/http_utils.dart' as service;
+import '../../../utils/utils.dart';
 
 class AuthService {
   Future<void> login({
@@ -97,15 +97,24 @@ class AuthService {
 
       if (!context.mounted) return;
 
-      httpErrorHandler(
-        response: res,
-        context: context,
-        onSuccess: () async {
-          showSnackBar(context,
-              "Account created successfully, please verify your email and then login.");
-          onSuccess();
-        },
-      );
+      if(res.statusCode == 200) {
+        showSnackBar(context,
+            "Account created successfully, please verify your email and then login.");
+        onSuccess();
+      }else{
+        print("error");
+        print(res.body);
+      }
+
+      // httpErrorHandler(
+      //   response: res,
+      //   context: context,
+      //   onSuccess: () async {
+      //     showSnackBar(context,
+      //         "Account created successfully, please verify your email and then login.");
+      //     onSuccess();
+      //   },
+      // );
     } catch (e) {
       print(e);
     }
