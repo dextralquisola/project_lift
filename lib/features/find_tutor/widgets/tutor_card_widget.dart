@@ -202,7 +202,7 @@ class TutorCard extends StatelessWidget {
   }) {
     var rating = tutor.parsedRating(true);
     var ratings = tutor.ratingAsTutor;
-    ratings.sort((a, b) => b.rating.compareTo(a.rating));
+    ratings.sort((a, b) => b.getSubjectRating().compareTo(a.getSubjectRating()));
 
     showDialog(
       context: context,
@@ -246,16 +246,16 @@ class TutorCard extends StatelessWidget {
                 _textBuilder(text: "Rating: $rating ⭐️ (${ratings.length})"),
                 const SizedBox(height: 10),
                 _textBuilder(text: "Comments: "),
-                ...ratings
-                    .map(
-                      (e) => _textBuilder(
-                        text:
-                            '${e.firstName} ${e.lastName}: ${e.feedback}  (${e.rating} ⭐️)',
-                        textSize: 12,
-                      ),
-                    )
-                    .toList()
-                    .take(3),
+                // ...ratings
+                //     .map(
+                //       (e) => _textBuilder(
+                //         text:
+                //             '${e.firstName} ${e.lastName}: ${e.feedback}  (${e.rating} ⭐️)',
+                //         textSize: 12,
+                //       ),
+                //     )
+                //     .toList()
+                //     .take(3),
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,

@@ -392,6 +392,7 @@ class StudyPoolService {
     required BuildContext context,
     required int rating,
     required String feedback,
+    required Subject subject,
   }) async {
     try {
       final studyRoomService = StudyPoolService();
@@ -427,6 +428,7 @@ class StudyPoolService {
       } else {
         path = '/api/rate-tutor';
         body = {
+          "subject": subject.toMap(),
           "rating": rating,
           "feedback": feedback,
           "tutorId": currentSudyRoom.studyRoom.roomOwner,

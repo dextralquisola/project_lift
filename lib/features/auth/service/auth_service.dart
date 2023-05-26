@@ -97,7 +97,7 @@ class AuthService {
 
       if (!context.mounted) return;
 
-      if(res.statusCode == 200) {
+      if(res.statusCode == 201) {
         showSnackBar(context,
             "Account created successfully, please verify your email and then login.");
         onSuccess();

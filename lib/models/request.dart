@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:project_lift/models/rating.dart';
-import 'package:project_lift/models/subject.dart';
+import './rating.dart';
+import './subject.dart';
 
 class Request {
   final String requestId;
@@ -74,7 +74,12 @@ class Request {
     double totalRating = 0;
 
     for (var rating in ratingsAsTutee) {
-      totalRating += rating.rating;
+      double avgRating = 0;
+      for (var subjectRating in rating.subjectRatings) {
+        avgRating += subjectRating.rating;
+      }
+      totalRating += avgRating /
+          (rating.subjectRatings.isEmpty ? 1 : rating.subjectRatings.length);
     }
 
     return totalRating / (ratingsAsTutee.isEmpty ? 1 : ratingsAsTutee.length);

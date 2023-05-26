@@ -148,15 +148,15 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
                 AppText(
                   text: "Comments: ",
                 ),
-                ...ratings
-                    .map(
-                      (rating) => AppText(
-                        text:
-                            "Anon user: ${rating.feedback} (${rating.rating} ⭐️)",
-                      ),
-                    )
-                    .toList()
-                    .take(3),
+                // ...ratings
+                //     .map(
+                //       (rating) => AppText(
+                //         text:
+                //             "Anon user: ${rating.feedback} (${rating.rating} ⭐️)",
+                //       ),
+                //     )
+                //     .toList()
+                //     .take(3),
               ],
             ),
           ),

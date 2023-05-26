@@ -1,26 +1,20 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_lift/features/profile/widgets/profile_tutee_screen.dart';
+import 'package:project_lift/features/profile/widgets/profile_tutor_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constants/styles.dart';
-import '../../auth/service/auth_service.dart';
-import './edit_availability_screen.dart';
-import './profile_edit_screen.dart';
-import './select_avatar_screen.dart';
-import './tutor_application_screen.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/study_room_providers.dart';
+import '../../auth/service/auth_service.dart';
 import '../../../utils/utils.dart';
-import '../../../widgets/app_text.dart';
 
-import '../../../models/user.dart';
+import '../../../widgets/profile_widgets/user_ratings_builder.dart';
+import '../../../widgets/app_text.dart';
+import '../../../widgets/profile_widgets/profile_top_builder.dart';
+
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
-import '../../../widgets/app_button.dart';
-import '../../../widgets/background_cover.dart';
-import './add_subject_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -53,203 +47,16 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final userRequestsProvider = Provider.of<UserRequestsProvider>(context);
-
     final user = userProvider.user;
-    final ratingAsTutor = user.parsedRating(true);
-    final ratingAsTutee = user.parsedRating(false);
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: 200,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  const SizedBox(
-                    child: BackgroundCover(hasBgImage: false),
-                  ),
-                  Positioned(
-                    bottom: -75,
-                    left: 0,
-                    right: 0,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(color: Colors.white, width: 5),
-                        ),
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: user.avatar != ""
-                                  ? SizedBox(
-                                      height: 150,
-                                      width: 150,
-                                      child: CachedNetworkImage(
-                                        imageUrl: user.avatar,
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) =>
-                                            Container(
-                                          color: Colors.green,
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.person,
-                                              color: Colors.white,
-                                              size: 100,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      color: Colors.green,
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.person,
-                                          color: Colors.white,
-                                          size: 100,
-                                        ),
-                                      ),
-                                    ),
-                            ),
-                            if (userProvider.isTutor)
-                              Positioned(
-                                bottom: -5,
-                                left: 1,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Container(
-                                    width: 30,
-                                    height: 30,
-                                    color: primaryColor,
-                                    child: const Icon(
-                                      FontAwesomeIcons.graduationCap,
-                                      color: Colors.amber,
-                                      size: 15,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            Positioned(
-                              bottom: 1,
-                              right: -0,
-                              child: AppText(
-                                text: userProvider.isTutor
-                                    ? '⭐️ $ratingAsTutor'
-                                    : '⭐️ $ratingAsTutee',
-                                textSize: 20,
-                                textColor: Colors.grey,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Row(
-                      children: [
-                        IconButton(
-                          constraints: const BoxConstraints(),
-                          onPressed: () async {
-                            await logoutDialog(context, userProvider);
-                          },
-                          icon: const Icon(Icons.exit_to_app,
-                              color: Colors.white),
-                        ),
-                        PopupMenuButton(
-                          icon:
-                              const Icon(Icons.more_vert, color: Colors.white),
-                          itemBuilder: (context) {
-                            return [
-                              PopupMenuItem(
-                                value: 0,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.edit, color: Colors.green),
-                                    const SizedBox(width: 5),
-                                    AppText(
-                                      text: "Edit profile details",
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem(
-                                value: 1,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.edit, color: Colors.green),
-                                    const SizedBox(width: 5),
-                                    AppText(
-                                      text: "Change avatar",
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              if (userProvider.isTutor)
-                                PopupMenuItem(
-                                  value: 2,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.edit,
-                                          color: Colors.green),
-                                      const SizedBox(width: 5),
-                                      AppText(
-                                        text: "Change schedule/availability",
-                                        textSize: 12,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                            ];
-                          },
-                          onSelected: (value) async {
-                            if (value == 0) {
-                              await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProfileEditScreen(),
-                                ),
-                              );
-                              setState(() {});
-                            } else if (value == 1) {
-                              await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SelectAvatarScreen(),
-                                ),
-                              );
-                              setState(() {});
-                            } else if (value == 2) {
-                              await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const EditAvailabilityScreen(),
-                                ),
-                              );
-                              setState(() {});
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+            ProfileTopBuilder(
+              user: user,
+              updateState: () => setState(() {}),
             ),
             const SizedBox(height: 80),
             AppText(
@@ -267,29 +74,26 @@ class _ProfileScreenState extends State<ProfileScreen>
             if (userProvider.isTutor)
               Column(
                 children: [
-                  _tutorScreenBuilder(userProvider),
+                  TutorScreen(
+                    animationController: animationController,
+                    updateState: () => setState(() {}),
+                    user: user,
+                  ),
                   const SizedBox(height: 20),
-                ],
-              ),
-            if (userProvider.isTutor)
-              Column(
-                children: [
-                  _userRatingsBuilder(user, "Tutor ratings", true),
+                  UserRatingsBuilder(user: user, title: "Tutor ratings"),
                   const SizedBox(height: 20),
-                  _userRatingsBuilder(user, "Tutee ratings", false),
-                ],
-              ),
-            if (!userProvider.isTutor)
-              Column(
-                children: [
-                  _userRatingsBuilder(user, "Tutee ratings", false),
-                  const SizedBox(height: 20),
+                  UserRatingsBuilder(user: user, title: "Tutee ratings"),
                 ],
               ),
             if (!userProvider.isTutor)
-              _tuteeScreenBuilder(
-                userProvider,
-                userRequestsProvider,
+              Column(
+                children: [
+                  UserRatingsBuilder(user: user, title: "Tutee ratings"),
+                  const SizedBox(height: 20),
+                  TuteeScreen(
+                    tutorApplication: userRequestsProvider.tutorApplication,
+                  ),
+                ],
               ),
           ],
         ),
@@ -339,208 +143,5 @@ class _ProfileScreenState extends State<ProfileScreen>
     } else {
       showSnackBar(context, "Something went wrong");
     }
-  }
-
-  Widget _tuteeScreenBuilder(
-      UserProvider userProvider, UserRequestsProvider userRequestsProvider) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          AppButton(
-            onPressed: userRequestsProvider.tutorApplication.id.isNotEmpty
-                ? () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const TutotApplicationScreen(),
-                      ),
-                    );
-                  }
-                : () {
-                    _showDialog(context);
-                  },
-            height: 50,
-            wrapRow: true,
-            text: userRequestsProvider.tutorApplication.id.isNotEmpty
-                ? "View application"
-                : "Be a tutor!",
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _tutorScreenBuilder(UserProvider userProvider) {
-    final user = userProvider.user;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Card(
-        child: Column(
-          children: [
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: AppText(
-                text: "Subjects I can help with",
-                fontWeight: FontWeight.w600,
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    constraints: const BoxConstraints(),
-                    onPressed: () async {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AddSubjectScreen(),
-                        ),
-                      );
-                      setState(() {});
-                    },
-                    icon: Icon(Icons.add, color: primaryColor),
-                  ),
-                  AnimatedIcon(
-                    icon: AnimatedIcons.menu_close,
-                    progress: animationController,
-                  ),
-                ],
-              ),
-              children: [
-                if (userProvider.user.subjects.isEmpty)
-                  ListTile(
-                    title: AppText(text: "No subjects yet"),
-                  ),
-                ...user.subjects.map((e) {
-                  return ListTile(
-                      title: AppText(text: e.subjectCode),
-                      subtitle: AppText(text: e.description),
-                      trailing: IconButton(
-                        onPressed: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AddSubjectScreen(
-                                subject: e,
-                              ),
-                            ),
-                          );
-                          setState(() {});
-                        },
-                        icon: const Icon(Icons.edit, color: Colors.green),
-                      ));
-                }).toList(),
-              ],
-              onExpansionChanged: (value) {
-                if (value) {
-                  animationController.forward();
-                } else {
-                  animationController.reverse();
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _userRatingsBuilder(User user, String title, bool isTutor) {
-    var ratings = isTutor ? user.ratingAsTutor : user.ratingAsTutee;
-    ratings.sort((a, b) => b.rating.compareTo(a.rating));
-
-    var totalRatings = user.parsedRating(isTutor);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Card(
-        child: Column(
-          children: [
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppText(
-                    text: "$title ⭐️ $totalRatings ",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  AppText(
-                    text: "(${ratings.length})",
-                    textColor: Colors.grey,
-                  )
-                ],
-              ),
-              children: [
-                if (ratings.isEmpty)
-                  ListTile(
-                    title: AppText(text: "No ratings yet"),
-                  ),
-                ...ratings
-                    .map((e) {
-                      return ListTile(
-                        title: AppText(
-                            text:
-                                "${e.firstName} ${e.lastName}: ${e.rating} ⭐️"),
-                        subtitle: AppText(
-                          text: "Comment: ${e.feedback}",
-                        ),
-                      );
-                    })
-                    .toList()
-                    .take(5),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          title: AppText(text: 'Be a tutor!'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppText(
-                  text:
-                      "Beware this cannot be undo, being a tutor can still be a tutee. Being a tutor can have the ff:"),
-              const SizedBox(height: 10),
-              AppText(text: "1. Badge"),
-              AppText(text: "2. Rated by tutee"),
-              AppText(text: "3. Create tutor session"),
-              const SizedBox(height: 10),
-              AppButton(
-                onPressed: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const TutotApplicationScreen(),
-                    ),
-                  );
-                  Navigator.of(context).pop();
-                },
-                height: 50,
-                wrapRow: true,
-                text: "Be a tutor!",
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: AppText(
-                  text: "Maybe next time...",
-                  textColor: Colors.grey,
-                  fontWeight: FontWeight.w200,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 }

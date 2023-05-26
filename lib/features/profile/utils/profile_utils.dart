@@ -1,5 +1,5 @@
 List<bool> daysSelectedBuilder(List<String> days) {
-  List<bool> daysSelected = [false, false, false, false, false, false, false];
+  List<bool> daysSelected = List.generate(6, (index) => false);
 
   for (int i = 0; i < days.length; i++) {
     daysSelected[convertDayToIndex(days[i])] = true;

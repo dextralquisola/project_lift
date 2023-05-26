@@ -53,23 +53,24 @@ class User {
     return result;
   }
 
-  User copyFrom(
-      {String? userId,
-      String? firstName,
-      String? lastName,
-      String? email,
-      String? token,
-      String? role,
-      String? deviceToken,
-      String? firebaseToken,
-      List<Subject>? subjects,
-      List<Rating>? ratingAsTutor,
-      List<Rating>? ratingAsTutee,
-      bool? isEmailVerified,
-      bool? hasRoom,
-      String? avatar,
-      String? dateTimeAvailability,
-        bool? isAvailable,}) {
+  User copyFrom({
+    String? userId,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? token,
+    String? role,
+    String? deviceToken,
+    String? firebaseToken,
+    List<Subject>? subjects,
+    List<Rating>? ratingAsTutor,
+    List<Rating>? ratingAsTutee,
+    bool? isEmailVerified,
+    bool? hasRoom,
+    String? avatar,
+    String? dateTimeAvailability,
+    bool? isAvailable,
+  }) {
     return User(
       userId: userId ?? this.userId,
       firstName: firstName ?? this.firstName,
@@ -100,7 +101,7 @@ class User {
     print('deviceToken: $deviceToken');
     print('firebaseToken: $firebaseToken');
     print('subjects: $subjects');
-    print('ratingAsTutor: ${[...ratingAsTutor.map((e) => e.rating).toList()]}');
+    //print('ratingAsTutor: ${[...ratingAsTutor.map((e) => e.rating).toList()]}');
     print('ratingAsTutee: $ratingAsTutee');
     print('dateTimeAvailability: $dateTimeAvailability');
     print('isAvailable: $isAvailable');
@@ -181,25 +182,25 @@ class User {
     return subjects.any((subject) => subject.subjectCode == subjectCode);
   }
 
-  double getRating({required bool isTutor}) {
+  double getRating([bool isTutor = false]) {
     double totalRating = 0;
-    if (isTutor) {
-      for (var rating in ratingAsTutor) {
-        totalRating += rating.rating;
+
+    var ratings = isTutor ? ratingAsTutor : ratingAsTutee;
+    for (var rating in ratings) {
+      var subjectRatings = 0;
+      for (var subjRating in rating.subjectRatings) {
+        subjectRatings += subjRating.rating;
       }
-    } else {
-      for (var rating in ratingAsTutee) {
-        totalRating += rating.rating;
-      }
+      totalRating += rating.subjectRatings.isNotEmpty
+          ? subjectRatings / rating.subjectRatings.length
+          : 0;
     }
 
-    return isTutor
-        ? totalRating / (ratingAsTutor.isEmpty ? 1 : ratingAsTutor.length)
-        : totalRating / (ratingAsTutee.isEmpty ? 1 : ratingAsTutee.length);
+    return ratings.isNotEmpty ? totalRating / ratings.length : 0;
   }
 
-  String parsedRating(bool isTutor) {
-    var rating = getRating(isTutor: isTutor);
+  String parsedRating([bool isTutor = false]) {
+    var rating = getRating(isTutor);
 
     if (rating == 0) return '0';
 
@@ -210,7 +211,7 @@ class User {
       return rating.toStringAsFixed(1);
     }
 
-    return getRating(isTutor: isTutor).toStringAsFixed(0);
+    return getRating(isTutor).toStringAsFixed(0);
   }
 
   String toJson() => json.encode(toMap());

@@ -16,7 +16,9 @@ class Subject {
 
     result.addAll({'subjectCode': subjectCode});
     result.addAll({'description': description});
-    result.addAll({'subTopics': subTopics});
+    result.addAll({
+      'subtopics': subTopicsToListMap(),
+    });
 
     return result;
   }
