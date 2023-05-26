@@ -1,8 +1,34 @@
 import 'package:flutter/material.dart';
 
+import '../../../providers/user_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_text.dart';
 import '../screens/tutor_application_screen.dart';
+import '../utils/profile_utils.dart' show logout;
+
+Future<void> logoutDialog(
+    BuildContext context) async {
+  return await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: AppText(text: 'Are you sure?'),
+      content: AppText(text: 'Do you want to logout?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: AppText(text: 'No'),
+        ),
+        TextButton(
+          onPressed: () async {
+            await logout(context);
+            Navigator.of(context).pop(true);
+          },
+          child: AppText(text: 'Yes'),
+        ),
+      ],
+    ),
+  );
+}
 
 void showApplyTutorDialog(BuildContext context) {
   showDialog(

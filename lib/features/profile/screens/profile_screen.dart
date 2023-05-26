@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/profile/widgets/profile_tutee_screen.dart';
-import 'package:project_lift/features/profile/widgets/profile_tutor_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/current_room_provider.dart';
-import '../../../providers/study_room_providers.dart';
 import '../../auth/service/auth_service.dart';
-import '../../../utils/utils.dart';
 
 import '../../../widgets/profile_widgets/user_ratings_builder.dart';
 import '../../../widgets/app_text.dart';
 import '../../../widgets/profile_widgets/profile_top_builder.dart';
+import '../widgets/profile_tutee_screen.dart';
+import '../widgets/profile_tutor_screen.dart';
 
-import '../../../providers/tutors_provider.dart';
-import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
+import '../../../providers/user_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -99,49 +95,5 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
       ),
     );
-  }
-
-  Future<void> logoutDialog(
-      BuildContext context, UserProvider userProvider) async {
-    return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: AppText(text: 'Are you sure?'),
-        content: AppText(text: 'Do you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: AppText(text: 'No'),
-          ),
-          TextButton(
-            onPressed: () async {
-              await logout(context, userProvider);
-              Navigator.of(context).pop(true);
-            },
-            child: AppText(text: 'Yes'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> logout(BuildContext context, UserProvider userProvider) async {
-    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
-    final userRequestsProvider =
-        Provider.of<UserRequestsProvider>(context, listen: false);
-    final studyPoolProvider =
-        Provider.of<StudyRoomProvider>(context, listen: false);
-    final currentStudyRoomProvider =
-        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
-    var isLogoutSuccess = await authService.logout(context);
-    if (isLogoutSuccess) {
-      tutorsProvider.clearTutors();
-      studyPoolProvider.clearStudyRooms();
-      currentStudyRoomProvider.leaveStudyRoom();
-      userRequestsProvider.clearRequests();
-      await userProvider.logout();
-    } else {
-      showSnackBar(context, "Something went wrong");
-    }
   }
 }

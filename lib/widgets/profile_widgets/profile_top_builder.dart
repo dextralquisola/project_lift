@@ -6,6 +6,7 @@ import '../../features/profile/screens/edit_availability_screen.dart';
 import '../../features/profile/screens/profile_edit_screen.dart';
 import '../../features/profile/screens/select_avatar_screen.dart';
 
+import '../../features/profile/widgets/profile_widgets.dart';
 import '../app_text.dart';
 import '../background_cover.dart';
 
@@ -84,8 +85,7 @@ class ProfileTopBuilder extends StatelessWidget {
                 IconButton(
                   constraints: const BoxConstraints(),
                   onPressed: () async {
-                    // TODO: implement logout
-                    //! await logoutDialog(context, userProvider);
+                    await logoutDialog(context);
                   },
                   icon: const Icon(Icons.exit_to_app, color: Colors.white),
                 ),
