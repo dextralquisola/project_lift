@@ -1,46 +1,62 @@
 {
-  "_id": "6459d087e70eb74250f381c8",
-  "firstName": "Chris P",
-  "lastName": "Chicken",
-  "email": "dexterjay.alquisola@cvsu.edu.ph",
-  "role": "tutor",
-  "isAvailable": true,
-  "isEmailVerified": true,
-  "isBanned": false,
   "ratingsAsTutor": [
     {
-      "value": 4,
-      "feedback": "sd",
-      "tuteeId": "645b9fedc7c4db6a2b5b8db6",
-      "_id": "645cc39c36a0c3941dc04ba0"
-    }
-  ],
-  "ratingsAsTutee": [
+      "subject": {
+        "subjectCode": "GNED 10",
+        "description": "PURPOSIVE COMMUNICATION",
+        "subjectRatings": [
+          {
+            "value": 4,
+            "feedback": "tryyyyy",
+            "tuteeId": "6471d3e783477c46d73207f5",
+            "_id": "6471e01833e8579a0b9677ae"
+          },
+          {
+            "value": 2,
+            "feedback": "tryyyyyqweqe",
+            "tuteeId": "6471d3e783477c46d73207f5",
+            "_id": "6471e03a33e8579a0b9677ee"
+          }
+        ],
+        "subtopics": [
+          {
+            "name": "",
+            "description": "",
+            "_id": "6471e01833e8579a0b9677ad"
+          },
+          {
+            "name": "test",
+            "description": "test",
+            "_id": "6471e03a33e8579a0b9677ed"
+          }
+        ],
+        "averageRating": 3
+      },
+      "_id": "6471e01833e8579a0b9677ac"
+    },
     {
-      "value": 5,
-      "feedback": "dsf",
-      "tutorId": "64595750e70eb74250f36763",
-      "_id": "645a5c1ca76fee73928f9bb4"
+      "subject": {
+        "subjectCode": "GNED 11",
+        "description": "KONTEKSTWALISADONG KOMUNIKASYON SA FILIPINO",
+        "subtopics": [
+          {
+            "name": "",
+            "description": "",
+            "subjectRatings": [
+              {
+                "value": 3,
+                "feedback": "gods123",
+                "tuteeId": "6470ead1c6bcbaf837123521",
+                "_id": "6472c72d7b44acec61726725"
+              }
+            ],
+            "averageRating": 3,
+            "_id": "6472c72d7b44acec61726724"
+          }
+        ],
+        "averageRating": 3
+      },
+      "_id": "6472c72d7b44acec61726723"
     }
-  ],
-  "subjects": [
-    {
-      "subjectCode": "FITT 1",
-      "description": "MOVEMENT ENHANCEMENT",
-      "subtopics": [
-        {
-          "name": "To be a chicken",
-          "description": "crispy",
-          "_id": "6459d128e70eb74250f38343"
-        }
-      ],
-      "_id": "6459d128e70eb74250f38342"
-    }
-  ],
-  "createdAt": "2023-05-09T04:48:07.902Z",
-  "updatedAt": "2023-05-11T12:31:46.943Z",
-  "__v": 36,
-  "socketId": "Vv34fUEmngPYHqwnAAAl",
-  "hasRoom": false,
-  "avatar": "https://firebasestorage.googleapis.com/v0/b/project-lift-f75f9.appspot.com/o/6459d087e70eb74250f381c8?alt=media&token=ae2de610-fa8b-4619-b235-514005fc4f53"
+  ]
 }

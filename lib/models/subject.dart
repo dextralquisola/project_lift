@@ -30,6 +30,10 @@ class Subject {
       result.add(subTopic.toMap());
     }
 
+    if(subTopics.isEmpty) {
+      result.add(SubTopic.empty().toMap());
+    }
+
     return result;
   }
 

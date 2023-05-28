@@ -14,7 +14,7 @@ class Request {
   final String status;
   final String location;
   final String schedule;
-  final List<Rating> ratingsAsTutee;
+  final List<TuteeRating> ratingsAsTutee;
 
   Request({
     required this.requestId,
@@ -60,26 +60,21 @@ class Request {
       status: map['status'] ?? '',
       location: map['location'] ?? '',
       schedule: map['schedule'] ?? '',
-      ratingsAsTutee: List<Rating>.from(
+      ratingsAsTutee: List<TuteeRating>.from(
         map['studentId']['ratingsAsTutee']?.map(
-          (x) => Rating.fromMap(x, false),
+          (x) => TuteeRating.fromMap(x),
         ),
       ),
     );
   }
 
-  List<Rating> get getRatingsAsTutee => ratingsAsTutee;
+  List<TuteeRating> get getRatingsAsTutee => ratingsAsTutee;
 
   double getRating() {
     double totalRating = 0;
 
     for (var rating in ratingsAsTutee) {
-      double avgRating = 0;
-      for (var subjectRating in rating.subjectRatings) {
-        avgRating += subjectRating.rating;
-      }
-      totalRating += avgRating /
-          (rating.subjectRatings.isEmpty ? 1 : rating.subjectRatings.length);
+      totalRating += rating.rating;
     }
 
     return totalRating / (ratingsAsTutee.isEmpty ? 1 : ratingsAsTutee.length);

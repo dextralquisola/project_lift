@@ -5,12 +5,14 @@ import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../../constants/styles.dart';
 import '../../../utils/date_time_utils.dart';
-import '../../study_pool/screens/create_room_screen.dart';
 import '../../../widgets/app_button.dart';
+import '../../../constants/styles.dart';
 import '../../../widgets/app_text.dart';
 import '../../../models/user.dart';
+
+import '../../study_pool/screens/create_room_screen.dart';
+import '../screens/view_tutor_screen.dart';
 
 class TutorCard extends StatelessWidget {
   final User tutor;
@@ -45,7 +47,14 @@ class TutorCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GestureDetector(
         onTap: () {
-          _showDialog(context: context, tutor: tutor, isAvailable: isAvailable);
+          //_showDialog(context: context, tutor: tutor, isAvailable: isAvailable);
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) {
+              return ViewTutorScreen(
+                tutor: tutor,
+              );
+            }),
+          );
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -202,7 +211,8 @@ class TutorCard extends StatelessWidget {
   }) {
     var rating = tutor.parsedRating(true);
     var ratings = tutor.ratingAsTutor;
-    ratings.sort((a, b) => b.getSubjectRating().compareTo(a.getSubjectRating()));
+    // ratings
+    //     .sort((a, b) => b.getSubjectRating().compareTo(a.getSubjectRating()));
 
     showDialog(
       context: context,

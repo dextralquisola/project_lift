@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/widgets/profile_widgets/profile_name_builder.dart';
 import 'package:provider/provider.dart';
 
 import '../../auth/service/auth_service.dart';
@@ -54,19 +55,17 @@ class _ProfileScreenState extends State<ProfileScreen>
               user: user,
               updateState: () => setState(() {}),
             ),
-            const SizedBox(height: 80),
-            AppText(
-              text: "${user.firstName} ${user.lastName}",
-              textSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-            const SizedBox(height: 5),
-            AppText(
-              text: user.email,
-              textColor: Colors.grey,
-              textSize: 14,
-            ),
-            const SizedBox(height: 20),
+            NameBuilder(user: user),
+            if (!userProvider.isTutor)
+              Column(
+                children: [
+                  UserRatingsBuilder(user: user, isTuteeBuilder: true),
+                  const SizedBox(height: 20),
+                  TuteeScreen(
+                    tutorApplication: userRequestsProvider.tutorApplication,
+                  ),
+                ],
+              ),
             if (userProvider.isTutor)
               Column(
                 children: [
@@ -76,19 +75,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                     user: user,
                   ),
                   const SizedBox(height: 20),
-                  UserRatingsBuilder(user: user, title: "Tutor ratings"),
-                  const SizedBox(height: 20),
-                  UserRatingsBuilder(user: user, title: "Tutee ratings"),
-                ],
-              ),
-            if (!userProvider.isTutor)
-              Column(
-                children: [
-                  UserRatingsBuilder(user: user, title: "Tutee ratings"),
-                  const SizedBox(height: 20),
-                  TuteeScreen(
-                    tutorApplication: userRequestsProvider.tutorApplication,
+                  UserRatingsBuilder(
+                    user: user,
+                    isTuteeBuilder: true,
                   ),
+                  const SizedBox(height: 20),
+                  UserRatingsBuilder(user: user),
                 ],
               ),
           ],

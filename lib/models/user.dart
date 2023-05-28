@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:project_lift/models/rating.dart';
-
+import './rating.dart';
 import './subject.dart';
 
 class User {
@@ -14,8 +13,8 @@ class User {
   final String token;
   final String firebaseToken;
   final String deviceToken;
-  final List<Rating> ratingAsTutor;
-  final List<Rating> ratingAsTutee;
+  final List<TutorRating> ratingAsTutor;
+  final List<TuteeRating> ratingAsTutee;
   final bool isEmailVerified;
   final bool hasRoom;
   final bool isAvailable;
@@ -63,8 +62,8 @@ class User {
     String? deviceToken,
     String? firebaseToken,
     List<Subject>? subjects,
-    List<Rating>? ratingAsTutor,
-    List<Rating>? ratingAsTutee,
+    List<TutorRating>? ratingAsTutor,
+    List<TuteeRating>? ratingAsTutee,
     bool? isEmailVerified,
     bool? hasRoom,
     String? avatar,
@@ -143,16 +142,16 @@ class User {
       hasRoom: map['hasRoom'] ?? false,
       ratingAsTutor: map['ratingsAsTutor'] == null
           ? []
-          : List<Rating>.from(
+          : List<TutorRating>.from(
               map['ratingsAsTutor']?.map(
-                (x) => Rating.fromMap(x),
+                (x) => TutorRating.fromMap(x),
               ),
             ),
       ratingAsTutee: map['ratingsAsTutee'] == null
           ? []
-          : List<Rating>.from(
+          : List<TuteeRating>.from(
               map['ratingsAsTutee']?.map(
-                (x) => Rating.fromMap(x),
+                (x) => TuteeRating.fromMap(x),
               ),
             ),
       subjects: map['subjects'].isEmpty
@@ -167,8 +166,8 @@ class User {
 
   Subject get firstSubject => subjects.first;
   List<Subject> get getSubjects => subjects;
-  List<Rating> get tutorRatings => ratingAsTutor;
-  List<Rating> get tuteeRatings => ratingAsTutee;
+  List<TutorRating> get tutorRatings => ratingAsTutor;
+  List<TuteeRating> get tuteeRatings => ratingAsTutee;
 
   Subject getSubject(String subjectCode) {
     return subjects.firstWhere((subject) => subject.subjectCode == subjectCode);
@@ -182,21 +181,28 @@ class User {
     return subjects.any((subject) => subject.subjectCode == subjectCode);
   }
 
+  // TODO: Get rating from tutor or tutee
+
   double getRating([bool isTutor = false]) {
+    return isTutor ? _getTutorRating() : _getTuteeRating();
+  }
+
+  double _getTutorRating() {
     double totalRating = 0;
 
-    var ratings = isTutor ? ratingAsTutor : ratingAsTutee;
-    for (var rating in ratings) {
-      var subjectRatings = 0;
-      for (var subjRating in rating.subjectRatings) {
-        subjectRatings += subjRating.rating;
-      }
-      totalRating += rating.subjectRatings.isNotEmpty
-          ? subjectRatings / rating.subjectRatings.length
-          : 0;
+    for (var rating in ratingAsTutor) {
+      totalRating += rating.averageSubjectsRating;
     }
 
-    return ratings.isNotEmpty ? totalRating / ratings.length : 0;
+    return ratingAsTutor.isNotEmpty ? totalRating / ratingAsTutor.length : 0;
+  }
+
+  double _getTuteeRating() {
+    double totalRating = 0;
+    for (var rating in ratingAsTutee) {
+      totalRating += rating.rating;
+    }
+    return ratingAsTutee.isNotEmpty ? totalRating / ratingAsTutee.length : 0;
   }
 
   String parsedRating([bool isTutor = false]) {
