@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:project_lift/features/find_tutor/utils/find_tutor_utitls.dart';
 
 import '../../../utils/date_time_utils.dart';
 import '../../../widgets/app_button.dart';
@@ -27,22 +27,7 @@ class TutorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isAvailable = false;
-
-    final daysAvail = getFilledDays(tutor.dateTimeAvailability.split('+')[0]);
-    final fromTime = getFromTime(tutor.dateTimeAvailability.split('+')[1]);
-    final toTime = getToTime(tutor.dateTimeAvailability.split('+')[1]);
-
-    var now = TimeOfDay.now();
-    if (daysAvail.contains(DateFormat('EEEE').format(DateTime.now()))) {
-      if ((now.hour > fromTime.hour ||
-              (now.hour == fromTime.hour && now.minute >= fromTime.minute)) &&
-          (now.hour < toTime.hour ||
-              (now.hour == toTime.hour && now.minute < toTime.minute))) {
-        isAvailable = true;
-      }
-    }
-
+    bool isAvailable = isAvailableAtCurrentDate(tutor);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GestureDetector(
@@ -52,6 +37,8 @@ class TutorCard extends StatelessWidget {
             MaterialPageRoute(builder: (context) {
               return ViewTutorScreen(
                 tutor: tutor,
+                isEnabled: isEnabled,
+                isPendingRequest: isPendingRequest,
               );
             }),
           );

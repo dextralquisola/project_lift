@@ -60,7 +60,7 @@ class ProfileTopBuilder extends StatelessWidget {
                     _badgeBuilder(isTutor),
                     Positioned(
                       bottom: 1,
-                      right: -0,
+                      right: -10,
                       child: AppText(
                         text: '⭐️ $rating',
                         textSize: 20,

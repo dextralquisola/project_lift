@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:project_lift/features/find_tutor/utils/find_tutor_utitls.dart';
+import 'package:project_lift/utils/date_time_utils.dart';
 import 'package:project_lift/widgets/app_button.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:project_lift/widgets/profile_widgets/profile_name_builder.dart';
@@ -6,12 +9,17 @@ import 'package:project_lift/widgets/profile_widgets/profile_top_builder.dart';
 import 'package:project_lift/widgets/profile_widgets/user_ratings_builder.dart';
 
 import '../../../models/user.dart';
+import '../../study_pool/screens/create_room_screen.dart';
 
 class ViewTutorScreen extends StatefulWidget {
   final User tutor;
+  final bool isPendingRequest;
+  final bool isEnabled;
   const ViewTutorScreen({
     super.key,
     required this.tutor,
+    required this.isPendingRequest,
+    required this.isEnabled,
   });
 
   @override
@@ -22,6 +30,7 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
   @override
   Widget build(BuildContext context) {
     final user = widget.tutor;
+    bool isAvailable = isAvailableAtCurrentDate(user);
     return Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
@@ -37,19 +46,79 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             ProfileTopBuilder(user: user, isView: true),
             NameBuilder(user: user),
+            //? top part
+            const SizedBox(height: 10),
+            // AppText(text: "Schedule", textSize: 17),
+            // const SizedBox(height: 5),
+            AppText(
+              text: dateTimeAvailabilityFormatter(
+                  context, user.dateTimeAvailability),
+              textSize: 14,
+            ),
             UserRatingsBuilder(user: user), // default is tutor
+            _subjectsBuilder(user),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: AppButton(
-                height: 50,
-                wrapRow: true,
-                onPressed: () {},
-                text: "Ask for help",
+                  isEnabled: widget.isEnabled &&
+                      widget.isPendingRequest &&
+                      isAvailable &&
+                      !user.hasRoom,
+                  height: 50,
+                  wrapRow: true,
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => CreateStudyRoomScreen(
+                          isAskHelp: true,
+                          tutor: user,
+                        ),
+                      ),
+                    );
+                  },
+                  text: user.hasRoom
+                      ? "Currently in session"
+                      : !isAvailable
+                          ? "Not Available"
+                          : "Ask Help"),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _subjectsBuilder(User user) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Card(
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: AppText(
+                text: "Subjects I can help with",
+                fontWeight: FontWeight.w600,
               ),
+              children: [
+                if (user.subjects.isEmpty)
+                  ListTile(
+                    title: AppText(text: "No subjects yet"),
+                  ),
+                ...user.subjects.map((e) {
+                  return ListTile(
+                    title: AppText(text: e.subjectCode),
+                    subtitle: AppText(
+                      text: e.description,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              ],
             ),
           ],
         ),

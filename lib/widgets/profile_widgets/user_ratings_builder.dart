@@ -15,14 +15,12 @@ class UserRatingsBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isTutor = user.role == "tutor";
     var ratingsAsTutor = user.ratingAsTutor;
     var ratingsAsTutee = user.ratingAsTutee;
 
     ratingsAsTutee.sort((a, b) => b.rating.compareTo(a.rating));
-    // TODO: sort ratingsAsTutor by ratings
-    // ratingsAsTutor
-    //     .sort((a, b) => b.getSubjectRating().compareTo(a.getSubjectRating()));
+    ratingsAsTutor.sort(
+        (a, b) => b.averageSubjectsRating.compareTo(a.averageSubjectsRating));
 
     //var totalRatings = user.parsedRating(isTutor);
 
@@ -93,6 +91,7 @@ class UserRatingsBuilder extends StatelessWidget {
             text: "Tutor Rating ⭐️ ${user.parsedRating(true)}",
             fontWeight: FontWeight.w600,
           ),
+          childrenPadding: const EdgeInsets.all(0),
           children: [
             if (tutorRatings.isEmpty)
               ListTile(
@@ -100,7 +99,8 @@ class UserRatingsBuilder extends StatelessWidget {
               ),
             ListView.builder(
               shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: tutorRatings.length,
               itemBuilder: (context, index) {
                 var rating = tutorRatings[index];
@@ -109,6 +109,7 @@ class UserRatingsBuilder extends StatelessWidget {
                     title: AppText(
                         text:
                             "${rating.subjectCode} ⭐️ ${rating.averageSubjectsRating}"),
+                    childrenPadding: const EdgeInsets.all(0),
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
@@ -118,6 +119,7 @@ class UserRatingsBuilder extends StatelessWidget {
                           var subTopicRating = rating.subTopicRatings[index];
                           return ExpansionTile(
                             title: _subTopicNameBuilder(subTopicRating),
+                            childrenPadding: const EdgeInsets.all(0),
                             children: [
                               ListView.builder(
                                 shrinkWrap: true,
