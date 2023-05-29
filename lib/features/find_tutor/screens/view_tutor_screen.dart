@@ -69,15 +69,19 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
                       !user.hasRoom,
                   height: 50,
                   wrapRow: true,
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
+                  onPressed: () async {
+                    var result = Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => CreateStudyRoomScreen(
                           isAskHelp: true,
                           tutor: user,
                         ),
                       ),
-                    );
+                    ) as bool?;
+                    if (result != null && result) {
+                      Navigator.of(context).pop();
+                    }
+                    
                   },
                   text: user.hasRoom
                       ? "Currently in session"

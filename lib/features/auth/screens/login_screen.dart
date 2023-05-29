@@ -148,6 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       onSuccess: () {},
     );
+    setState(() => _isLoading = false);
   }
 
   bool verifyFields() {

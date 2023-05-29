@@ -39,25 +39,39 @@ class AuthService {
 
       if (!context.mounted) return;
 
-      if (res.body.isEmpty) {
+      if (res.statusCode == 200) {
+        if (res.body.isEmpty) {
+          showSnackBar(context, "Please check your credentials");
+          return;
+        }
+
+        await _loginMethod(
+          isFromLogin: true,
+          context: context,
+          res: res,
+          fcmToken: fcmToken!,
+          deviceToken: deviceToken!,
+        );
+        onSuccess();
+      } else {
         showSnackBar(context, "Please check your credentials");
         return;
       }
 
-      httpErrorHandler(
-        response: res,
-        context: context,
-        onSuccess: () async {
-          await _loginMethod(
-            isFromLogin: true,
-            context: context,
-            res: res,
-            fcmToken: fcmToken!,
-            deviceToken: deviceToken!,
-          );
-          onSuccess();
-        },
-      );
+      // httpErrorHandler(
+      //   response: res,
+      //   context: context,
+      //   onSuccess: () async {
+      //     await _loginMethod(
+      //       isFromLogin: true,
+      //       context: context,
+      //       res: res,
+      //       fcmToken: fcmToken!,
+      //       deviceToken: deviceToken!,
+      //     );
+      //     onSuccess();
+      //   },
+      // );
     } catch (e) {
       print(e);
     }
@@ -97,24 +111,13 @@ class AuthService {
 
       if (!context.mounted) return;
 
-      if(res.statusCode == 201) {
+      if (res.statusCode == 201) {
         showSnackBar(context,
             "Account created successfully, please verify your email and then login.");
         onSuccess();
-      }else{
-        print("error");
-        print(res.body);
+      } else {
+        showSnackBar(context, res.body);
       }
-
-      // httpErrorHandler(
-      //   response: res,
-      //   context: context,
-      //   onSuccess: () async {
-      //     showSnackBar(context,
-      //         "Account created successfully, please verify your email and then login.");
-      //     onSuccess();
-      //   },
-      // );
     } catch (e) {
       print(e);
     }
@@ -183,6 +186,11 @@ class AuthService {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var userData = json.decode(res.body);
+
+      if (userData['message'] != null) {
+        showSnackBar(context, userData['message']);
+        return;
+      }
 
       if (isFromAutoLogin) {
         userData.addAll({'token': token});
