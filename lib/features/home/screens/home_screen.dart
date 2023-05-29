@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:project_lift/features/find_tutor/screens/find_tutor_screen.dart';
+import 'package:project_lift/features/home/screens/survey_screen.dart';
 import 'package:project_lift/features/profile/screens/profile_screen.dart';
 import 'package:project_lift/features/profile/service/profile_service.dart';
 import 'package:project_lift/features/study_pool/screens/study_pool_screen.dart';
@@ -74,6 +75,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SurveyScreen(),
+              ),
+            );
+          },
+          backgroundColor: Colors.red,
+          tooltip: "Gifts",
+          child: const Icon(Icons.card_giftcard, color: Colors.white),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       ),
     );
   }
