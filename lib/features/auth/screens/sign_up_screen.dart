@@ -24,11 +24,6 @@ extension ExtString on String {
         r'^(?!.*?password|.*?PASSWORD|.*?Password)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     return passwordRegExp.hasMatch(this);
   }
-
-  bool get isValidPhoneNumber {
-    final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
-    return phoneRegExp.hasMatch(this);
-  }
 }
 
 class SignupScreen extends StatefulWidget {

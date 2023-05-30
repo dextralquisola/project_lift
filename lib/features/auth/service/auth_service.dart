@@ -224,6 +224,34 @@ class AuthService {
     }
   }
 
+  Future<void> forgotPassword({
+    required String email,
+    required BuildContext context,
+  }) async {
+    try {
+      var res = await service.requestApi(
+        path: '/api/forgot-password',
+        body: {
+          "email": email,
+        },
+      );
+
+      if (!context.mounted) return;
+
+      if (res.statusCode == 200) {
+        showSnackBar(context, "Please check your email");
+      } else {
+        showSnackBar(
+          context,
+          json.decode(res.body)['error'] ??
+              "Something went wrong, please try again later.",
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<bool> logout(BuildContext context) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);

@@ -9,6 +9,7 @@ import '../../../widgets/app_textfield.dart';
 
 import '../../../constants/styles.dart';
 import '../service/auth_service.dart';
+import './forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -62,9 +63,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPassword: true,
                 ),
                 const SizedBox(height: 5),
-                AppText(
-                  text: "Forgot Password?",
-                  alignment: Alignment.centerRight,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordScreen(),
+                      ),
+                    );
+                  },
+                  child: AppText(
+                    text: "Forgot Password?",
+                    alignment: Alignment.centerRight,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 _isLoading
