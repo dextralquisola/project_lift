@@ -103,7 +103,8 @@ class TutorService {
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
-        userRequestsProvider.addMyRequestFromMap([decoded], true);
+        userRequestsProvider
+            .addMyRequestFromMap([decoded], notifyListener: true);
         print("Success");
       } else {
         print(res.statusCode);

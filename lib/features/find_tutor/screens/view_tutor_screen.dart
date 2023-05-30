@@ -70,7 +70,7 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
                   height: 50,
                   wrapRow: true,
                   onPressed: () async {
-                    var result = Navigator.of(context).push(
+                    var result = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => CreateStudyRoomScreen(
                           isAskHelp: true,
@@ -78,6 +78,7 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
                         ),
                       ),
                     ) as bool?;
+                    
                     if (result != null && result) {
                       Navigator.of(context).pop();
                     }

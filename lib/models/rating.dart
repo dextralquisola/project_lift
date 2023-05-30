@@ -48,7 +48,7 @@ class TuteeRating extends Rating {
   factory TuteeRating.fromMap(Map<String, dynamic> map,
       {bool isUserMapped = true}) {
     return TuteeRating(
-      id: map['id'] ?? '',
+      id: map['_id'] ?? '',
       rating: map['value']?.toInt() ?? 0,
       feedback: map['feedback'] ?? '',
       firstName: isUserMapped

@@ -509,6 +509,9 @@ class StudyPoolService {
         userAuthHeader: userProvider.user,
       );
 
+      print("getTuteeRequests");
+      print(res.body);
+
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
         userRequestsProvider.addTuteeRequestsFromMap(decoded);
@@ -517,6 +520,7 @@ class StudyPoolService {
         print(res.body);
       }
     } catch (e) {
+      print("getTuteeRequest");
       print(e);
     }
   }
@@ -532,14 +536,21 @@ class StudyPoolService {
         userAuthHeader: userProvider.user,
       );
 
+      print("getMyRequests");
+      print(res.body);
+
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
-        userRequestsProvider.addMyRequestFromMap(decoded);
+        userRequestsProvider.addMyRequestFromMap(
+          decoded,
+          isMyRequest: true,
+        );
       } else {
         print("ERROR: ${res.statusCode}");
         print(res.body);
       }
     } catch (e) {
+      print("getMyRequests");
       print(e);
     }
   }

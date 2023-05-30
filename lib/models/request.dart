@@ -46,9 +46,8 @@ class Request {
     return result;
   }
 
-  factory Request.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory Request.fromMap(Map<String, dynamic> map,
+      [bool isMyRequest = false]) {
     return Request(
       requestId: map['_id'] ?? '',
       subject: Subject.fromMap(map['subject']),
@@ -60,11 +59,13 @@ class Request {
       status: map['status'] ?? '',
       location: map['location'] ?? '',
       schedule: map['schedule'] ?? '',
-      ratingsAsTutee: List<TuteeRating>.from(
-        map['studentId']['ratingsAsTutee']?.map(
-          (x) => TuteeRating.fromMap(x),
-        ),
-      ),
+      ratingsAsTutee: isMyRequest
+          ? []
+          : List<TuteeRating>.from(
+              map['studentId']['ratingsAsTutee']?.map(
+                (x) => TuteeRating.fromMap(x, isUserMapped: false),
+              ),
+            ),
     );
   }
 

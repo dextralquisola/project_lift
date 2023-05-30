@@ -35,11 +35,14 @@ class UserRequestsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addMyRequestFromMap(List<dynamic> requests,
-      [bool notifyListener = false]) {
+  void addMyRequestFromMap(
+    List<dynamic> requests, {
+    bool notifyListener = true,
+    bool isMyRequest = false,
+  }) {
     _myRequests = [
       ..._myRequests,
-      ...requests.map((e) => Request.fromMap(e)).toList()
+      ...requests.map((e) => Request.fromMap(e, isMyRequest)).toList()
     ];
 
     notifyListener ? notifyListeners() : () {};

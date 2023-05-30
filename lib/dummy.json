@@ -1,62 +1,26 @@
-{
-  "ratingsAsTutor": [
-    {
-      "subject": {
-        "subjectCode": "GNED 10",
-        "description": "PURPOSIVE COMMUNICATION",
-        "subjectRatings": [
-          {
-            "value": 4,
-            "feedback": "tryyyyy",
-            "tuteeId": "6471d3e783477c46d73207f5",
-            "_id": "6471e01833e8579a0b9677ae"
-          },
-          {
-            "value": 2,
-            "feedback": "tryyyyyqweqe",
-            "tuteeId": "6471d3e783477c46d73207f5",
-            "_id": "6471e03a33e8579a0b9677ee"
-          }
-        ],
-        "subtopics": [
-          {
-            "name": "",
-            "description": "",
-            "_id": "6471e01833e8579a0b9677ad"
-          },
-          {
-            "name": "test",
-            "description": "test",
-            "_id": "6471e03a33e8579a0b9677ed"
-          }
-        ],
-        "averageRating": 3
-      },
-      "_id": "6471e01833e8579a0b9677ac"
+[
+  {
+    "_id": "6475eedbb1e22b1a55a1b4bf",
+    "subject": {
+      "subjectCode": "GNED 11",
+      "description": "KONTEKSTWALISADONG KOMUNIKASYON SA FILIPINO",
+      "subtopics": []
     },
-    {
-      "subject": {
-        "subjectCode": "GNED 11",
-        "description": "KONTEKSTWALISADONG KOMUNIKASYON SA FILIPINO",
-        "subtopics": [
-          {
-            "name": "",
-            "description": "",
-            "subjectRatings": [
-              {
-                "value": 3,
-                "feedback": "gods123",
-                "tuteeId": "6470ead1c6bcbaf837123521",
-                "_id": "6472c72d7b44acec61726725"
-              }
-            ],
-            "averageRating": 3,
-            "_id": "6472c72d7b44acec61726724"
-          }
-        ],
-        "averageRating": 3
-      },
-      "_id": "6472c72d7b44acec61726723"
-    }
-  ]
-}
+    "tutorId": {
+      "_id": "646ec0c06e1e3537bd8b451e",
+      "firstName": "Dexter",
+      "lastName": "Alquisola"
+    },
+    "studentId": {
+      "_id": "6475136930125e6287ceaabd",
+      "firstName": "Ethyl",
+      "lastName": "Alcohol"
+    },
+    "name": "sdf",
+    "status": "public",
+    "location": "sdf",
+    "schedule": "2023-05-29T00:00:00.000+16:40.17:40",
+    "reqStatus": "pending",
+    "__v": 0
+  }
+]

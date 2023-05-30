@@ -109,6 +109,11 @@ class UserRatingsBuilder extends StatelessWidget {
                     title: AppText(
                         text:
                             "${rating.subjectCode} ⭐️ ${rating.averageSubjectsRating}"),
+                    subtitle: AppText(
+                      text: rating.description,
+                      textSize: 12,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
                     childrenPadding: const EdgeInsets.all(0),
                     children: [
                       ListView.builder(
