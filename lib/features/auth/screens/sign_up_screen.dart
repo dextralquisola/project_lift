@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:project_lift/widgets/app_formfield.dart';
 
 import '../../../constants/styles.dart';
 import '../../../widgets/app_button.dart';
@@ -6,6 +8,30 @@ import '../../../widgets/app_text.dart';
 import '../../../widgets/app_textfield.dart';
 
 import '../service/auth_service.dart';
+
+extension ExtString on String {
+  bool get isValidEmail {
+    final emailRegExp = RegExp(r"^[A-Za-z0-9._%+-]+@cvsu\.edu\.ph$");
+    return emailRegExp.hasMatch(this);
+  }
+
+  bool get isValidName {
+    final nameRegExp =
+        RegExp(r'^[a-zA-Z0-9 _.+-]*(?:[a-zA-Z][a-zA-Z0-9 _.+-]*){2,}$');
+    return nameRegExp.hasMatch(this);
+  }
+
+  bool get isValidPassword {
+    final passwordRegExp = RegExp(
+        r'^(?!.*?password|.*?PASSWORD|.*?Password)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    return passwordRegExp.hasMatch(this);
+  }
+
+  bool get isValidPhoneNumber {
+    final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
+    return phoneRegExp.hasMatch(this);
+  }
+}
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -21,6 +47,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final passwordController = TextEditingController();
 
   final authService = AuthService();
+
+  var formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -39,81 +67,105 @@ class _SignupScreenState extends State<SignupScreen> {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: size.height * 0.1,
-                ),
-                AppText(
-                  text: "Create an Account",
-                  fontWeight: FontWeight.bold,
-                  textSize: 28,
-                ),
-                AppText(
-                  text: "Sign up to get started with an account",
-                  textColor: Colors.grey,
-                  textSize: 14,
-                ),
-                const SizedBox(height: 50),
-                AppTextField(
-                  controller: firstNameController,
-                  hintText: "First name",
-                ),
-                const SizedBox(height: 10),
-                AppTextField(
-                  controller: lastNameController,
-                  hintText: "Last name",
-                ),
-                const SizedBox(height: 10),
-                AppTextField(
-                  controller: emailController,
-                  hintText: "Email",
-                ),
-                const SizedBox(height: 10),
-                AppTextField(
-                  isPassword: true,
-                  controller: passwordController,
-                  hintText: "Password",
-                ),
-                const SizedBox(height: 20),
-                AppButton(
-                  onPressed: () async {
-                    if (!verifyFields()) {
-                      return;
-                    }
-                    await authService.signup(
-                      firstName: firstNameController.text,
-                      lastName: lastNameController.text,
-                      email: emailController.text,
-                      password: passwordController.text,
-                      context: context,
-                      onSuccess: () {
-                        Navigator.of(context).pop();
-                      },
-                    );
-                  },
-                  text: 'Sign Up',
-                  height: 50,
-                  wrapRow: true,
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    AppText(text: "Already have an account?"),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: AppText(
-                        text: "Login",
-                        textColor: primaryColor,
-                        fontWeight: FontWeight.bold,
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: size.height * 0.1,
+                  ),
+                  AppText(
+                    text: "Create an Account",
+                    fontWeight: FontWeight.bold,
+                    textSize: 28,
+                  ),
+                  AppText(
+                    text: "Sign up to get started with an account",
+                    textColor: Colors.grey,
+                    textSize: 14,
+                  ),
+                  const SizedBox(height: 50),
+                  CustomFormField(
+                    validator: (p0) => p0!.isValidName
+                        ? null
+                        : "First name is required and must be valid",
+                    controller: firstNameController,
+                    hintText: "First name",
+                  ),
+                  const SizedBox(height: 10),
+                  CustomFormField(
+                    validator: (p0) => p0!.isValidName
+                        ? null
+                        : "Last name is required and must be valid",
+                    controller: lastNameController,
+                    hintText: "Last name",
+                  ),
+                  const SizedBox(height: 10),
+                  CustomFormField(
+                    controller: emailController,
+                    hintText: "Email",
+                    validator: (val) {
+                      if (emailController.text.isNotEmpty) {
+                        if (!val!.isValidEmail) return 'Use CvSU email only';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  CustomFormField(
+                    isPassword: true,
+                    controller: passwordController,
+                    hintText: "Password",
+                    validator: (val) {
+                      if (passwordController.text.isNotEmpty) {
+                        if (!val!.isValidPassword &&
+                            val.toLowerCase().contains("password")) {
+                          return 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, one special character and must not contain the word "password"';
+                        }
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  AppButton(
+                    onPressed: () async {
+                      if (!formKey.currentState!.validate()) {
+                        return;
+                      }
+                      await authService.signup(
+                        firstName: firstNameController.text,
+                        lastName: lastNameController.text,
+                        email: emailController.text,
+                        password: passwordController.text,
+                        context: context,
+                        onSuccess: () {
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                    text: 'Sign Up',
+                    height: 50,
+                    wrapRow: true,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      AppText(text: "Already have an account?"),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: AppText(
+                          text: "Login",
+                          textColor: primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
