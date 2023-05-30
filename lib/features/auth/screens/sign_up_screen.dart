@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:project_lift/widgets/app_formfield.dart';
 
 import '../../../constants/styles.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_text.dart';
-import '../../../widgets/app_textfield.dart';
 
 import '../service/auth_service.dart';
 
@@ -119,8 +117,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     hintText: "Password",
                     validator: (val) {
                       if (passwordController.text.isNotEmpty) {
-                        if (!val!.isValidPassword &&
-                            val.toLowerCase().contains("password")) {
+                        if ((!val!.isValidPassword &&
+                                val.toLowerCase().contains("password")) ||
+                            !val.isValidPassword) {
                           return 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, one special character and must not contain the word "password"';
                         }
                       }
