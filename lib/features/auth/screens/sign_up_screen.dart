@@ -138,6 +138,10 @@ class _SignupScreenState extends State<SignupScreen> {
       return false;
     }
 
+    if (passwordController.text.contains("password")) {
+      return false;
+    }
+
     return true;
   }
 }

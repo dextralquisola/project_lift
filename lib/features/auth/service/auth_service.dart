@@ -57,21 +57,6 @@ class AuthService {
         showSnackBar(context, "Please check your credentials");
         return;
       }
-
-      // httpErrorHandler(
-      //   response: res,
-      //   context: context,
-      //   onSuccess: () async {
-      //     await _loginMethod(
-      //       isFromLogin: true,
-      //       context: context,
-      //       res: res,
-      //       fcmToken: fcmToken!,
-      //       deviceToken: deviceToken!,
-      //     );
-      //     onSuccess();
-      //   },
-      // );
     } catch (e) {
       print(e);
     }
@@ -116,7 +101,7 @@ class AuthService {
             "Account created successfully, please verify your email and then login.");
         onSuccess();
       } else {
-        showSnackBar(context, res.body);
+        showSnackBar(context, "Something went wrong, please try again later.");
       }
     } catch (e) {
       print(e);
