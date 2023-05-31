@@ -1,46 +1,26 @@
-{
-  "_id": "6459d087e70eb74250f381c8",
-  "firstName": "Chris P",
-  "lastName": "Chicken",
-  "email": "dexterjay.alquisola@cvsu.edu.ph",
-  "role": "tutor",
-  "isAvailable": true,
-  "isEmailVerified": true,
-  "isBanned": false,
-  "ratingsAsTutor": [
-    {
-      "value": 4,
-      "feedback": "sd",
-      "tuteeId": "645b9fedc7c4db6a2b5b8db6",
-      "_id": "645cc39c36a0c3941dc04ba0"
-    }
-  ],
-  "ratingsAsTutee": [
-    {
-      "value": 5,
-      "feedback": "dsf",
-      "tutorId": "64595750e70eb74250f36763",
-      "_id": "645a5c1ca76fee73928f9bb4"
-    }
-  ],
-  "subjects": [
-    {
-      "subjectCode": "FITT 1",
-      "description": "MOVEMENT ENHANCEMENT",
-      "subtopics": [
-        {
-          "name": "To be a chicken",
-          "description": "crispy",
-          "_id": "6459d128e70eb74250f38343"
-        }
-      ],
-      "_id": "6459d128e70eb74250f38342"
-    }
-  ],
-  "createdAt": "2023-05-09T04:48:07.902Z",
-  "updatedAt": "2023-05-11T12:31:46.943Z",
-  "__v": 36,
-  "socketId": "Vv34fUEmngPYHqwnAAAl",
-  "hasRoom": false,
-  "avatar": "https://firebasestorage.googleapis.com/v0/b/project-lift-f75f9.appspot.com/o/6459d087e70eb74250f381c8?alt=media&token=ae2de610-fa8b-4619-b235-514005fc4f53"
-}
+[
+  {
+    "_id": "6475eedbb1e22b1a55a1b4bf",
+    "subject": {
+      "subjectCode": "GNED 11",
+      "description": "KONTEKSTWALISADONG KOMUNIKASYON SA FILIPINO",
+      "subtopics": []
+    },
+    "tutorId": {
+      "_id": "646ec0c06e1e3537bd8b451e",
+      "firstName": "Dexter",
+      "lastName": "Alquisola"
+    },
+    "studentId": {
+      "_id": "6475136930125e6287ceaabd",
+      "firstName": "Ethyl",
+      "lastName": "Alcohol"
+    },
+    "name": "sdf",
+    "status": "public",
+    "location": "sdf",
+    "schedule": "2023-05-29T00:00:00.000+16:40.17:40",
+    "reqStatus": "pending",
+    "__v": 0
+  }
+]

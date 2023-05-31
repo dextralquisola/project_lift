@@ -392,6 +392,7 @@ class StudyPoolService {
     required BuildContext context,
     required int rating,
     required String feedback,
+    required Subject subject,
   }) async {
     try {
       final studyRoomService = StudyPoolService();
@@ -427,6 +428,7 @@ class StudyPoolService {
       } else {
         path = '/api/rate-tutor';
         body = {
+          "subject": subject.toMap(),
           "rating": rating,
           "feedback": feedback,
           "tutorId": currentSudyRoom.studyRoom.roomOwner,
@@ -507,6 +509,9 @@ class StudyPoolService {
         userAuthHeader: userProvider.user,
       );
 
+      print("getTuteeRequests");
+      print(res.body);
+
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
         userRequestsProvider.addTuteeRequestsFromMap(decoded);
@@ -515,6 +520,7 @@ class StudyPoolService {
         print(res.body);
       }
     } catch (e) {
+      print("getTuteeRequest");
       print(e);
     }
   }
@@ -530,14 +536,21 @@ class StudyPoolService {
         userAuthHeader: userProvider.user,
       );
 
+      print("getMyRequests");
+      print(res.body);
+
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
-        userRequestsProvider.addMyRequestFromMap(decoded);
+        userRequestsProvider.addMyRequestFromMap(
+          decoded,
+          isMyRequest: true,
+        );
       } else {
         print("ERROR: ${res.statusCode}");
         print(res.body);
       }
     } catch (e) {
+      print("getMyRequests");
       print(e);
     }
   }

@@ -241,6 +241,7 @@ class _RateScreenState extends State<RateScreen> {
                           context: context,
                           rating: _rating,
                           feedback: feedback.text,
+                          subject: studyRoom.subject,
                         );
 
                         setState(() {

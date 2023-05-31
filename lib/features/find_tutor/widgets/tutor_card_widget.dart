@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:project_lift/features/find_tutor/utils/find_tutor_utitls.dart';
 
-import '../../../constants/styles.dart';
 import '../../../utils/date_time_utils.dart';
-import '../../study_pool/screens/create_room_screen.dart';
 import '../../../widgets/app_button.dart';
+import '../../../constants/styles.dart';
 import '../../../widgets/app_text.dart';
 import '../../../models/user.dart';
+
+import '../../study_pool/screens/create_room_screen.dart';
+import '../screens/view_tutor_screen.dart';
 
 class TutorCard extends StatelessWidget {
   final User tutor;
@@ -25,27 +27,21 @@ class TutorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isAvailable = false;
-
-    final daysAvail = getFilledDays(tutor.dateTimeAvailability.split('+')[0]);
-    final fromTime = getFromTime(tutor.dateTimeAvailability.split('+')[1]);
-    final toTime = getToTime(tutor.dateTimeAvailability.split('+')[1]);
-
-    var now = TimeOfDay.now();
-    if (daysAvail.contains(DateFormat('EEEE').format(DateTime.now()))) {
-      if ((now.hour > fromTime.hour ||
-              (now.hour == fromTime.hour && now.minute >= fromTime.minute)) &&
-          (now.hour < toTime.hour ||
-              (now.hour == toTime.hour && now.minute < toTime.minute))) {
-        isAvailable = true;
-      }
-    }
-
+    bool isAvailable = isAvailableAtCurrentDate(tutor);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GestureDetector(
         onTap: () {
-          _showDialog(context: context, tutor: tutor, isAvailable: isAvailable);
+          //_showDialog(context: context, tutor: tutor, isAvailable: isAvailable);
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) {
+              return ViewTutorScreen(
+                tutor: tutor,
+                isEnabled: isEnabled,
+                isPendingRequest: isPendingRequest,
+              );
+            }),
+          );
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -202,7 +198,8 @@ class TutorCard extends StatelessWidget {
   }) {
     var rating = tutor.parsedRating(true);
     var ratings = tutor.ratingAsTutor;
-    ratings.sort((a, b) => b.rating.compareTo(a.rating));
+    // ratings
+    //     .sort((a, b) => b.getSubjectRating().compareTo(a.getSubjectRating()));
 
     showDialog(
       context: context,
@@ -246,16 +243,16 @@ class TutorCard extends StatelessWidget {
                 _textBuilder(text: "Rating: $rating ⭐️ (${ratings.length})"),
                 const SizedBox(height: 10),
                 _textBuilder(text: "Comments: "),
-                ...ratings
-                    .map(
-                      (e) => _textBuilder(
-                        text:
-                            '${e.firstName} ${e.lastName}: ${e.feedback}  (${e.rating} ⭐️)',
-                        textSize: 12,
-                      ),
-                    )
-                    .toList()
-                    .take(3),
+                // ...ratings
+                //     .map(
+                //       (e) => _textBuilder(
+                //         text:
+                //             '${e.firstName} ${e.lastName}: ${e.feedback}  (${e.rating} ⭐️)',
+                //         textSize: 12,
+                //       ),
+                //     )
+                //     .toList()
+                //     .take(3),
                 const SizedBox(height: 20),
                 AppButton(
                   height: 50,

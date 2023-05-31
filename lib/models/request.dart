@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:project_lift/models/rating.dart';
-import 'package:project_lift/models/subject.dart';
+import './rating.dart';
+import './subject.dart';
 
 class Request {
   final String requestId;
@@ -14,7 +14,7 @@ class Request {
   final String status;
   final String location;
   final String schedule;
-  final List<Rating> ratingsAsTutee;
+  final List<TuteeRating> ratingsAsTutee;
 
   Request({
     required this.requestId,
@@ -46,9 +46,8 @@ class Request {
     return result;
   }
 
-  factory Request.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory Request.fromMap(Map<String, dynamic> map,
+      [bool isMyRequest = false]) {
     return Request(
       requestId: map['_id'] ?? '',
       subject: Subject.fromMap(map['subject']),
@@ -60,15 +59,17 @@ class Request {
       status: map['status'] ?? '',
       location: map['location'] ?? '',
       schedule: map['schedule'] ?? '',
-      ratingsAsTutee: List<Rating>.from(
-        map['studentId']['ratingsAsTutee']?.map(
-          (x) => Rating.fromMap(x, false),
-        ),
-      ),
+      ratingsAsTutee: isMyRequest
+          ? []
+          : List<TuteeRating>.from(
+              map['studentId']['ratingsAsTutee']?.map(
+                (x) => TuteeRating.fromMap(x, isUserMapped: false),
+              ),
+            ),
     );
   }
 
-  List<Rating> get getRatingsAsTutee => ratingsAsTutee;
+  List<TuteeRating> get getRatingsAsTutee => ratingsAsTutee;
 
   double getRating() {
     double totalRating = 0;

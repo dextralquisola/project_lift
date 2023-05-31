@@ -426,7 +426,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                                     }
 
                                     setState(() => _isLoading = false);
-                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop(true);
                                   },
                                   text: "Create Study Room",
                                 ),
