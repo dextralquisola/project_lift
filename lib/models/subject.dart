@@ -30,7 +30,7 @@ class Subject {
       result.add(subTopic.toMap());
     }
 
-    if(subTopics.isEmpty) {
+    if (subTopics.isEmpty) {
       result.add(SubTopic.empty().toMap());
     }
 
@@ -117,4 +117,23 @@ class SubTopic {
 
   factory SubTopic.fromJson(String source) =>
       SubTopic.fromMap(json.decode(source));
+}
+
+class TopSearchSubject extends Subject {
+  final int searchCount;
+  TopSearchSubject({
+    required super.subjectCode,
+    required super.description,
+    required this.searchCount,
+    super.subTopics = const [],
+  });
+
+  factory TopSearchSubject.fromMap(Map<String, dynamic> map) {
+    return TopSearchSubject(
+      subjectCode: map['subjectCode'] ?? '',
+      description: map['description'] ?? '',
+      searchCount: map['searchCount']?.toInt() ?? 0,
+      subTopics: [],
+    );
+  }
 }

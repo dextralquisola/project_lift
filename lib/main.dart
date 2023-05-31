@@ -6,6 +6,7 @@ import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
+import 'package:project_lift/providers/top_subjects_provider.dart';
 import 'package:project_lift/providers/tutors_provider.dart';
 import 'package:project_lift/providers/user_provider.dart';
 import 'package:project_lift/providers/user_requests_provider.dart';
@@ -33,6 +34,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => StudyRoomProvider()),
         ChangeNotifierProvider(create: (_) => CurrentStudyRoomProvider()),
         ChangeNotifierProvider(create: (_) => UserRequestsProvider()),
+        ChangeNotifierProvider(create: (_) => TopSubjectProvider()),
       ],
       child: const MyApp(),
     ),
@@ -55,12 +57,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     super.dispose();
-    print("Disposing MyApp!");
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Building MyApp!");
     return MaterialApp(
         title: 'LFT',
         theme: ThemeData(
@@ -79,6 +79,8 @@ class _MyAppState extends State<MyApp> {
                       studyRoomService.getTuteeRequests(context),
                       studyRoomService.getMyRequests(context),
                       profileService.getUserApplication(context),
+                      profileService.getMostSearchedTutorAndSubject(
+                          context: context)
                     ]),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

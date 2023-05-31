@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../models/subject.dart';
 import '../../../models/tutor_application.dart';
 
+import '../../../providers/top_subjects_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
 
@@ -314,6 +315,32 @@ class ProfileService {
         print(res.body);
       }
     } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getMostSearchedTutorAndSubject({
+    required BuildContext context,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final topSubjectsProvider =
+          Provider.of<TopSubjectProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/analytics/most-searched-tutor-subject',
+        method: 'GET',
+        userAuthHeader: userProvider.user,
+      );
+
+      if (res.statusCode == 200) {
+        var decoded = json.decode(res.body);
+        topSubjectsProvider.setTopSubjectsFromMap(decoded['topSubject']);
+      } else {
+        print("Failed: ${res.statusCode}");
+        print(res.body);
+      }
+    } catch (e) {
+      print("error in getMostSearchedTutorAndSubject");
       print(e);
     }
   }

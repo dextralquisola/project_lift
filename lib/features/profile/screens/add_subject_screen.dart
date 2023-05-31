@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/styles.dart';
+import '../../../providers/top_subjects_provider.dart';
 import '../service/profile_service.dart';
 import '../../../models/subject.dart';
 import '../../../utils/utils.dart';
@@ -57,27 +58,41 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final topSearchSubjects =
+        Provider.of<TopSubjectProvider>(context).getTopThreeSubjects();
 
     var filteredSubjects = filterSubjects(userProvider);
     dropdownItems = widget.subject != null
         ? [
             DropdownMenuItem(
               value: widget.subject!.subjectCode,
-              child: AppText(
-                  text:
-                      '${widget.subject!.subjectCode}: ${widget.subject!.description}'),
-            )
-          ]
-        : filteredSubjects
-            .map(
-              (e) => DropdownMenuItem(
-                value: e['subjectCode'],
-                child: e['subjectCode'] != ''
-                    ? AppText(text: '${e['subjectCode']}: ${e['description']}')
-                    : AppText(text: 'List of subjects'),
+              child: ListTile(
+                title: AppText(text: widget.subject!.subjectCode),
+                subtitle: AppText(
+                  text: '${widget.subject!.description} ',
+                  textSize: 12,
+                ),
               ),
             )
-            .toList();
+          ]
+        : filteredSubjects.map((e) {
+            var mostSearchString =
+                mostSearchStringBuilder(e, topSearchSubjects);
+
+            return DropdownMenuItem(
+              value: e['subjectCode'],
+              child: e['subjectCode'] != ''
+                  ? ListTile(
+                      title: AppText(
+                          text: '${e["subjectCode"]} $mostSearchString'),
+                      subtitle: AppText(
+                        text: '${e["description"]} ',
+                        textSize: 12,
+                      ),
+                    )
+                  : AppText(text: 'List of subjects'),
+            );
+          }).toList();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -114,6 +129,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                             onChanged:
                                 widget.subject != null ? null : _onChange,
                           ),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -295,6 +311,21 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
         ),
       ),
     );
+  }
+
+  String mostSearchStringBuilder(
+    Map<String, dynamic> subject,
+    List<TopSearchSubject> topSearchSubjects,
+  ) {
+    if (topSearchSubjects.isNotEmpty) {
+      var index = topSearchSubjects.indexWhere(
+        (element) => element.subjectCode == subject['subjectCode'],
+      );
+      if (index == -1) return '';
+      return List<String>.generate((index - 3).abs(), (index) => '🔥').join('');
+    }
+
+    return '';
   }
 
   List<Map<String, String>> filterSubjects(UserProvider userProvider) {
