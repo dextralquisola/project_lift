@@ -118,6 +118,7 @@ class UserRatingsBuilder extends StatelessWidget {
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
+                        padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: rating.subTopicRatings.length,
                         itemBuilder: (context, index) {
@@ -129,6 +130,7 @@ class UserRatingsBuilder extends StatelessWidget {
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.zero,
                                 itemCount: subTopicRating.ratings.length,
                                 itemBuilder: (context, index) {
                                   return ListTile(
