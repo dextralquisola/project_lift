@@ -75,7 +75,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
               borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
               borderRadius: BorderRadius.circular(8),
             ),
-            errorMaxLines: 3,
+            errorMaxLines: 4,
             hintText: widget.hintText,
             hintStyle: const TextStyle(fontSize: 17),
             suffixIcon: widget.isPassword

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/app_formfield.dart';
 
 import '../../../constants/styles.dart';
@@ -38,6 +39,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  var _isAgreed = false;
 
   final authService = AuthService();
 
@@ -121,12 +124,52 @@ class _SignupScreenState extends State<SignupScreen> {
                       return null;
                     },
                   ),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _isAgreed,
+                        activeColor: primaryColor,
+                        onChanged: (value) {
+                          setState(() {
+                            _isAgreed = value!;
+                          });
+                        },
+                      ),
+                      AppText(
+                        text: "I agree to the ",
+                        textColor: Colors.black,
+                        textSize: 14,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          showTermsAndCondition(context);
+                        },
+                        child: AppText(
+                          text: "Terms and conditions",
+                          textColor: primaryColor,
+                          textSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 20),
                   AppButton(
                     onPressed: () async {
+                      if (!verifyFields()) {
+                        showSnackBar(context, "Please fill up all fields");
+                        return;
+                      }
+                      if (!_isAgreed) {
+                        showSnackBar(context,
+                            "Please agree to the terms and conditions");
+                        return;
+                      }
+
                       if (!formKey.currentState!.validate()) {
                         return;
                       }
+
                       await authService.signup(
                         firstName: firstNameController.text,
                         lastName: lastNameController.text,
@@ -184,10 +227,30 @@ class _SignupScreenState extends State<SignupScreen> {
       return false;
     }
 
-    if (passwordController.text.contains("password")) {
-      return false;
-    }
-
     return true;
+  }
+
+  void showTermsAndCondition(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: AppText(text: 'Terms and Conditions'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppText(
+                  textAlign: TextAlign.justify,
+                  text:
+                      "I grant my consent for using my personal university information and grades by the LFT Team for scholarly purposes. I understand that this data will be used for educational research and academic analysis while ensuring strict confidentiality and compliance with data protection regulations by Republic Act No. 10173, otherwise known as the Data Privacy Act. This consent is valid until revoked in writing. May God guide us in our pursuit of knowledge."),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
