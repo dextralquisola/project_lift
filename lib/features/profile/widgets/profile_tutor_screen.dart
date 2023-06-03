@@ -58,7 +58,11 @@ class TutorScreen extends StatelessWidget {
                 ...user.subjects.map((e) {
                   return ListTile(
                       title: AppText(text: e.subjectCode),
-                      subtitle: AppText(text: e.description, textOverflow: TextOverflow.ellipsis,),
+                      subtitle: AppText(
+                        text: e.description,
+                        textOverflow: TextOverflow.ellipsis,
+                        textSize: 12,
+                      ),
                       trailing: IconButton(
                         onPressed: () async {
                           await Navigator.of(context).push(
