@@ -8,9 +8,17 @@ import '../models/user.dart';
 class UserProvider with ChangeNotifier {
   User _user = User.emptyUser();
 
+  bool _isTutorialDoNotShow = false;
+
   User get user => _user;
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '' && user.isEmailVerified;
+  bool get isTutorialDoNotShow => _isTutorialDoNotShow;
+
+  void setIsTutorialDoNotShow(bool value) {
+    _isTutorialDoNotShow = value;
+    notifyListeners();
+  }
 
   void updateSubject(Subject subject, [bool isNotify = true]) {
     var subjects = _user.subjects;
@@ -31,9 +39,10 @@ class UserProvider with ChangeNotifier {
     isNotify ? notifyListeners() : () {};
   }
 
-  void deleteSubject(Subject subject, [bool isNotify = true]){
+  void deleteSubject(Subject subject, [bool isNotify = true]) {
     var subjects = _user.subjects;
-    subjects.removeWhere((element) => element.subjectCode == subject.subjectCode);
+    subjects
+        .removeWhere((element) => element.subjectCode == subject.subjectCode);
     _user = _user.copyFrom(subjects: subjects);
     isNotify ? notifyListeners() : () {};
   }
@@ -58,6 +67,11 @@ class UserProvider with ChangeNotifier {
     );
 
     notifyListeners();
+  }
+
+  Future<void> getUserState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _isTutorialDoNotShow = prefs.getBool('isTutorialDoNotShow') ?? false;
   }
 
   Future<void> logout() async {

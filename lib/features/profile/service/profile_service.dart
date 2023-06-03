@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/subject.dart';
@@ -341,6 +342,43 @@ class ProfileService {
       }
     } catch (e) {
       print("error in getMostSearchedTutorAndSubject");
+      print(e);
+    }
+  }
+
+  Future<void> addSubjectV2({
+    required BuildContext context,
+    required XFile image,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final storageMethods = StorageMethods();
+
+      var gradeUrl = await storageMethods.uploadImage(
+          filePath: image.path,
+          fileName:
+              "${userProvider.user.userId}.grades.${DateTime.now().toIso8601String()}");
+
+      print("gradeUrl: $gradeUrl");
+
+      var res = await service.requestApi(
+        path: '/api/tutor/add-subject',
+        method: 'POST',
+        userAuthHeader: userProvider.user,
+        body: {
+          "image": gradeUrl,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        showSnackBar(context, "Subject Added");
+      } else {
+        showSnackBar(context, res.body);
+        print("Failed: ${res.statusCode}");
+        print(res.body);
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString());
       print(e);
     }
   }

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/profile/screens/tutorial_screen.dart';
+import 'package:project_lift/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,6 +36,7 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     final userRequestProvider = Provider.of<UserRequestsProvider>(context);
     final tutorApplication = userRequestProvider.tutorApplication;
     final hasTutorApplication = tutorApplication.id.isNotEmpty;
@@ -83,15 +86,19 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
               children: [
                 Column(
                   children: [
-                    if (hasTutorApplication)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: AppText(
-                          text: "Status: ${tutorApplication.status}",
-                          textSize: 20,
-                          textColor: Colors.amber,
-                        ),
-                      ),
+                    // if (hasTutorApplication)
+                    //   Align(
+                    //     alignment: Alignment.centerLeft,
+                    //     child: AppButton(
+                    //       wrapRow: true,
+                    //       height: 50,
+                    //       bgColor: Colors.amberAccent,
+                    //       textColor: Colors.black,
+                    //       onPressed: () {},
+                    //       text: "Status: ${tutorApplication.status}",
+                    //       textSize: 20,
+                    //     ),
+                    //   ),
                     const SizedBox(height: 10),
                     AppTextField(
                       hintText: 'e.g I am a 2nd year college student in CvSU',
@@ -121,6 +128,14 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
                             const SizedBox(width: 10),
                             TextButton(
                               onPressed: () async {
+                                if (!userProvider.isTutorialDoNotShow) {
+                                  await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TutorialScreen(),
+                                    ),
+                                  );
+                                }
                                 var pickedImage = await imagePicker.pickImage(
                                     source: ImageSource.gallery);
                                 setState(() {
@@ -133,6 +148,20 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
                         ),
                       ),
                     const SizedBox(height: 10),
+                    if (selectedImage == null && !hasTutorApplication) ...[
+                      SizedBox(
+                        height: 150,
+                        child: Card(
+                          child: Center(
+                            child: AppText(
+                              text: "No image selected",
+                              textColor: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
                     if (selectedImage != null || hasTutorApplication)
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,

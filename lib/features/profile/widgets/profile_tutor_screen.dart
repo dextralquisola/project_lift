@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/profile/screens/add_subject_screen_v2.dart';
 
 import '../../../constants/styles.dart';
 import '../../../models/user.dart';
 import '../../../widgets/app_text.dart';
 import '../screens/add_subject_screen.dart';
 
-class TutorScreen extends StatelessWidget {
+class TutorScreen extends StatefulWidget {
   final User user;
   final AnimationController animationController;
   final VoidCallback updateState;
@@ -16,6 +17,11 @@ class TutorScreen extends StatelessWidget {
     required this.user,
   });
 
+  @override
+  State<TutorScreen> createState() => _TutorScreenState();
+}
+
+class _TutorScreenState extends State<TutorScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,25 +43,25 @@ class TutorScreen extends StatelessWidget {
                     onPressed: () async {
                       await Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const AddSubjectScreen(),
+                          builder: (context) => const AddSubjectScreenV2(),
                         ),
                       );
-                      updateState();
+                      widget.updateState();
                     },
                     icon: Icon(Icons.add, color: primaryColor),
                   ),
                   AnimatedIcon(
                     icon: AnimatedIcons.menu_close,
-                    progress: animationController,
+                    progress: widget.animationController,
                   ),
                 ],
               ),
               children: [
-                if (user.subjects.isEmpty)
+                if (widget.user.subjects.isEmpty)
                   ListTile(
                     title: AppText(text: "No subjects yet"),
                   ),
-                ...user.subjects.map((e) {
+                ...widget.user.subjects.map((e) {
                   return ListTile(
                       title: AppText(text: e.subjectCode),
                       subtitle: AppText(
@@ -72,7 +78,7 @@ class TutorScreen extends StatelessWidget {
                               ),
                             ),
                           );
-                          updateState();
+                          widget.updateState();
                         },
                         icon: const Icon(Icons.edit, color: Colors.green),
                       ));
@@ -80,9 +86,9 @@ class TutorScreen extends StatelessWidget {
               ],
               onExpansionChanged: (value) {
                 if (value) {
-                  animationController.forward();
+                  widget.animationController.forward();
                 } else {
-                  animationController.reverse();
+                  widget.animationController.reverse();
                 }
               },
             ),

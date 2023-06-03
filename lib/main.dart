@@ -80,7 +80,8 @@ class _MyAppState extends State<MyApp> {
                       studyRoomService.getMyRequests(context),
                       profileService.getUserApplication(context),
                       profileService.getMostSearchedTutorAndSubject(
-                          context: context)
+                          context: context),
+                      userProvider.getUserState(),
                     ]),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
