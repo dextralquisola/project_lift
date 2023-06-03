@@ -132,28 +132,6 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                   onStepCancel: cancel,
                   steps: [
                     Step(
-                      title: AppText(text: 'Set study room name.'),
-                      content: Column(
-                        children: [
-                          AppTextField(
-                            controller: studyNameController,
-                            labelText: "Study Room Name",
-                          ),
-                          const SizedBox(height: 10),
-                          AppTextField(
-                            controller: locationController,
-                            labelText: "Study location",
-                            hintText: 'e.g. Library, 3rd floor',
-                          ),
-                          const SizedBox(height: 10)
-                        ],
-                      ),
-                      isActive: _currentStep >= 0,
-                      state: _currentStep == 0
-                          ? StepState.complete
-                          : StepState.disabled,
-                    ),
-                    Step(
                       title: AppText(text: "Select subject and sub-topics."),
                       content: Column(
                         children: [
@@ -179,6 +157,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                                           onChanged: (s) =>
                                               _onChangeSubject(s as Subject),
                                         ),
+                                        const SizedBox(height: 10),
                                       ],
                                     ),
                                   ),
@@ -228,6 +207,28 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                               ),
                             ),
                           ),
+                        ],
+                      ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep == 0
+                          ? StepState.complete
+                          : StepState.disabled,
+                    ),
+                    Step(
+                      title: AppText(text: 'Set study room name.'),
+                      content: Column(
+                        children: [
+                          AppTextField(
+                            controller: studyNameController,
+                            labelText: "Study Room Name",
+                          ),
+                          const SizedBox(height: 10),
+                          AppTextField(
+                            controller: locationController,
+                            labelText: "Study location",
+                            hintText: 'e.g. Library, 3rd floor',
+                          ),
+                          const SizedBox(height: 10)
                         ],
                       ),
                       isActive: _currentStep >= 0,
@@ -456,7 +457,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
 
   bool validateStep() {
     switch (_currentStep) {
-      case 0:
+      case 1:
         return studyNameController.text.isNotEmpty &&
             locationController.text.isNotEmpty;
       case 2:
@@ -543,8 +544,19 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
         .map(
           (subject) => DropdownMenuItem(
             value: subject,
-            child:
-                AppText(text: '${subject.subjectCode}: ${subject.description}'),
+            child: ListTile(
+              title: AppText(
+                text: subject.subjectCode,
+              ),
+              subtitle: SizedBox(
+                child: AppText(
+                  text: subject.description,
+                  textColor: Colors.grey,
+                  textSize: 12,
+                  textOverflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
           ),
         )
         .toList();
