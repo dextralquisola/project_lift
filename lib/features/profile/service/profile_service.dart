@@ -356,8 +356,7 @@ class ProfileService {
 
       var gradeUrl = await storageMethods.uploadImage(
           filePath: image.path,
-          fileName:
-              "${userProvider.user.userId}.grades.${DateTime.now().toIso8601String()}");
+          fileName: "${userProvider.user.userId}.grades}");
 
       print("gradeUrl: $gradeUrl");
 
