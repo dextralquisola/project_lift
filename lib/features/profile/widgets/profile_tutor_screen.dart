@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/features/profile/screens/add_subject_screen_v2.dart';
+import 'package:project_lift/features/profile/service/profile_service.dart';
 
 import '../../../constants/styles.dart';
 import '../../../models/user.dart';
@@ -22,6 +23,7 @@ class TutorScreen extends StatefulWidget {
 }
 
 class _TutorScreenState extends State<TutorScreen> {
+  final profileService = ProfileService();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -46,7 +48,10 @@ class _TutorScreenState extends State<TutorScreen> {
                           builder: (context) => const AddSubjectScreenV2(),
                         ),
                       );
-                      widget.updateState();
+                      if (context.mounted) {
+                        await profileService.fetchUser(context);
+                        widget.updateState();
+                      }
                     },
                     icon: Icon(Icons.add, color: primaryColor),
                   ),
