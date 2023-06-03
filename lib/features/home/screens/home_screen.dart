@@ -75,19 +75,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => SurveyScreen(),
-              ),
-            );
-          },
-          backgroundColor: Colors.red,
-          tooltip: "Gifts",
-          child: const Icon(Icons.card_giftcard, color: Colors.white),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     Navigator.of(context).push(
+        //       MaterialPageRoute(
+        //         builder: (context) => SurveyScreen(),
+        //       ),
+        //     );
+        //   },
+        //   backgroundColor: Colors.red,
+        //   tooltip: "Gifts",
+        //   child: const Icon(Icons.card_giftcard, color: Colors.white),
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       ),
     );
   }
