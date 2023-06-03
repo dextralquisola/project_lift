@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../auth/service/auth_service.dart';
 
 import '../../../widgets/profile_widgets/user_ratings_builder.dart';
-import '../../../widgets/app_text.dart';
 import '../../../widgets/profile_widgets/profile_top_builder.dart';
 import '../widgets/profile_tutee_screen.dart';
 import '../widgets/profile_tutor_screen.dart';
