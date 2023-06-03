@@ -59,7 +59,29 @@ class _AddSubjectScreenV2State extends State<AddSubjectScreenV2> {
             children: [
               AppText(text: "Add subject by uploading grades", textSize: 20),
               const SizedBox(height: 5),
-              AppText(text: "Select grade (from CvSU student portal)"),
+              Row(
+                children: [
+                  AppText(text: "Select grade (from CvSU student portal)"),
+                  PopupMenuButton(
+                    icon: const Icon(Icons.info_outline, color: Colors.amber),
+                    itemBuilder: (context) {
+                      return [
+                        PopupMenuItem(
+                          value: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AppText(
+                              text:
+                                  "The subject within your grades will be added automatically if the grades is atleast 1.75",
+                              textColor: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ];
+                    },
+                  ),
+                ],
+              ),
               TextButton(
                 onPressed: () async {
                   XFile? pickedImage =
