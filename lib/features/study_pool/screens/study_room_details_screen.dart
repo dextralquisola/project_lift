@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:project_lift/widgets/report_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/study_room.dart';
@@ -15,7 +16,8 @@ class StudyRoomDetailsScreen extends StatelessWidget {
     final currentStudyRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context);
 
-    if (currentStudyRoomProvider.isEmpty || currentStudyRoomProvider.studyRoom.sessionEnded) {
+    if (currentStudyRoomProvider.isEmpty ||
+        currentStudyRoomProvider.studyRoom.sessionEnded) {
       Navigator.of(context).pop();
     }
 
@@ -124,23 +126,52 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                             itemCount: currentStudyRoomProvider
                                 .studyRoom.participants.length,
                             itemBuilder: (context, index) {
-                              return ListTile(
-                                leading: AppText(
-                                  text: '${index + 1}.',
-                                  textColor: Colors.black54,
-                                  textSize: 20,
+                              return GestureDetector(
+                                onLongPress:
+                                    participants[index]['status'] == 'owner'
+                                        ? () {}
+                                        : () {
+                                            showReportDialog(
+                                                context: context,
+                                                userParticipant:
+                                                    participants[index]);
+                                          },
+                                child: ListTile(
+                                  leading: AppText(
+                                    text: '${index + 1}.',
+                                    textColor: Colors.black54,
+                                    textSize: 20,
+                                  ),
+                                  title: AppText(
+                                    text:
+                                        '${participants[index]["firstName"]} ${participants[index]["lastName"]}',
+                                  ),
+                                  trailing: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      participants[index]['status'] == 'owner'
+                                          ? const Icon(Icons.star,
+                                              color: Colors.yellow)
+                                          : participants[index]['status'] ==
+                                                  'pending'
+                                              ? AppText(text: 'Pending')
+                                              : AppText(text: 'Participant'),
+                                      const SizedBox(width: 10),
+                                      participants[index]['status'] == 'owner'
+                                          ? const SizedBox()
+                                          : IconButton(
+                                              onPressed: () {
+                                                showReportDialog(
+                                                    context: context,
+                                                    userParticipant:
+                                                        participants[index]);
+                                              },
+                                              icon: const Icon(Icons.more_vert),
+                                            )
+                                    ],
+                                  ),
                                 ),
-                                title: AppText(
-                                  text:
-                                      '${participants[index]["firstName"]} ${participants[index]["lastName"]}',
-                                ),
-                                trailing: participants[index]['status'] ==
-                                        'owner'
-                                    ? const Icon(Icons.star,
-                                        color: Colors.yellow)
-                                    : participants[index]['status'] == 'pending'
-                                        ? AppText(text: 'Pending')
-                                        : AppText(text: 'Participant'),
                               );
                             },
                           ),

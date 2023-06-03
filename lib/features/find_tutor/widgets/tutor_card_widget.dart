@@ -4,7 +4,9 @@ import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:project_lift/features/find_tutor/utils/find_tutor_utitls.dart';
+import 'package:project_lift/widgets/report_widget.dart';
 
+import '../../../services/global_services.dart';
 import '../../../utils/date_time_utils.dart';
 import '../../../widgets/app_button.dart';
 import '../../../constants/styles.dart';
@@ -18,7 +20,10 @@ class TutorCard extends StatelessWidget {
   final User tutor;
   final bool isPendingRequest;
   final bool isEnabled;
-  const TutorCard({
+
+  final globalService = GlobalService();
+
+  TutorCard({
     super.key,
     required this.tutor,
     required this.isPendingRequest,
@@ -31,6 +36,13 @@ class TutorCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GestureDetector(
+        onLongPress: () {
+          //report tutor
+          showReportDialog(
+            context: context,
+            user: tutor,
+          );
+        },
         onTap: () {
           //_showDialog(context: context, tutor: tutor, isAvailable: isAvailable);
           Navigator.of(context).push(

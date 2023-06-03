@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/widgets/report_user_screen.dart';
 
-import 'package:project_lift/features/find_tutor/utils/find_tutor_utitls.dart';
-import 'package:project_lift/utils/date_time_utils.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_text.dart';
-import 'package:project_lift/widgets/profile_widgets/profile_name_builder.dart';
-import 'package:project_lift/widgets/profile_widgets/profile_top_builder.dart';
-import 'package:project_lift/widgets/profile_widgets/user_ratings_builder.dart';
+import '../utils/find_tutor_utitls.dart';
+import '../../../utils/date_time_utils.dart';
+import '../../../widgets/app_button.dart';
+import '../../../widgets/app_text.dart';
+import '../../../widgets/profile_widgets/profile_name_builder.dart';
+import '../../../widgets/profile_widgets/profile_top_builder.dart';
+import '../../../widgets/profile_widgets/user_ratings_builder.dart';
 
 import '../../../models/user.dart';
 import '../../study_pool/screens/create_room_screen.dart';
@@ -43,6 +44,22 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
         ),
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0.0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              //report tutor
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return ReportUserScreen(user: user);
+                }),
+              );
+            },
+            icon: const Icon(
+              Icons.warning_amber_outlined,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -78,11 +95,10 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
                         ),
                       ),
                     ) as bool?;
-                    
+
                     if (result != null && result) {
                       Navigator.of(context).pop();
                     }
-                    
                   },
                   text: user.hasRoom
                       ? "Currently in session"
