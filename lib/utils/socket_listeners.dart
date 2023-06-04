@@ -167,7 +167,7 @@ class SocketListeners {
     final userRequestsProvider =
         Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("new-request", (data) {
-      userRequestsProvider.addTuteeRequestsFromMap([data], true);
+      userRequestsProvider.addSingleTuteeRequestFromMap(data, true);
     });
   }
 
