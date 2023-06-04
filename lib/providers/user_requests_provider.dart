@@ -63,7 +63,7 @@ class UserRequestsProvider with ChangeNotifier {
   void addSingleTuteeRequestFromMap(dynamic request,
       [bool notifyListener = false]) {
     _tuteeRequests = [..._tuteeRequests, Request.fromMap(request)];
-    notifyListeners();
+    notifyListener ? notifyListeners() : () {};
   }
 
   void clearRequests() {
