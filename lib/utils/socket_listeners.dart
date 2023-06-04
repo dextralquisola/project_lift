@@ -4,6 +4,7 @@ import 'package:project_lift/utils/socket_client.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/current_room_provider.dart';
+import '../providers/tutors_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/user_requests_provider.dart';
 import '../widgets/app_text.dart';
@@ -233,9 +234,31 @@ class SocketListeners {
   }
 
   void _onReportResult(BuildContext context) {
-    _socket.on("report-result", (data) {
-      print("report result");
-      print(data);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    final studyPoolProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
+    final currentStudyRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
+    _socket.on("report-result", (data) async {
+      if (data['status'] == 'resolved') {
+        if (data['reportedUser'] == userProvider.user.userId) {
+          tutorsProvider.clearTutors();
+          userRequestsProvider.clearRequests();
+          studyPoolProvider.clearStudyRooms();
+          currentStudyRoomProvider.clearRoom();
+          await userProvider.logout();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: AppText(text: 'Report resolved!'),
+            ),
+          );
+        }
+      }
     });
   }
 }
