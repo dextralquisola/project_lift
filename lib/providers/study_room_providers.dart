@@ -30,7 +30,7 @@ class StudyRoomProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removePendingRoomById(String id){
+  void removePendingRoomById(String id) {
     _pendingRooms.removeWhere((element) => element == id);
     notifyListeners();
   }
@@ -72,6 +72,7 @@ class StudyRoomProvider with ChangeNotifier {
     _currentPage = 1;
     _totalPages = 1;
     _studyRooms = [];
+    _pendingRooms = [];
     isNotify ? notifyListeners() : () {};
   }
 

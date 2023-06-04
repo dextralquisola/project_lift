@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project_lift/constants/styles.dart';
 
 import '../service/study_pool_service.dart';
 import '../../../models/study_room.dart';
@@ -73,7 +74,12 @@ class StudyPoolCard extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            title: AppText(text: studyRoom.roomName),
+            title: AppText(
+              text: studyRoom.roomName,
+              textSize: 20,
+              fontWeight: FontWeight.w600,
+              textColor: primaryColor,
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,14 +92,6 @@ class StudyPoolCard extends StatelessWidget {
                         "Time: ${fromTime.format(context)} - ${toTime.format(context)}"),
                 AppText(text: "Tutor: ${studyRoom.roomOwner}"),
                 AppText(text: "Tutees: $participantCount"),
-                const SizedBox(height: 10),
-                AppText(
-                  text: "Description:",
-                  fontWeight: FontWeight.bold,
-                ),
-                AppText(
-                    text:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel ultricies lacinia, nunc nisl ultricies nunc, nec ultricies nisl nunc vel nunc."),
                 const SizedBox(height: 20),
                 AppButton(
                   onPressed: () async {

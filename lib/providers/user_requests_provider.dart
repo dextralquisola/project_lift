@@ -62,6 +62,7 @@ class UserRequestsProvider with ChangeNotifier {
   void clearRequests() {
     _myRequests = [];
     _tuteeRequests = [];
+    _tutorApplication = TutorApplication.empty();
     notifyListeners();
   }
 }
