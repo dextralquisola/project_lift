@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/providers/app_state_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/socket_client.dart';
 import 'package:provider/provider.dart';
@@ -194,42 +195,9 @@ class SocketListeners {
   }
 
   void _onNewReport(BuildContext context) {
-    void showAlertDialog(BuildContext context, dynamic data) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: AppText(
-              text: 'Reported!',
-              fontWeight: FontWeight.w600,
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText(text: 'You have been reported!'),
-                const SizedBox(height: 10),
-                AppText(text: 'Category: ${data['category']}'),
-                AppText(text: 'Reason: ${data['content']}'),
-              ],
-            ),
-            actions: [
-              TextButton(
-                child: AppText(text: 'OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-
+    final userProvider = Provider.of<AppStateProvider>(context, listen: false);
     _socket.on("new-report", (data) {
-      print("new report");
-      print(data);
-      showAlertDialog(context, data);
+      userProvider.setNotif(data);
     });
   }
 
@@ -252,11 +220,11 @@ class SocketListeners {
           currentStudyRoomProvider.clearRoom();
           await userProvider.logout();
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: AppText(text: 'Report resolved!'),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: AppText(text: 'Report resolved!'),
+          //   ),
+          // );
         }
       }
     });

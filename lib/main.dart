@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:project_lift/features/auth/screens/login_screen.dart';
 import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
 import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
+import 'package:project_lift/providers/app_state_provider.dart';
 import 'package:project_lift/providers/current_room_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/providers/top_subjects_provider.dart';
@@ -35,6 +36,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CurrentStudyRoomProvider()),
         ChangeNotifierProvider(create: (_) => UserRequestsProvider()),
         ChangeNotifierProvider(create: (_) => TopSubjectProvider()),
+        ChangeNotifierProvider(create: (_) => AppStateProvider()),
       ],
       child: const MyApp(),
     ),
