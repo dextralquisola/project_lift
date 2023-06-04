@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../providers/current_room_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/user_requests_provider.dart';
+import '../widgets/app_text.dart';
 
 class SocketListeners {
   final _socket = SocketClient.instance.socket!;
@@ -25,6 +26,8 @@ class SocketListeners {
     _onRejectedAsTutor(context);
     _onParticipantRejected(context);
     _onParticipantCancelled(context);
+    _onNewReport(context);
+    _onReportResult(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -101,7 +104,8 @@ class SocketListeners {
     _socket.on("user-left", (data) {
       print("on user left");
       print(data);
-      if (data['sessionEnded'] != null && currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
+      if (data['sessionEnded'] != null &&
+          currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
         currentRoomProvider.removeParticipantById(
           data['user']['userId'],
           !data['sessionEnded'],
@@ -185,6 +189,53 @@ class SocketListeners {
         Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("tutor-application-rejected", (data) {
       userRequestsProvider.clearTutorApplication();
+    });
+  }
+
+  void _onNewReport(BuildContext context) {
+    void showAlertDialog(BuildContext context, dynamic data) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: AppText(
+              text: 'Reported!',
+              fontWeight: FontWeight.w600,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppText(text: 'You have been reported!'),
+                const SizedBox(height: 10),
+                AppText(text: 'Category: ${data['category']}'),
+                AppText(text: 'Reason: ${data['content']}'),
+              ],
+            ),
+            actions: [
+              TextButton(
+                child: AppText(text: 'OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    _socket.on("new-report", (data) {
+      print("new report");
+      print(data);
+      showAlertDialog(context, data);
+    });
+  }
+
+  void _onReportResult(BuildContext context) {
+    _socket.on("report-result", (data) {
+      print("report result");
+      print(data);
     });
   }
 }

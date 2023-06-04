@@ -54,6 +54,11 @@ class AuthService {
         );
         onSuccess();
       } else {
+        if (res.statusCode == 403) {
+          showSnackBar(context, "Your account has been banned");
+          return;
+        }
+
         showSnackBar(context, "Please check your credentials");
         return;
       }

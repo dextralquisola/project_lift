@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../models/study_room.dart';
 import '../../../providers/current_room_provider.dart';
+import '../../../providers/user_provider.dart';
 import '../../../widgets/app_text.dart';
 
 class StudyRoomDetailsScreen extends StatelessWidget {
@@ -13,6 +14,7 @@ class StudyRoomDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final currentStudyRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context);
 
@@ -127,15 +129,15 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                                 .studyRoom.participants.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onLongPress:
-                                    participants[index]['status'] == 'owner'
-                                        ? () {}
-                                        : () {
-                                            showReportDialog(
-                                                context: context,
-                                                userParticipant:
-                                                    participants[index]);
-                                          },
+                                onLongPress: participants[index]['userId'] ==
+                                        userProvider.user.userId
+                                    ? () {}
+                                    : () {
+                                        showReportDialog(
+                                            context: context,
+                                            userParticipant:
+                                                participants[index]);
+                                      },
                                 child: ListTile(
                                   leading: AppText(
                                     text: '${index + 1}.',
@@ -158,7 +160,8 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                                               ? AppText(text: 'Pending')
                                               : AppText(text: 'Participant'),
                                       const SizedBox(width: 10),
-                                      participants[index]['status'] == 'owner'
+                                      participants[index]['userId'] ==
+                                              userProvider.user.userId
                                           ? const SizedBox()
                                           : IconButton(
                                               onPressed: () {
