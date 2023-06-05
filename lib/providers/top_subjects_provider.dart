@@ -7,7 +7,7 @@ class TopSubjectProvider with ChangeNotifier {
   List<TopSearchSubject> get topSubjects => _topSubjects;
 
   List<TopSearchSubject> getTopThreeSubjects() {
-    print('getTopThreeSubjects');
+    print("getTopThreeSubjects");
     print(_topSubjects[0].subjectCode);
     print(_topSubjects[1].subjectCode);
     print(_topSubjects[2].subjectCode);

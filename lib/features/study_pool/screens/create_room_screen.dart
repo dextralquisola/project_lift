@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/top_subjects_provider.dart';
 import '../../../utils/utils.dart';
 
 import '../../../constants/styles.dart';
@@ -532,11 +533,14 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
   }
 
   void initialize() {
+    final topSubjectProvider =
+        Provider.of<TopSubjectProvider>(context, listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
 
     var isAskHelp = widget.isAskHelp;
     var tutor = widget.tutor;
     var subjects = isAskHelp ? tutor!.subjects : userProvider.user.subjects;
+    var topSubjects = topSubjectProvider.getTopThreeSubjects();
 
     selectedSubject =
         isAskHelp ? tutor!.firstSubject : userProvider.user.firstSubject;
@@ -546,7 +550,8 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
             value: subject,
             child: ListTile(
               title: AppText(
-                text: subject.subjectCode,
+                text:
+                    '${subject.subjectCode} ${mostSearchStringBuilder(subject, topSubjects)}',
               ),
               subtitle: SizedBox(
                 child: AppText(
@@ -673,5 +678,21 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
 
   bool isEmptySubtopic(SubTopic subTopic) {
     return subTopic.topic == '' && subTopic.description == '';
+  }
+
+  String mostSearchStringBuilder(
+    Subject subject,
+    List<TopSearchSubject> topSearchSubjects,
+  ) {
+    if (topSearchSubjects.isNotEmpty) {
+      var index = topSearchSubjects.indexWhere(
+        (element) => element.subjectCode == subject.subjectCode,
+      );
+      print(index);
+      if (index == -1) return '';
+      return List<String>.generate((index - 3).abs(), (index) => '🔥').join('');
+    }
+
+    return '';
   }
 }

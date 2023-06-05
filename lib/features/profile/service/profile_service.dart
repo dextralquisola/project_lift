@@ -131,6 +131,7 @@ class ProfileService {
         var decoded = json.decode(res.body);
         userRequestsProvider.setTutorApplicationFromMap(decoded);
       } else {
+        showSnackBar(context, "Failed to submit application, make sure the the image is clear and readable");
         print("Failed: ${res.statusCode}");
         print(res.body);
       }
