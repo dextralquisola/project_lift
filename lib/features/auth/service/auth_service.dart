@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:project_lift/features/auth/widgets/auth_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -54,6 +55,11 @@ class AuthService {
         );
         onSuccess();
       } else {
+        if (res.statusCode == 403) {
+          showBannedDialog(context: context);
+          return;
+        }
+
         showSnackBar(context, "Please check your credentials");
         return;
       }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:project_lift/features/find_tutor/screens/find_tutor_screen.dart';
-import 'package:project_lift/features/home/screens/survey_screen.dart';
 import 'package:project_lift/features/profile/screens/profile_screen.dart';
 import 'package:project_lift/features/profile/service/profile_service.dart';
 import 'package:project_lift/features/study_pool/screens/study_pool_screen.dart';
 import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/app_state_provider.dart';
 import '../../../providers/user_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,7 +30,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final user = userProvider.user;
+    final appStateProvider = Provider.of<AppStateProvider>(context);
+
+    pageIndex = appStateProvider.currentHomePageIndex;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (appStateProvider.getNotif != null) {
+        showAlertDialog(context, appStateProvider.getNotif);
+      }
+    });
 
     return WillPopScope(
       onWillPop: onWillPop,
@@ -38,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SafeArea(child: pages[pageIndex]),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: pageIndex,
-          onTap: _updatePage,
+          onTap: (index) => _updatePage(index, appStateProvider),
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.black,
           selectedIconTheme: const IconThemeData(color: Colors.black),
@@ -92,12 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _updatePage(int index) async {
+  void _updatePage(int index, AppStateProvider appStateProvider) async {
     if (index == 2) {
       await profileService.fetchUser(context);
     }
     setState(() {
       pageIndex = index;
+      appStateProvider.setCurrentHomePageIndex(index, false);
     });
   }
 
@@ -120,5 +129,40 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         )) ??
         false;
+  }
+
+  void showAlertDialog(BuildContext context, dynamic data) {
+    final appStateProvider =
+        Provider.of<AppStateProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: AppText(
+            text: 'Reported!',
+            fontWeight: FontWeight.w600,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppText(text: 'You have been reported!'),
+              const SizedBox(height: 10),
+              AppText(text: 'Category: ${data['category']}'),
+              AppText(text: 'Reason: ${data['content']}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: AppText(text: 'OK'),
+              onPressed: () {
+                appStateProvider.dismissNotif();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

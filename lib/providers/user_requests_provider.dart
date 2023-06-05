@@ -56,12 +56,20 @@ class UserRequestsProvider with ChangeNotifier {
   void addTuteeRequestsFromMap(List<dynamic> requests,
       [bool notifyListener = false]) {
     _tuteeRequests = requests.map((e) => Request.fromMap(e)).toList();
+
+    notifyListener ? notifyListeners() : () {};
+  }
+
+  void addSingleTuteeRequestFromMap(dynamic request,
+      [bool notifyListener = false]) {
+    _tuteeRequests = [..._tuteeRequests, Request.fromMap(request)];
     notifyListener ? notifyListeners() : () {};
   }
 
   void clearRequests() {
     _myRequests = [];
     _tuteeRequests = [];
+    _tutorApplication = TutorApplication.empty();
     notifyListeners();
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/providers/app_state_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/socket_client.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/current_room_provider.dart';
+import '../providers/tutors_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/user_requests_provider.dart';
 
@@ -25,6 +27,9 @@ class SocketListeners {
     _onRejectedAsTutor(context);
     _onParticipantRejected(context);
     _onParticipantCancelled(context);
+    _onNewReport(context);
+    _onReportResult(context);
+    _onRequestRemove(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -101,7 +106,8 @@ class SocketListeners {
     _socket.on("user-left", (data) {
       print("on user left");
       print(data);
-      if (data['sessionEnded'] != null && currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
+      if (data['sessionEnded'] != null &&
+          currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
         currentRoomProvider.removeParticipantById(
           data['user']['userId'],
           !data['sessionEnded'],
@@ -157,11 +163,19 @@ class SocketListeners {
     });
   }
 
+  void _onRequestRemove(BuildContext context) {
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    _socket.on("request-remove", (data) {
+      userRequestsProvider.removeTuteeRequestById(data['_id']);
+    });
+  }
+
   void _onTuteeRequested(BuildContext context) {
     final userRequestsProvider =
         Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("new-request", (data) {
-      userRequestsProvider.addTuteeRequestsFromMap([data], true);
+      userRequestsProvider.addSingleTuteeRequestFromMap(data, true);
     });
   }
 
@@ -185,6 +199,42 @@ class SocketListeners {
         Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("tutor-application-rejected", (data) {
       userRequestsProvider.clearTutorApplication();
+    });
+  }
+
+  void _onNewReport(BuildContext context) {
+    final userProvider = Provider.of<AppStateProvider>(context, listen: false);
+    _socket.on("new-report", (data) {
+      userProvider.setNotif(data);
+    });
+  }
+
+  void _onReportResult(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    final studyPoolProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
+    final currentStudyRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
+    _socket.on("report-result", (data) async {
+      if (data['status'] == 'resolved') {
+        if (data['reportedUser'] == userProvider.user.userId) {
+          tutorsProvider.clearTutors();
+          userRequestsProvider.clearRequests();
+          studyPoolProvider.clearStudyRooms();
+          currentStudyRoomProvider.clearRoom();
+          await userProvider.logout();
+        } else {
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: AppText(text: 'Report resolved!'),
+          //   ),
+          // );
+        }
+      }
     });
   }
 }
