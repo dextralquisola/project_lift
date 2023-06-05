@@ -59,7 +59,9 @@ class TutorService {
         final decoded = json.decode(res.body);
         for (var tutor in decoded['tutors']) {
           var newTutor = User.fromMap(tutor);
-          if (newTutor.userId != userProvider.user.userId) {
+          if (newTutor.userId != userProvider.user.userId &&
+              newTutor.dateTimeAvailability.isNotEmpty &&
+              newTutor.subjects.isNotEmpty) {
             listOfTutors.add(newTutor);
           }
         }

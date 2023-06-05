@@ -8,7 +8,6 @@ import '../providers/current_room_provider.dart';
 import '../providers/tutors_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/user_requests_provider.dart';
-import '../widgets/app_text.dart';
 
 class SocketListeners {
   final _socket = SocketClient.instance.socket!;
@@ -30,6 +29,7 @@ class SocketListeners {
     _onParticipantCancelled(context);
     _onNewReport(context);
     _onReportResult(context);
+    _onRequestRemove(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -160,6 +160,14 @@ class SocketListeners {
         Provider.of<UserRequestsProvider>(context, listen: false);
     _socket.on("request-rejected", (data) {
       userRequestsProvider.removeMyRequestById(data['_id']);
+    });
+  }
+
+  void _onRequestRemove(BuildContext context) {
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    _socket.on("request-remove", (data) {
+      userRequestsProvider.removeTuteeRequestById(data['_id']);
     });
   }
 

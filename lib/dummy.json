@@ -1,26 +1,182 @@
-[
-  {
-    "_id": "6475eedbb1e22b1a55a1b4bf",
-    "subject": {
-      "subjectCode": "GNED 11",
-      "description": "KONTEKSTWALISADONG KOMUNIKASYON SA FILIPINO",
-      "subtopics": []
+{
+  "tutors": [
+    {
+      "_id": "6471d3e783477c46d73207f5",
+      "firstName": "test",
+      "lastName": "test",
+      "email": "test@gmail.com",
+      "avatar": "",
+      "role": "tutor",
+      "averageRatingAsTutor": 3,
+      "timeAndDateAvailability": "M.T.W.Th.F.Sat+6:0-23:59",
+      "isAvailable": true,
+      "hasRoom": false,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [
+        {
+          "subject": {
+            "subjectCode": "GNED 05",
+            "description": "PURPOSIVE COMMUNICATION",
+            "subtopics": [
+              {
+                "name": "test",
+                "description": "test",
+                "subtopicsRatings": [
+                  {
+                    "value": 4,
+                    "feedback": "gooood",
+                    "tuteeId": {
+                      "_id": "64746f7fb9904e16ec9c90b2",
+                      "firstName": "test3",
+                      "lastName": "test3",
+                      "avatar": ""
+                    },
+                    "_id": "6474784ab9904e16ec9c9590"
+                  },
+                  {
+                    "value": 2,
+                    "feedback": "bad",
+                    "tuteeId": {
+                      "_id": "6471d3dc83477c46d73207f1",
+                      "firstName": "test1",
+                      "lastName": "test1",
+                      "avatar": ""
+                    },
+                    "_id": "6474d3b7a160eeabf136d903"
+                  }
+                ],
+                "averageSubtopicsRating": 3,
+                "_id": "6474784ab9904e16ec9c958f"
+              },
+              {
+                "name": "new sub",
+                "description": "test",
+                "subtopicsRatings": [
+                  {
+                    "value": 3,
+                    "feedback": "good",
+                    "tuteeId": {
+                      "_id": "6471d3dc83477c46d73207f1",
+                      "firstName": "test1",
+                      "lastName": "test1",
+                      "avatar": ""
+                    },
+                    "_id": "64747f0eb9904e16ec9c9d3c"
+                  },
+                  {
+                    "value": 3,
+                    "feedback": "wqe",
+                    "tuteeId": {
+                      "_id": "64746f7fb9904e16ec9c90b2",
+                      "firstName": "test3",
+                      "lastName": "test3",
+                      "avatar": ""
+                    },
+                    "_id": "64782f7013d261d29c8e04a7"
+                  }
+                ],
+                "averageSubtopicsRating": 3,
+                "_id": "64747f0eb9904e16ec9c9d3b"
+              }
+            ],
+            "averageSubjectsRating": 3
+          },
+          "_id": "6474784ab9904e16ec9c958e"
+        }
+      ],
+      "ratingsAsTutee": [],
+      "subjects": [
+        {
+          "subjectCode": "GNED 05",
+          "description": "PURPOSIVE COMMUNICATION",
+          "subtopics": [
+            {
+              "name": "test",
+              "description": "test",
+              "_id": "6474775db9904e16ec9c935f"
+            },
+            {
+              "name": "new sub",
+              "description": "test",
+              "_id": "6474775db9904e16ec9c9360"
+            }
+          ],
+          "_id": "6474771fb9904e16ec9c9352"
+        }
+      ],
+      "createdAt": "2023-05-27T09:56:55.105Z",
+      "updatedAt": "2023-06-04T17:04:03.551Z",
+      "__v": 55,
+      "socketId": "X7V9YpIj4paguexUAAAB"
     },
-    "tutorId": {
-      "_id": "646ec0c06e1e3537bd8b451e",
-      "firstName": "Dexter",
-      "lastName": "Alquisola"
-    },
-    "studentId": {
-      "_id": "6475136930125e6287ceaabd",
-      "firstName": "Ethyl",
-      "lastName": "Alcohol"
-    },
-    "name": "sdf",
-    "status": "public",
-    "location": "sdf",
-    "schedule": "2023-05-29T00:00:00.000+16:40.17:40",
-    "reqStatus": "pending",
-    "__v": 0
-  }
-]
+    {
+      "_id": "64746f7fb9904e16ec9c90b2",
+      "firstName": "test3",
+      "lastName": "test3",
+      "email": "test3@cvsu.edu.ph",
+      "avatar": "",
+      "role": "tutor",
+      "averageRatingAsTutor": 0,
+      "timeAndDateAvailability": "",
+      "isAvailable": true,
+      "hasRoom": false,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [],
+      "ratingsAsTutee": [
+        {
+          "value": 2,
+          "feedback": "nice",
+          "tutorId": {
+            "_id": "6471d3e783477c46d73207f5",
+            "firstName": "test",
+            "lastName": "test",
+            "avatar": ""
+          },
+          "_id": "64747834b9904e16ec9c94a9"
+        }
+      ],
+      "subjects": [
+        {
+          "subjectCode": "DCIT 50LEC",
+          "description": "OBJECT ORIENTED PROGRAMMING",
+          "_id": "647adb2678b9d717ce5e5f84",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "MATH IA",
+          "description": "ANALYTIC GEOMETRY",
+          "_id": "647affbeb0c3ab88286d0483",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "COSC 55A",
+          "description": "DISCRETE STRUCTURES II",
+          "_id": "647affbeb0c3ab88286d0484",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "COSC 60LEC",
+          "description": "DIGITAL LOGIC DESIGN",
+          "_id": "647affbeb0c3ab88286d0485",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "INSY 50",
+          "description": "FUNDAMENTALS OF INFORMATION SYSTEMS",
+          "_id": "647affbeb0c3ab88286d0486",
+          "subtopics": []
+        }
+      ],
+      "createdAt": "2023-05-29T09:25:19.510Z",
+      "updatedAt": "2023-06-04T06:03:12.783Z",
+      "__v": 29,
+      "socketId": ""
+    }
+  ],
+  "currentPage": 1,
+  "totalPages": 1,
+  "totalTutors": 2
+}
+
