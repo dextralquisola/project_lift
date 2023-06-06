@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_lift/utils/socket_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -91,31 +93,31 @@ class UserProvider with ChangeNotifier {
   }
 }
 
-// class UserProvider with ChangeNotifier {
-//   final googleSignIn = GoogleSignIn();
+class UserProvider2 with ChangeNotifier {
+  final googleSignIn = GoogleSignIn();
 
-//   GoogleSignInAccount? _user;
-//   GoogleSignInAccount get user => _user!;
+  GoogleSignInAccount? _user;
+  GoogleSignInAccount get user => _user!;
 
-//   Future<void> googleLogin() async {
-//     final googleUser = await googleSignIn.signIn();
-//     if (googleUser == null) return;
+  Future<void> googleLogin() async {
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser == null) return;
 
-//     _user = googleUser;
+    _user = googleUser;
 
-//     final googleAuth = await googleUser.authentication;
+    final googleAuth = await googleUser.authentication;
 
-//     final credential = GoogleAuthProvider.credential(
-//       accessToken: googleAuth.accessToken,
-//       idToken: googleAuth.idToken,
-//     );
+    final credential = firebaseAuth.GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
 
-//     await FirebaseAuth.instance.signInWithCredential(credential);
-//     notifyListeners();
-//   }
+    await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
+    notifyListeners();
+  }
 
-//   Future<void> logout() async {
-//     await googleSignIn.disconnect();
-//     FirebaseAuth.instance.signOut();
-//   }
-// }
+  Future<void> logout() async {
+    await googleSignIn.disconnect();
+    firebaseAuth.FirebaseAuth.instance.signOut();
+  }
+}
