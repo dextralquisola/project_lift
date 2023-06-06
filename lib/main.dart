@@ -11,6 +11,7 @@ import 'package:project_lift/providers/top_subjects_provider.dart';
 import 'package:project_lift/providers/tutors_provider.dart';
 import 'package:project_lift/providers/user_provider.dart';
 import 'package:project_lift/providers/user_requests_provider.dart';
+import 'package:project_lift/utils/firebase_api.dart';
 import 'package:project_lift/widgets/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -22,10 +23,7 @@ import 'features/profile/service/profile_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('A new onMessageOpenedApp event was published!');
-  });
+  await FirebaseApi().initNotification();
 
   runApp(
     MultiProvider(
