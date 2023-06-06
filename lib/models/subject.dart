@@ -41,7 +41,7 @@ class Subject {
     return Subject(
       subjectCode: map['subjectCode'] ?? '',
       description: map['description'] ?? '',
-      subTopics: map['subtopics'].isEmpty
+      subTopics: map['subtopics'] == null
           ? []
           : List<SubTopic>.from(
               map['subtopics']?.map(

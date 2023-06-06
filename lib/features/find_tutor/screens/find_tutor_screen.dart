@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import '../../profile/service/profile_service.dart';
 import './find_tutor_search_screen.dart';
 import '../../../providers/user_requests_provider.dart';
 import '../../../widgets/background_cover.dart';
@@ -29,6 +30,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
   late Animation _animation;
 
   final tutorService = TutorService();
+  final profileService = ProfileService();
 
   @override
   void initState() {
@@ -171,8 +173,13 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                   ),
                 )
               : RefreshIndicator(
-                  onRefresh: () async =>
-                      await tutorService.fetchTutors(context, true),
+                  onRefresh: () async {
+                    Future.wait([
+                      tutorService.fetchTutors(context, true),
+                      profileService.getMostSearchedTutorAndSubject(
+                          context: context)
+                    ]);
+                  },
                   child: ListView.separated(
                     itemBuilder: (context, index) {
                       var isPendingRequest = userRequestsProvider

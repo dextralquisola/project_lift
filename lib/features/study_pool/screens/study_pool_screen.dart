@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/styles.dart';
 
 import '../../../providers/user_requests_provider.dart';
+import '../../profile/service/profile_service.dart';
 import './create_room_screen.dart';
 import './rate_screen.dart';
 import './study_room_screen.dart';
@@ -36,6 +37,7 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
   bool _isDisposed = false;
 
   final studyPoolService = StudyPoolService();
+  final profileService = ProfileService();
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   @override
@@ -104,7 +106,14 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                         ),
                         TextButton(
                           onPressed: () async {
-                            await studyPoolService.fetchStudyRooms(context);
+                            Future.wait(
+                              [
+                                studyPoolService.fetchStudyRooms(context),
+                                profileService.getMostSearchedTutorAndSubject(
+                                  context: context,
+                                ),
+                              ],
+                            );
                           },
                           child: const Text("Tap to refresh"),
                         )

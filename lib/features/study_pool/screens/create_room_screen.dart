@@ -551,7 +551,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
             child: ListTile(
               title: AppText(
                 text:
-                    '${subject.subjectCode} ${mostSearchStringBuilder(subject, topSubjects)}',
+                    '${subject.subjectCode} ${isAskHelp ? "" : mostSearchStringBuilder(subject, topSubjects)}',
               ),
               subtitle: SizedBox(
                 child: AppText(

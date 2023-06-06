@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/models/subject.dart';
 import 'package:project_lift/providers/app_state_provider.dart';
 import 'package:project_lift/providers/study_room_providers.dart';
 import 'package:project_lift/utils/socket_client.dart';
@@ -186,8 +187,13 @@ class SocketListeners {
     _socket.on(
       "tutor-application-approved",
       (data) {
+        print("tutor application approved");
+        print(data);
         userProvider.setUserFromModel(userProvider.user.copyFrom(
           role: "tutor",
+          subjects: List<Subject>.from(
+            data['subject'].map((subject) => Subject.fromMap(subject)),
+          ),
         ));
         userRequestsProvider.clearRequests();
       },
