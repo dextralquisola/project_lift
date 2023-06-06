@@ -58,9 +58,6 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final topSearchSubjects =
-        Provider.of<TopSubjectProvider>(context).getTopThreeSubjects();
-
     var filteredSubjects = filterSubjects(userProvider);
     dropdownItems = widget.subject != null
         ? [
@@ -76,15 +73,11 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
             )
           ]
         : filteredSubjects.map((e) {
-            var mostSearchString =
-                mostSearchStringBuilder(e, topSearchSubjects);
-
             return DropdownMenuItem(
               value: e['subjectCode'],
               child: e['subjectCode'] != ''
                   ? ListTile(
-                      title: AppText(
-                          text: '${e["subjectCode"]} $mostSearchString'),
+                      title: AppText(text: '${e["subjectCode"]}'),
                       subtitle: AppText(
                         text: '${e["description"]} ',
                         textSize: 12,
@@ -311,21 +304,6 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
         ),
       ),
     );
-  }
-
-  String mostSearchStringBuilder(
-    Map<String, dynamic> subject,
-    List<TopSearchSubject> topSearchSubjects,
-  ) {
-    if (topSearchSubjects.isNotEmpty) {
-      var index = topSearchSubjects.indexWhere(
-        (element) => element.subjectCode == subject['subjectCode'],
-      );
-      if (index == -1) return '';
-      return List<String>.generate((index - 3).abs(), (index) => '🔥').join('');
-    }
-
-    return '';
   }
 
   List<Map<String, String>> filterSubjects(UserProvider userProvider) {
