@@ -38,7 +38,7 @@ class StudyPoolService {
 
       var res = await service.requestApi(
         path: '/api/studyroom/create',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           'name': studyPoolName,
           'status': status == StudyRoomStatus.public ? 'public' : 'private',
@@ -78,7 +78,7 @@ class StudyPoolService {
       var chatRoomRes = await service.requestApi(
         path: '/api/studyroom/user-room',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       print("Chat room res");
@@ -153,7 +153,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/public?page=${studyRoomProvider.currentPage}',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -179,7 +179,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/messages',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           'roomId': roomId,
           'message': message,
@@ -213,7 +213,7 @@ class StudyPoolService {
       var joinResRoom = await service.requestApi(
         path: '/api/studyroom/join/$roomId',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (joinResRoom.statusCode == 202) {
@@ -242,7 +242,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/accept-participant/$roomId/$userId/$status',
         method: 'PATCH',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -282,7 +282,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/leave/${currentRoomProvider.studyRoom.roomId}',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -320,7 +320,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/public?search=$search',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -351,7 +351,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/pending',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -377,7 +377,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/studyroom/end-session/${currentSudyRoom.studyRoom.roomId}',
         method: 'PATCH',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -438,7 +438,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: path,
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: body,
       );
 
@@ -477,7 +477,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/rate-participants',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "participants": participantsMapped,
         },
@@ -506,7 +506,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/ask-help/get-request',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       print("getTuteeRequests");
@@ -533,7 +533,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/ask-help/my-requests',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       print("getMyRequests");
@@ -571,7 +571,7 @@ class StudyPoolService {
       var res = await service.requestApi(
         path: '/api/ask-help/accept-request/$requestId/$requestStatus',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {

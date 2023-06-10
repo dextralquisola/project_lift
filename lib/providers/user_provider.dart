@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:project_lift/features/auth/service/auth_service.dart';
 import 'package:project_lift/utils/socket_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,6 +9,11 @@ import '../models/subject.dart';
 import '../models/user.dart';
 
 class UserProvider with ChangeNotifier {
+  final googleSignIn = GoogleSignIn();
+
+  GoogleSignInAccount? _googleUser;
+  GoogleSignInAccount? get googleUser => _googleUser;
+
   User _user = User.emptyUser();
 
   bool _isTutorialDoNotShow = false;
@@ -77,6 +83,11 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> logout() async {
+    if (_googleUser != null) {
+      await googleSignIn.disconnect();
+      firebaseAuth.FirebaseAuth.instance.signOut();
+    }
+
     _user = User.emptyUser();
 
     SocketClient.instance.disconnect();
@@ -85,6 +96,34 @@ class UserProvider with ChangeNotifier {
     prefs.clear();
 
     notifyListeners();
+  }
+
+  Future<void> googleLogin(BuildContext context) async {
+    final authService = AuthService();
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser == null) return;
+
+    _googleUser = googleUser;
+
+    final googleAuth = await googleUser.authentication;
+
+    final credential = firebaseAuth.GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
+
+    print("credential.accessToken: ${credential.accessToken}");
+    print("credential.idToken: ${credential.idToken}");
+
+    if (context.mounted) {
+      await authService.signInWithGoogle(
+        accessToken: credential.accessToken!,
+        idToken: credential.idToken!,
+        context: context,
+      );
+    }
   }
 
   void clearUserData() {
@@ -111,6 +150,9 @@ class UserProvider2 with ChangeNotifier {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+
+    print(credential.idToken);
+    print(credential.accessToken);
 
     await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
     notifyListeners();

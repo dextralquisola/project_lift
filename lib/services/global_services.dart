@@ -12,14 +12,11 @@ class GlobalService {
     required String category,
     required String content,
   }) async {
-    print(userId);
-    print(category);
-    print(content);
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
         path: '/api/report',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "reportedUser": userId,
           "category": category,
