@@ -16,6 +16,12 @@ import '../../../models/user.dart';
 import '../../study_pool/screens/create_room_screen.dart';
 import '../screens/view_tutor_screen.dart';
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
+
 class TutorCard extends StatelessWidget {
   final User tutor;
   final bool isPendingRequest;
@@ -33,6 +39,8 @@ class TutorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isAvailable = isAvailableAtCurrentDate(tutor);
+    final formattedName =
+        "${tutor.firstName.split(' ').map((e) => e.capitalize()).join(' ')} ${tutor.lastName.capitalize()}";
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GestureDetector(
@@ -126,7 +134,7 @@ class TutorCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _textBuilder(
-                              text: "${tutor.firstName} ${tutor.lastName}",
+                              text: formattedName,
                               isName: true,
                             ),
                             const SizedBox(height: 5),
