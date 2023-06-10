@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/user_provider.dart';
 import './sign_up_screen.dart';
 import '../../../utils/utils.dart';
 import '../../../widgets/app_button.dart';
@@ -34,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -106,8 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 20),
                 AppButton(
                   onPressed: () async {
-                    //await provider.googleLogin();
-                    showSnackBar(context, "Feature coming soon!");
+                    await userProvider.googleLogin(context);
                   },
                   text: "Login with Google",
                   icon: FontAwesomeIcons.google,

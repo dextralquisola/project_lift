@@ -24,7 +24,7 @@ class TutorService {
       var res = await service.requestApi(
         path: '/home/tutors?page=${tutorProvider.currentPage}&limit=10',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (!context.mounted) return;
@@ -37,6 +37,7 @@ class TutorService {
         print(res.body);
       }
     } catch (e) {
+      print("fethcTutors error");
       print(e);
     }
   }
@@ -51,7 +52,7 @@ class TutorService {
       var res = await service.requestApi(
         path: '/home/tutors?search=$search',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       List<User> listOfTutors = [];
@@ -91,7 +92,7 @@ class TutorService {
       var res = await service.requestApi(
         path: '/api/ask-help/request/$tutorId',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "name": name,
           "status": status,

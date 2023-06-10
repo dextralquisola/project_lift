@@ -35,7 +35,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-
+    final isGoogleLogin = userProvider.isGoogleLogin;
     firstNameController.text = userProvider.user.firstName;
     lastNameController.text = userProvider.user.lastName;
 
@@ -57,16 +57,20 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 controller: lastNameController,
                 labelText: 'Last Name',
               ),
-              AppTextField(
-                controller: passwordController,
-                labelText: 'Password',
-                isPassword: true,
-              ),
-              AppTextField(
-                controller: confirmPasswordController,
-                labelText: 'Confirm Password',
-                isPassword: true,
-              ),
+              !isGoogleLogin
+                  ? AppTextField(
+                      controller: passwordController,
+                      labelText: 'Password',
+                      isPassword: true,
+                    )
+                  : const SizedBox(),
+              !isGoogleLogin
+                  ? AppTextField(
+                      controller: confirmPasswordController,
+                      labelText: 'Confirm Password',
+                      isPassword: true,
+                    )
+                  : const SizedBox(),
               const SizedBox(height: 20),
               _isLoading
                   ? const Center(
@@ -96,8 +100,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         ),
       );
       return;
-    } else if (passwordController.text.isNotEmpty) {
+    } else if (passwordController.text.isNotEmpty &&
+        passwordController.text == confirmPasswordController.text) {
       password = passwordController.text;
+    } else {
+      return;
     }
 
     await profileService.updateUser(

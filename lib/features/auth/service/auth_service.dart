@@ -26,6 +26,7 @@ class AuthService {
   }) async {
     // function here
     try {
+      final sharedPrefs = await SharedPreferences.getInstance();
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
       var res = await service.requestApi(
@@ -53,6 +54,7 @@ class AuthService {
           fcmToken: fcmToken!,
           deviceToken: deviceToken!,
         );
+        sharedPrefs.setBool('isGoogleLogin', false);
         onSuccess();
       } else {
         if (res.statusCode == 403) {
@@ -62,6 +64,46 @@ class AuthService {
 
         showSnackBar(context, "Please check your credentials");
         return;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> signInWithGoogle({
+    required BuildContext context,
+    required String idToken,
+    required String accessToken,
+  }) async {
+    try {
+      final sharedPrefs = await SharedPreferences.getInstance();
+
+      var fcmToken = await _getFCMToken();
+      var deviceToken = await _getDeviceId();
+      var res = await service.requestApi(
+        path: '/google-login',
+        body: {
+          "id_token": idToken,
+          "access_token": accessToken,
+          "deviceToken": deviceToken,
+          "fcmToken": fcmToken,
+        },
+      );
+
+      if (!context.mounted) return;
+
+      if (res.statusCode == 200) {
+        await _loginMethod(
+          isFromLogin: true,
+          context: context,
+          res: res,
+          fcmToken: fcmToken!,
+          deviceToken: deviceToken!,
+        );
+        sharedPrefs.setBool('isGoogleLogin', true);
+      } else if (res.statusCode == 409) {
+        showSnackBar(
+            context, "Email already registered through traditional login.");
       }
     } catch (e) {
       print(e);
@@ -117,19 +159,26 @@ class AuthService {
   Future<void> autoLogin(BuildContext context) async {
     // function here
     try {
+      final sharedPrefs = await SharedPreferences.getInstance();
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
 
       var prefs = await SharedPreferences.getInstance();
       var token = prefs.getString('token');
+
       if (token == null) return;
       print("token: $token");
+
+      var isGoogleLogin = false;
+      if (sharedPrefs.containsKey('isGoogleLogin')) {
+        isGoogleLogin = sharedPrefs.getBool('isGoogleLogin')!;
+      }
 
       var res = await service.requestApi(
         path: '/api/users/me',
         method: 'GET',
         headers: {
-          "Authorization": token,
+          "Authorization": isGoogleLogin ? "Bearer $token" : "Google $token",
           "fcmToken": fcmToken!,
           "deviceToken": deviceToken!,
         },
@@ -147,6 +196,7 @@ class AuthService {
             context: context,
             res: res,
             isFromAutoLogin: true,
+            isFromGoogleLogin: isGoogleLogin,
             token: token,
             fcmToken: fcmToken,
             deviceToken: deviceToken,
@@ -154,6 +204,7 @@ class AuthService {
         },
       );
     } catch (e) {
+      print("asdfasfasdfasdf");
       print(e);
     }
   }
@@ -166,6 +217,7 @@ class AuthService {
     bool isSignup = false,
     bool isFromLogin = false,
     bool isFromAutoLogin = false,
+    bool isFromGoogleLogin = false,
     String token = "",
   }) async {
     /*
@@ -177,6 +229,8 @@ class AuthService {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var userData = json.decode(res.body);
+
+      print(res.body);
 
       if (userData['message'] != null) {
         showSnackBar(context, userData['message']);
@@ -216,7 +270,7 @@ class AuthService {
         return;
       }
 
-      SocketClient(userProvider.user.token).socket!.connect();
+      SocketClient(userProvider.user.token, isFromGoogleLogin).socket!.connect();
       SocketListeners().activateEventListeners(context);
 
       if (isSignup) showSnackBar(context, "Account created successfully");
@@ -264,7 +318,7 @@ class AuthService {
       var res = await service.requestApi(
         path: '/api/users/logout',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {

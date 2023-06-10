@@ -24,7 +24,7 @@ class ProfileService {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var res = await service.requestApi(
         path: '/api/tutor/add-subject',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "subjectCode": subject.subjectCode,
           "description": subject.description,
@@ -51,7 +51,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/users/me',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -80,7 +80,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/users/me/avatar',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "image": avatarUrl,
         },
@@ -118,7 +118,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor-application/create',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "image": gradeUrl,
           "briefIntro": briefIntro,
@@ -163,7 +163,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor-application/update',
         method: 'PATCH',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "image": gradeUrl,
           "briefIntro": briefIntro,
@@ -196,7 +196,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor-application/me',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -209,6 +209,7 @@ class ProfileService {
             .setTutorApplicationFromModel(TutorApplication.empty());
       }
     } catch (e) {
+      print('error getting user application');
       print(e);
     }
   }
@@ -227,7 +228,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/users/me',
         method: 'PATCH',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: dateTimeAvailability.isNotEmpty
             ? {
                 "timeAndDateAvailability": dateTimeAvailability,
@@ -280,7 +281,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor/update-subject/${subject.subjectCode}',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "description": subject.description,
           "subtopics": subject.subTopicsToListMap(),
@@ -307,7 +308,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor/delete-subject/${subject.subjectCode}',
         method: 'DELETE',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -331,7 +332,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/analytics/most-searched-tutor-subject',
         method: 'GET',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
       );
 
       if (res.statusCode == 200) {
@@ -364,7 +365,7 @@ class ProfileService {
       var res = await service.requestApi(
         path: '/api/tutor/add-subject',
         method: 'POST',
-        userAuthHeader: userProvider.user,
+        userAuthHeader: userProvider,
         body: {
           "image": gradeUrl,
         },

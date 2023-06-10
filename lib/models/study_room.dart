@@ -44,18 +44,18 @@ class StudyRoom {
           ? List<Map<String, dynamic>>.from(
               map['participants']?.map(
                 (x) => {
-                  'userId': x['userId']['_id'],
-                  'firstName': x['userId']['firstName'],
-                  'lastName': x['userId']['lastName'],
-                  'status': x['status'],
+                  'userId': x['userId']['_id'] ?? '',
+                  'firstName': (x['userId']['firstName']) ?? '',
+                  'lastName': x['userId']['lastName'] ?? '',
+                  'status': x['status'] ?? '',
                 },
               ),
             )
           : List<Map<String, dynamic>>.from(
               map['participants']?.map(
                 (x) => {
-                  'userId': x['userId'],
-                  'status': x['status'],
+                  'userId': x['userId'] ?? '',
+                  'status': x['status'] ?? '',
                 },
               ),
             ),

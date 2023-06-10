@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import '../../models/user.dart';
 import '../app_text.dart';
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
+
 class NameBuilder extends StatelessWidget {
   final User user;
   const NameBuilder({
@@ -12,11 +18,13 @@ class NameBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formattedName =
+        "${user.firstName.split(' ').map((e) => e.capitalize()).join(' ')} ${user.lastName.capitalize()}";
     return Column(
       children: [
         const SizedBox(height: 80),
         AppText(
-          text: "${user.firstName} ${user.lastName}",
+          text: formattedName,
           textSize: 24,
           fontWeight: FontWeight.bold,
         ),
