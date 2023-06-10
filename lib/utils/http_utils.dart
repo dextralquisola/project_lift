@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/constants.dart';
 import '../models/user.dart';
@@ -18,10 +19,11 @@ Future<http.Response> requestApi({
     h.addAll(headers);
   }
   if (userAuthHeader != null) {
+    final isGoogleLogin = userAuthHeader.isGoogleLogin;
     h.addAll({
-      "Authorization": userAuthHeader.googleUser == null
-          ? "Bearer ${userAuthHeader.user.token}"
-          : "Google ${userAuthHeader.user.token}",
+      "Authorization": isGoogleLogin
+          ? "Google ${userAuthHeader.user.token}"
+          : "Bearer ${userAuthHeader.user.token}",
       "fcmToken": userAuthHeader.user.firebaseToken,
       "deviceToken": userAuthHeader.user.deviceToken,
     });

@@ -16,12 +16,14 @@ class UserProvider with ChangeNotifier {
 
   User _user = User.emptyUser();
 
+  bool _isGoogleLogin = false;
   bool _isTutorialDoNotShow = false;
 
   User get user => _user;
   bool get isTutor => _user.role == 'tutor';
   bool get isAuthenticated => _user.token != '' && user.isEmailVerified;
   bool get isTutorialDoNotShow => _isTutorialDoNotShow;
+  bool get isGoogleLogin => _isGoogleLogin;
 
   void setIsTutorialDoNotShow(bool value) {
     _isTutorialDoNotShow = value;
@@ -80,6 +82,9 @@ class UserProvider with ChangeNotifier {
   Future<void> getUserState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _isTutorialDoNotShow = prefs.getBool('isTutorialDoNotShow') ?? false;
+    if (prefs.containsKey('isGoogleLogin')) {
+      _isGoogleLogin = prefs.getBool('isGoogleLogin')!;
+    }
   }
 
   Future<void> logout() async {
