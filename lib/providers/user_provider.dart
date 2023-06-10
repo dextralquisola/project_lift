@@ -85,7 +85,6 @@ class UserProvider with ChangeNotifier {
   Future<void> logout() async {
     if (_googleUser != null) {
       await googleSignIn.disconnect();
-      firebaseAuth.FirebaseAuth.instance.signOut();
     }
 
     _user = User.emptyUser();
@@ -107,20 +106,20 @@ class UserProvider with ChangeNotifier {
 
     final googleAuth = await googleUser.authentication;
 
-    final credential = firebaseAuth.GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+    // final credential = firebaseAuth.GoogleAuthProvider.credential(
+    //   accessToken: googleAuth.accessToken,
+    //   idToken: googleAuth.idToken,
+    // );
 
     //await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
 
-    print("credential.accessToken: ${credential.accessToken}");
-    print("credential.idToken: ${credential.idToken}");
+    print("credential.accessToken: ${googleAuth.accessToken}");
+    print("credential.idToken: ${googleAuth.idToken}");
 
     if (context.mounted) {
       await authService.signInWithGoogle(
-        accessToken: credential.accessToken!,
-        idToken: credential.idToken!,
+        accessToken: googleAuth.accessToken!,
+        idToken: googleAuth.idToken!,
         context: context,
       );
     }
