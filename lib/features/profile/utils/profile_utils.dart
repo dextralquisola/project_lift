@@ -28,10 +28,9 @@ Future<void> logout(BuildContext context) async {
       currentStudyRoomProvider.leaveStudyRoom();
       userRequestsProvider.clearRequests();
       await userProvider.logout();
+    } else {
+      showSnackBar(context, "Something went wrong");
     }
-    // } else {
-    //   showSnackBar(context, "Something went wrong");
-    // }
   } catch (e) {
     print("logout error: $e");
     print(e);

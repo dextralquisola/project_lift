@@ -104,6 +104,11 @@ class AuthService {
       } else if (res.statusCode == 409) {
         showSnackBar(
             context, "Email already registered through traditional login.");
+      } else if (res.statusCode == 403) {
+        showBannedDialog(context: context);
+        return;
+      } else if (res.statusCode == 400) {
+        showSnackBar(context, "Invalid email address. use CvSU email address.");
       }
     } catch (e) {
       print(e);
@@ -270,7 +275,9 @@ class AuthService {
         return;
       }
 
-      SocketClient(userProvider.user.token, isFromGoogleLogin).socket!.connect();
+      SocketClient(userProvider.user.token, isFromGoogleLogin)
+          .socket!
+          .connect();
       SocketListeners().activateEventListeners(context);
 
       if (isSignup) showSnackBar(context, "Account created successfully");
