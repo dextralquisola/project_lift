@@ -37,6 +37,7 @@ class TutorService {
         print(res.body);
       }
     } catch (e) {
+      print("fethcTutors error");
       print(e);
     }
   }

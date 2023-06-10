@@ -196,6 +196,7 @@ class AuthService {
             context: context,
             res: res,
             isFromAutoLogin: true,
+            isFromGoogleLogin: isGoogleLogin,
             token: token,
             fcmToken: fcmToken,
             deviceToken: deviceToken,
@@ -203,6 +204,7 @@ class AuthService {
         },
       );
     } catch (e) {
+      print("asdfasfasdfasdf");
       print(e);
     }
   }
@@ -215,6 +217,7 @@ class AuthService {
     bool isSignup = false,
     bool isFromLogin = false,
     bool isFromAutoLogin = false,
+    bool isFromGoogleLogin = false,
     String token = "",
   }) async {
     /*
@@ -267,7 +270,7 @@ class AuthService {
         return;
       }
 
-      SocketClient(userProvider.user.token).socket!.connect();
+      SocketClient(userProvider.user.token, isFromGoogleLogin).socket!.connect();
       SocketListeners().activateEventListeners(context);
 
       if (isSignup) showSnackBar(context, "Account created successfully");

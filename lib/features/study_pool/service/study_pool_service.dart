@@ -94,11 +94,7 @@ class StudyPoolService {
           path:
               '/api/studyroom/messages/${currentRoomProvider.studyRoom.roomId}?page=${currentRoomProvider.currentMessagePage}',
           method: 'GET',
-          headers: {
-            "Authorization": userProvider.user.token,
-            "fcmToken": userProvider.user.firebaseToken,
-            "deviceToken": userProvider.user.deviceToken,
-          },
+          userAuthHeader: userProvider,
         );
 
         print("MessageRes");
@@ -110,6 +106,7 @@ class StudyPoolService {
         }
       }
     } catch (e) {
+      print("getUserRoom error");
       print(e);
     }
   }
@@ -125,11 +122,7 @@ class StudyPoolService {
         path:
             '/api/studyroom/messages/${currentRoomProvider.studyRoom.roomId}?page=${currentRoomProvider.currentMessagePage}',
         method: 'GET',
-        headers: {
-          "Authorization": userProvider.user.token,
-          "fcmToken": userProvider.user.firebaseToken,
-          "deviceToken": userProvider.user.deviceToken,
-        },
+        userAuthHeader: userProvider,
       );
 
       if (resMessages.statusCode == 200) {
@@ -162,6 +155,7 @@ class StudyPoolService {
         print("ERROR: ${res.statusCode}");
       }
     } catch (e) {
+      print("fetchStudyRooms error");
       print(e);
     }
   }
@@ -361,6 +355,7 @@ class StudyPoolService {
         }
       }
     } catch (e) {
+      print("getPendingChatRoomIds error: $e");
       print(e);
     }
   }
@@ -520,7 +515,7 @@ class StudyPoolService {
         print(res.body);
       }
     } catch (e) {
-      print("getTuteeRequest");
+      print("getTuteeRequest error");
       print(e);
     }
   }
@@ -546,6 +541,7 @@ class StudyPoolService {
           isMyRequest: true,
         );
       } else {
+        print('getMyRequests');
         print("ERROR: ${res.statusCode}");
         print(res.body);
       }

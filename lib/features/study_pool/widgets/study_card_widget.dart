@@ -7,6 +7,12 @@ import '../../../models/study_room.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_text.dart';
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
+
 class StudyPoolCard extends StatelessWidget {
   final StudyRoom studyRoom;
   final bool isStudyRoomPending;
@@ -39,7 +45,11 @@ class StudyPoolCard extends StatelessWidget {
                 ),
                 ListTile(
                   title: AppText(text: studyRoom.roomName),
-                  subtitle: AppText(text: studyRoom.roomOwner),
+                  subtitle: AppText(
+                      text: studyRoom.roomOwner
+                          .split(' ')
+                          .map((e) => e.capitalize())
+                          .join(' ')),
                   trailing: const Icon(Icons.more_vert),
                 ),
               ],

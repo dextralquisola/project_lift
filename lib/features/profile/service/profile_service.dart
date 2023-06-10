@@ -209,6 +209,7 @@ class ProfileService {
             .setTutorApplicationFromModel(TutorApplication.empty());
       }
     } catch (e) {
+      print('error getting user application');
       print(e);
     }
   }
