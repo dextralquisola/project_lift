@@ -10,24 +10,31 @@ import '../../../utils/utils.dart';
 import '../../auth/service/auth_service.dart';
 
 Future<void> logout(BuildContext context) async {
-  final authService = AuthService();
-  final userProvider = Provider.of<UserProvider>(context, listen: false);
-  final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
-  final userRequestsProvider =
-      Provider.of<UserRequestsProvider>(context, listen: false);
-  final studyPoolProvider =
-      Provider.of<StudyRoomProvider>(context, listen: false);
-  final currentStudyRoomProvider =
-      Provider.of<CurrentStudyRoomProvider>(context, listen: false);
-  var isLogoutSuccess = await authService.logout(context);
-  if (isLogoutSuccess) {
-    tutorsProvider.clearTutors();
-    studyPoolProvider.clearStudyRooms();
-    currentStudyRoomProvider.leaveStudyRoom();
-    userRequestsProvider.clearRequests();
-    await userProvider.logout();
-  } else {
-    showSnackBar(context, "Something went wrong");
+  try {
+    final authService = AuthService();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    final studyPoolProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
+    final currentStudyRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    var isLogoutSuccess = await authService.logout(context);
+    if (isLogoutSuccess) {
+      userProvider.clearUserData();
+      tutorsProvider.clearTutors();
+      studyPoolProvider.clearStudyRooms();
+      currentStudyRoomProvider.leaveStudyRoom();
+      userRequestsProvider.clearRequests();
+      await userProvider.logout();
+    }
+    // } else {
+    //   showSnackBar(context, "Something went wrong");
+    // }
+  } catch (e) {
+    print("logout error: $e");
+    print(e);
   }
 }
 

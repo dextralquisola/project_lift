@@ -103,35 +103,41 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> googleLogin(BuildContext context) async {
-    final authService = AuthService();
-    final googleUser = await googleSignIn.signIn();
-    if (googleUser == null) return;
+    try {
+      final authService = AuthService();
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) return;
 
-    _googleUser = googleUser;
+      _googleUser = googleUser;
 
-    final googleAuth = await googleUser.authentication;
+      final googleAuth = await googleUser.authentication;
 
-    // final credential = firebaseAuth.GoogleAuthProvider.credential(
-    //   accessToken: googleAuth.accessToken,
-    //   idToken: googleAuth.idToken,
-    // );
+      // final credential = firebaseAuth.GoogleAuthProvider.credential(
+      //   accessToken: googleAuth.accessToken,
+      //   idToken: googleAuth.idToken,
+      // );
 
-    //await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
+      //await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
 
-    print("credential.accessToken: ${googleAuth.accessToken}");
-    print("credential.idToken: ${googleAuth.idToken}");
+      print("credential.accessToken: ${googleAuth.accessToken}");
+      print("credential.idToken: ${googleAuth.idToken}");
 
-    if (context.mounted) {
-      await authService.signInWithGoogle(
-        accessToken: googleAuth.accessToken!,
-        idToken: googleAuth.idToken!,
-        context: context,
-      );
+      if (context.mounted) {
+        await authService.signInWithGoogle(
+          accessToken: googleAuth.accessToken!,
+          idToken: googleAuth.idToken!,
+          context: context,
+        );
+      }
+    } catch (e) {
+      print("googleLogin error: $e");
+      print(e);
     }
   }
 
   void clearUserData() {
     _user = User.emptyUser();
+    _googleUser = null;
     notifyListeners();
   }
 }
