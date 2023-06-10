@@ -112,7 +112,7 @@ class UserProvider with ChangeNotifier {
       idToken: googleAuth.idToken,
     );
 
-    await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
+    //await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
 
     print("credential.accessToken: ${credential.accessToken}");
     print("credential.idToken: ${credential.idToken}");
