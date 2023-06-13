@@ -82,16 +82,13 @@ class UserProvider with ChangeNotifier {
   Future<void> getUserState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _isTutorialDoNotShow = prefs.getBool('isTutorialDoNotShow') ?? false;
-    // if (prefs.containsKey('isGoogleLogin')) {
-    //   _isGoogleLogin = prefs.getBool('isGoogleLogin')!;
-    // }
-    // print("getuserstate isGoogleLogin: $_isGoogleLogin");
+    if (prefs.containsKey('isGoogleLogin')) {
+      _isGoogleLogin = prefs.getBool('isGoogleLogin')!;
+    }
   }
 
   Future<void> logout() async {
-    if (_googleUser != null) {
-      await googleSignIn.disconnect();
-    }
+    await googleSignIn.disconnect();
 
     _user = User.emptyUser();
 
@@ -124,11 +121,17 @@ class UserProvider with ChangeNotifier {
       print("credential.idToken: ${googleAuth.idToken}");
 
       if (context.mounted) {
-        await authService.signInWithGoogle(
+        var result = await authService.signInWithGoogle(
           accessToken: googleAuth.accessToken!,
           idToken: googleAuth.idToken!,
           context: context,
         );
+
+        if (!result) {
+          await googleSignIn.disconnect();
+          _googleUser = null;
+          return;
+        }
       }
     } catch (e) {
       print("googleLogin error: $e");
@@ -136,41 +139,9 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  void clearUserData() {
+  void clearUserData() async {
     _user = User.emptyUser();
     _googleUser = null;
     notifyListeners();
-  }
-}
-
-class UserProvider2 with ChangeNotifier {
-  final googleSignIn = GoogleSignIn();
-
-  GoogleSignInAccount? _user;
-  GoogleSignInAccount get user => _user!;
-
-  Future<void> googleLogin() async {
-    final googleUser = await googleSignIn.signIn();
-    if (googleUser == null) return;
-
-    _user = googleUser;
-
-    final googleAuth = await googleUser.authentication;
-
-    final credential = firebaseAuth.GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    print(credential.idToken);
-    print(credential.accessToken);
-
-    await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
-    notifyListeners();
-  }
-
-  Future<void> logout() async {
-    await googleSignIn.disconnect();
-    firebaseAuth.FirebaseAuth.instance.signOut();
   }
 }

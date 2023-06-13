@@ -26,6 +26,7 @@ class AuthService {
   }) async {
     // function here
     try {
+      final sharedPrefs = await SharedPreferences.getInstance();
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
       var res = await service.requestApi(
@@ -53,6 +54,7 @@ class AuthService {
           fcmToken: fcmToken!,
           deviceToken: deviceToken!,
         );
+        sharedPrefs.setBool('isGoogleLogin', false);
         onSuccess();
       } else {
         if (res.statusCode == 403) {
@@ -68,12 +70,13 @@ class AuthService {
     }
   }
 
-  Future<void> signInWithGoogle({
+  Future<bool> signInWithGoogle({
     required BuildContext context,
     required String idToken,
     required String accessToken,
   }) async {
     try {
+      final sharedPrefs = await SharedPreferences.getInstance();
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
       var res = await service.requestApi(
@@ -86,7 +89,7 @@ class AuthService {
         },
       );
 
-      if (!context.mounted) return;
+      if (!context.mounted) return false;
 
       if (res.statusCode == 200) {
         await _loginMethod(
@@ -96,18 +99,23 @@ class AuthService {
           fcmToken: fcmToken!,
           deviceToken: deviceToken!,
         );
+        sharedPrefs.setBool('isGoogleLogin', true);
+        return true;
       } else if (res.statusCode == 409) {
         showSnackBar(
             context, "Email already registered through traditional login.");
       } else if (res.statusCode == 403) {
         showBannedDialog(context: context);
-        return;
       } else if (res.statusCode == 400) {
         showSnackBar(context, "Invalid email address. use CvSU email address.");
+      } else {
+        showSnackBar(context, "Something went wrong, please try again later.");
       }
     } catch (e) {
       print(e);
     }
+
+    return false;
   }
 
   Future<void> signup({
