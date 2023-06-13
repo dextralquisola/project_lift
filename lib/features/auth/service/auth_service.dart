@@ -53,6 +53,7 @@ class AuthService {
           res: res,
           fcmToken: fcmToken!,
           deviceToken: deviceToken!,
+          isFromGoogleLogin: false,
         );
         sharedPrefs.setBool('isGoogleLogin', false);
         onSuccess();
@@ -99,6 +100,7 @@ class AuthService {
           res: res,
           fcmToken: fcmToken!,
           deviceToken: deviceToken!,
+          isFromGoogleLogin: true,
         );
         sharedPrefs.setBool('isGoogleLogin', true);
       } else if (res.statusCode == 409) {
@@ -179,11 +181,13 @@ class AuthService {
         isGoogleLogin = sharedPrefs.getBool('isGoogleLogin')!;
       }
 
+      print("isGoogleLogin: $isGoogleLogin");
+
       var res = await service.requestApi(
         path: '/api/users/me',
         method: 'GET',
         headers: {
-          "Authorization": isGoogleLogin ? "Bearer $token" : "Google $token",
+          "Authorization": isGoogleLogin ? "Google $token" : "Bearer $token",
           "fcmToken": fcmToken!,
           "deviceToken": deviceToken!,
         },
@@ -219,10 +223,10 @@ class AuthService {
     required http.Response res,
     required String fcmToken,
     required String deviceToken,
+    required bool isFromGoogleLogin,
     bool isSignup = false,
     bool isFromLogin = false,
     bool isFromAutoLogin = false,
-    bool isFromGoogleLogin = false,
     String token = "",
   }) async {
     /*

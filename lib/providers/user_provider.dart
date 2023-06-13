@@ -85,6 +85,7 @@ class UserProvider with ChangeNotifier {
     if (prefs.containsKey('isGoogleLogin')) {
       _isGoogleLogin = prefs.getBool('isGoogleLogin')!;
     }
+    print("getuserstate isGoogleLogin: $_isGoogleLogin");
   }
 
   Future<void> logout() async {
