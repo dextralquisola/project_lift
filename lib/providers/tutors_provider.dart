@@ -5,7 +5,6 @@ class TutorProvider with ChangeNotifier {
   List<User> _tutors = [];
 
   int _currentPage = 1;
-  int _totalPages = 1;
 
   List<User> get tutors => _tutors
       .where((tutor) =>
@@ -39,7 +38,6 @@ class TutorProvider with ChangeNotifier {
   void clearTutors([bool notify = true]) {
     _tutors = [];
     _currentPage = 1;
-    _totalPages = 1;
     notify ? notifyListeners() : () {};
   }
 

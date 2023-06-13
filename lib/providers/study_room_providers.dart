@@ -6,7 +6,6 @@ class StudyRoomProvider with ChangeNotifier {
   List<String> _pendingRooms = [];
 
   int _currentPage = 1;
-  int _totalPages = 1;
 
   List<StudyRoom> get studyRooms => _studyRooms;
   int get currentPage => _currentPage;
@@ -70,7 +69,6 @@ class StudyRoomProvider with ChangeNotifier {
 
   void clearStudyRooms([bool isNotify = true]) {
     _currentPage = 1;
-    _totalPages = 1;
     _studyRooms = [];
     _pendingRooms = [];
     isNotify ? notifyListeners() : () {};
