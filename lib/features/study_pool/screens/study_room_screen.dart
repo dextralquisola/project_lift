@@ -207,6 +207,8 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                       controller: _scrollControllerMessage,
                       itemBuilder: (context, index) {
                         final message = chats[index];
+                        final formattedName =
+                            "${message.firstName.capitalize()} ${message.lastName.capitalize()}";
                         return Wrap(
                           alignment: message.userId == user.userId
                               ? WrapAlignment.end
@@ -227,10 +229,10 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                                   children: [
                                     if (message.userId != user.userId)
                                       AppText(
-                                          textColor: primaryColor,
-                                          fontWeight: FontWeight.w600,
-                                          text:
-                                              "${message.firstName} ${message.lastName}"),
+                                        textColor: primaryColor,
+                                        fontWeight: FontWeight.w600,
+                                        text: formattedName,
+                                      ),
                                     AppText(
                                       textSize: 14,
                                       textColor: message.userId == user.userId

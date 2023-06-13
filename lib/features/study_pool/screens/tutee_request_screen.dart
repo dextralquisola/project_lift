@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/features/find_tutor/widgets/tutor_card_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -37,12 +38,11 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
                 itemCount: requests.length,
                 itemBuilder: (context, index) {
                   final request = requests[index];
-
+                  final formattedName =
+                      '${request.tuteeFirstName.capitalize()} ${request.tuteeLastName.capitalize()}';
                   return Card(
                     child: ListTile(
-                      title: AppText(
-                          text:
-                              "${index + 1}. ${request.tuteeFirstName} ${request.tuteeLastName}"),
+                      title: AppText(text: "${index + 1}. $formattedName"),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -108,6 +108,9 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
     final rating = request.parsedRating();
     final ratings = request.getRatingsAsTutee;
 
+    final formattedName =
+        '${request.tuteeFirstName.capitalize()} ${request.tuteeLastName.capitalize()}';
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -118,7 +121,7 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
               borderRadius: BorderRadius.circular(10.0),
             ),
             title: AppText(
-              text: "${request.tuteeFirstName} ${request.tuteeLastName}",
+              text: formattedName,
               fontWeight: FontWeight.w600,
             ),
             content: Column(
