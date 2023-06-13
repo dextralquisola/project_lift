@@ -140,14 +140,14 @@ class User {
       dateTimeAvailability: map['timeAndDateAvailability'] ?? '',
       isEmailVerified: map['isEmailVerified'] ?? false,
       hasRoom: map['hasRoom'] ?? false,
-      ratingAsTutor: map['ratingsAsTutor'] == null || map['ratingsAsTutor'].isEmpty
+      ratingAsTutor: map['ratingsAsTutor'] == null
           ? []
           : List<TutorRating>.from(
               map['ratingsAsTutor']?.map(
                 (x) => TutorRating.fromMap(x),
               ),
             ),
-      ratingAsTutee: map['ratingsAsTutee'] == null || map['ratingsAsTutee'].isEmpty
+      ratingAsTutee: map['ratingsAsTutee'] == null
           ? []
           : List<TuteeRating>.from(
               map['ratingsAsTutee']?.map(

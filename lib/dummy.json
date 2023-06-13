@@ -1,25 +1,236 @@
 {
-  "subject": {
-    "subjectCode": "MATH 4A",
-    "description": "EXPERIMENTAL STATISTICS",
-    "subtopics": []
-  },
-  "_id": "6488440f01b77b583b4b2fa0",
-  "tutorId": {
-    "_id": "6484371c95bbcbaf6dc24e41",
-    "firstName": "djtest5",
-    "lastName": "test"
-  },
-  "studentId": {
-    "_id": "648407eb508bf9176eeac335",
-    "firstName": "DEXTER JAY",
-    "lastName": "ALQUISOLA",
-    "ratingsAsTutee": []
-  },
-  "name": "sdf",
-  "status": "public",
-  "location": "sdf",
-  "schedule": "2023-06-12T00:00:00.000+16:24.18:24",
-  "reqStatus": "pending",
-  "__v": 0
+  "tutors": [
+    {
+      "_id": "648880c55958ebbe2bfb7a8e",
+      "firstName": "AUGUSTINE LAWRENCE",
+      "lastName": "TRUMATA",
+      "email": "augustinelawrence.trumata@cvsu.edu.ph",
+      "avatar": "https://firebasestorage.googleapis.com/v0/b/project-lift-f75f9.appspot.com/o/648880c55958ebbe2bfb7a8e?alt=media&token=bd4d4064-8969-48ca-ad5c-6eb6c5c29cfd",
+      "role": "tutor",
+      "averageRatingAsTutor": 3,
+      "timeAndDateAvailability": "M.T.W.Th.F.Sat+8:0-16:0",
+      "isAvailable": true,
+      "hasRoom": false,
+      "googleId": "102922485550442890054",
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [
+        {
+          "subject": {
+            "subjectCode": "DCIT 21A",
+            "description": "INTRODUCTION TO COMPUTING",
+            "subtopics": [
+              {
+                "name": "Loopings",
+                "description": "While Loop",
+                "subtopicsRatings": [
+                  {
+                    "value": 3,
+                    "feedback": "nice",
+                    "tuteeId": {
+                      "_id": "648891ede80c1f72e1b3c31a",
+                      "firstName": "KARL JOSEPH",
+                      "lastName": "DUCTA",
+                      "avatar": ""
+                    },
+                    "_id": "6488931be80c1f72e1b3ca47"
+                  }
+                ],
+                "averageSubtopicsRating": 3,
+                "_id": "6488931be80c1f72e1b3ca46"
+              }
+            ],
+            "averageSubjectsRating": 3
+          },
+          "_id": "6488931be80c1f72e1b3ca45"
+        }
+      ],
+      "ratingsAsTutee": [],
+      "subjects": [
+        {
+          "subjectCode": "DCIT 21A",
+          "description": "INTRODUCTION TO COMPUTING",
+          "_id": "648881705958ebbe2bfb89aa",
+          "subtopics": [
+            {
+              "name": "Loopings",
+              "description": "While Loop",
+              "_id": "6488911de80c1f72e1b3c212"
+            }
+          ]
+        }
+      ],
+      "createdAt": "2023-06-13T14:44:21.584Z",
+      "updatedAt": "2023-06-13T16:30:15.382Z",
+      "__v": 6,
+      "socketId": "XdrRbxQMSQ_KXYzPAABA"
+    },
+    {
+      "_id": "647a236b1688f5c3eaa84183",
+      "firstName": "Paul Kenneth",
+      "lastName": "Ilan",
+      "email": "paulkenneth.ilan@cvsu.edu.ph",
+      "avatar": "",
+      "role": "tutor",
+      "averageRatingAsTutor": 0,
+      "timeAndDateAvailability": "M.T.W.Th.F.Sat+6:16-19:16",
+      "isAvailable": true,
+      "hasRoom": false,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [],
+      "ratingsAsTutee": [
+        {
+          "value": 5,
+          "feedback": "Very Good!",
+          "tutorId": null,
+          "_id": "64887c635958ebbe2bfb57e9"
+        },
+        {
+          "value": 4,
+          "feedback": "very good",
+          "tutorId": null,
+          "_id": "64887e695958ebbe2bfb623d"
+        }
+      ],
+      "subjects": [
+        {
+          "subjectCode": "COSC 50A",
+          "description": "DISCRETE STRUCTURE",
+          "subtopics": [
+            {
+              "name": "Boolean",
+              "description": "true or false",
+              "_id": "647a23e91688f5c3eaa84222"
+            }
+          ],
+          "_id": "647a23e91688f5c3eaa84221"
+        }
+      ],
+      "createdAt": "2023-06-02T17:14:19.815Z",
+      "updatedAt": "2023-06-13T14:49:17.995Z",
+      "__v": 6,
+      "socketId": ""
+    },
+    {
+      "_id": "647f68a2c4a22b6c8130f47c",
+      "firstName": "tester12",
+      "lastName": "test",
+      "email": "tester12@cvsu.edu.ph",
+      "avatar": "",
+      "role": "tutor",
+      "averageRatingAsTutor": 0,
+      "timeAndDateAvailability": "M.T.W.Th.F.Sat+6:0-23:58",
+      "isAvailable": true,
+      "hasRoom": false,
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [],
+      "ratingsAsTutee": [],
+      "subjects": [
+        {
+          "subjectCode": "MATH 1A",
+          "description": "ANALYTIC GEOMETRY",
+          "_id": "647f6a6bc4a22b6c8130f755",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "COSC 55A",
+          "description": "DISCRETE STRUCTURES II",
+          "_id": "647f6a6bc4a22b6c8130f756",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "DCIT 50LEC",
+          "description": "OBJECT ORIENTED PROGRAMMING",
+          "_id": "647f6a6bc4a22b6c8130f757",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "COSC 60LEC",
+          "description": "DIGITAL LOGIC DESIGN",
+          "_id": "647f6a6bc4a22b6c8130f758",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "INSY 50",
+          "description": "FUNDAMENTALS OF INFORMATION SYSTEMS",
+          "_id": "647f6a6bc4a22b6c8130f759",
+          "subtopics": []
+        }
+      ],
+      "createdAt": "2023-06-06T17:10:58.077Z",
+      "updatedAt": "2023-06-13T16:17:12.687Z",
+      "__v": 23,
+      "socketId": ""
+    },
+    {
+      "_id": "648891ede80c1f72e1b3c31a",
+      "firstName": "KARL JOSEPH",
+      "lastName": "DUCTA",
+      "email": "karljoseph.ducta@cvsu.edu.ph",
+      "avatar": "",
+      "role": "tutor",
+      "averageRatingAsTutor": 0,
+      "timeAndDateAvailability": "M.T.W.Th.F.Sat+6:0-23:58",
+      "isAvailable": true,
+      "hasRoom": false,
+      "googleId": "112211402719602412981",
+      "isEmailVerified": true,
+      "isBanned": false,
+      "ratingsAsTutor": [],
+      "ratingsAsTutee": [
+        {
+          "value": 4,
+          "feedback": "Very Good 👍👍",
+          "tutorId": {
+            "_id": "648880c55958ebbe2bfb7a8e",
+            "firstName": "AUGUSTINE LAWRENCE",
+            "lastName": "TRUMATA",
+            "avatar": "https://firebasestorage.googleapis.com/v0/b/project-lift-f75f9.appspot.com/o/648880c55958ebbe2bfb7a8e?alt=media&token=bd4d4064-8969-48ca-ad5c-6eb6c5c29cfd"
+          },
+          "_id": "648892e2e80c1f72e1b3ca14"
+        }
+      ],
+      "subjects": [
+        {
+          "subjectCode": "MATH 1A",
+          "description": "ANALYTIC GEOMETRY",
+          "_id": "648895f6e80c1f72e1b3d951",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "COSC 55A",
+          "description": "DISCRETE STRUCTURES II",
+          "_id": "648895f6e80c1f72e1b3d952",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "DCIT 50LEC",
+          "description": "OBJECT ORIENTED PROGRAMMING",
+          "_id": "648895f6e80c1f72e1b3d953",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "COSC 60LEC",
+          "description": "DIGITAL LOGIC DESIGN",
+          "_id": "648895f6e80c1f72e1b3d954",
+          "subtopics": []
+        },
+        {
+          "subjectCode": "INSY 50",
+          "description": "FUNDAMENTALS OF INFORMATION SYSTEMS",
+          "_id": "648895f6e80c1f72e1b3d955",
+          "subtopics": []
+        }
+      ],
+      "createdAt": "2023-06-13T15:57:33.618Z",
+      "updatedAt": "2023-06-13T16:15:23.473Z",
+      "__v": 8,
+      "socketId": ""
+    }
+  ],
+  "currentPage": 1,
+  "totalPages": 1,
+  "totalTutors": 4
 }

@@ -22,12 +22,16 @@ class Rating {
       feedback: map['feedback'] ?? '',
       firstName: isUserMapped
           ? map['tuteeId'] == null
-              ? map['tutorId']['firstName'] ?? ''
+              ? map['tutorId'] != null
+                  ? map['tutorId']['firstName'] ?? ''
+                  : ''
               : map['tuteeId']['firstName'] ?? ''
           : '',
       lastName: isUserMapped
           ? map['tuteeId'] == null
-              ? map['tutorId']['lastName'] ?? ''
+              ? map['tutorId'] != null
+                  ? map['tutorId']['lastName'] ?? ''
+                  : ''
               : map['tuteeId']['lastName'] ?? ''
           : '',
     );
@@ -53,12 +57,16 @@ class TuteeRating extends Rating {
       feedback: map['feedback'] ?? '',
       firstName: isUserMapped
           ? map['tuteeId'] == null
-              ? map['tutorId']['firstName'] ?? ''
+              ? map['tutorId'] != null
+                  ? map['tutorId']['firstName'] ?? ''
+                  : ''
               : map['tuteeId']['firstName'] ?? ''
           : '',
       lastName: isUserMapped
           ? map['tuteeId'] == null
-              ? map['tutorId']['lastName'] ?? ''
+              ? map['tutorId'] != null
+                  ? map['tutorId']['lastName'] ?? ''
+                  : ''
               : map['tuteeId']['lastName'] ?? ''
           : '',
     );

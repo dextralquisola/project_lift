@@ -27,6 +27,10 @@ class TutorService {
         userAuthHeader: userProvider,
       );
 
+      print("fetchTutors");
+      print(tutorProvider.currentPage);
+      print(res.body);
+
       if (!context.mounted) return;
 
       if (res.statusCode == 200) {
