@@ -26,7 +26,6 @@ class AuthService {
   }) async {
     // function here
     try {
-      final sharedPrefs = await SharedPreferences.getInstance();
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
       var res = await service.requestApi(
@@ -53,9 +52,7 @@ class AuthService {
           res: res,
           fcmToken: fcmToken!,
           deviceToken: deviceToken!,
-          isFromGoogleLogin: false,
         );
-        sharedPrefs.setBool('isGoogleLogin', false);
         onSuccess();
       } else {
         if (res.statusCode == 403) {
@@ -77,8 +74,6 @@ class AuthService {
     required String accessToken,
   }) async {
     try {
-      final sharedPrefs = await SharedPreferences.getInstance();
-
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
       var res = await service.requestApi(
@@ -100,9 +95,7 @@ class AuthService {
           res: res,
           fcmToken: fcmToken!,
           deviceToken: deviceToken!,
-          isFromGoogleLogin: true,
         );
-        sharedPrefs.setBool('isGoogleLogin', true);
       } else if (res.statusCode == 409) {
         showSnackBar(
             context, "Email already registered through traditional login.");
@@ -166,7 +159,6 @@ class AuthService {
   Future<void> autoLogin(BuildContext context) async {
     // function here
     try {
-      final sharedPrefs = await SharedPreferences.getInstance();
       var fcmToken = await _getFCMToken();
       var deviceToken = await _getDeviceId();
 
@@ -176,18 +168,11 @@ class AuthService {
       if (token == null) return;
       print("token: $token");
 
-      var isGoogleLogin = false;
-      if (sharedPrefs.containsKey('isGoogleLogin')) {
-        isGoogleLogin = sharedPrefs.getBool('isGoogleLogin')!;
-      }
-
-      print("isGoogleLogin: $isGoogleLogin");
-
       var res = await service.requestApi(
         path: '/api/users/me',
         method: 'GET',
         headers: {
-          "Authorization": isGoogleLogin ? "Google $token" : "Bearer $token",
+          "Authorization": token,
           "fcmToken": fcmToken!,
           "deviceToken": deviceToken!,
         },
@@ -205,7 +190,6 @@ class AuthService {
             context: context,
             res: res,
             isFromAutoLogin: true,
-            isFromGoogleLogin: isGoogleLogin,
             token: token,
             fcmToken: fcmToken,
             deviceToken: deviceToken,
@@ -223,7 +207,6 @@ class AuthService {
     required http.Response res,
     required String fcmToken,
     required String deviceToken,
-    required bool isFromGoogleLogin,
     bool isSignup = false,
     bool isFromLogin = false,
     bool isFromAutoLogin = false,
@@ -279,9 +262,7 @@ class AuthService {
         return;
       }
 
-      SocketClient(userProvider.user.token, isFromGoogleLogin)
-          .socket!
-          .connect();
+      SocketClient(userProvider.user.token).socket!.connect();
       SocketListeners().activateEventListeners(context);
 
       if (isSignup) showSnackBar(context, "Account created successfully");

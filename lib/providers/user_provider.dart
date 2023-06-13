@@ -82,10 +82,10 @@ class UserProvider with ChangeNotifier {
   Future<void> getUserState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _isTutorialDoNotShow = prefs.getBool('isTutorialDoNotShow') ?? false;
-    if (prefs.containsKey('isGoogleLogin')) {
-      _isGoogleLogin = prefs.getBool('isGoogleLogin')!;
-    }
-    print("getuserstate isGoogleLogin: $_isGoogleLogin");
+    // if (prefs.containsKey('isGoogleLogin')) {
+    //   _isGoogleLogin = prefs.getBool('isGoogleLogin')!;
+    // }
+    // print("getuserstate isGoogleLogin: $_isGoogleLogin");
   }
 
   Future<void> logout() async {

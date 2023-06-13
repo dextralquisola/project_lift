@@ -20,16 +20,14 @@ class SocketClient {
     _instance = null;
   }
 
-  SocketClient._internal(String authToken, bool isGoogleLogin) {
-    var t = isGoogleLogin ? "Google $authToken" : "Bearer $authToken";
-    print('SocketClient._internal()');
-    print(t);
+  SocketClient._internal(
+    String authToken,
+  ) {
     socket = io.io(
       baseServerAddress,
       io.OptionBuilder().setTransports(['websocket']).setQuery(
         {
-          'authToken':
-              isGoogleLogin ? "Google $authToken" : "Bearer $authToken",
+          'authToken': authToken,
         },
       ).build(),
     );
@@ -40,8 +38,8 @@ class SocketClient {
     socket!.onDisconnect((data) => print('Socket.IO server disconnected'));
   }
 
-  factory SocketClient(String authToken, [bool isGoogleLogin = false]) {
-    _instance = SocketClient._internal(authToken, isGoogleLogin);
+  factory SocketClient(String authToken) {
+    _instance = SocketClient._internal(authToken);
     return _instance!;
   }
 
