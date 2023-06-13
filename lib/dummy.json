@@ -1,24 +1,25 @@
 {
-  "user": {
-    "_id": "6483d611508bf9176eeab752",
+  "subject": {
+    "subjectCode": "MATH 4A",
+    "description": "EXPERIMENTAL STATISTICS",
+    "subtopics": []
+  },
+  "_id": "6488440f01b77b583b4b2fa0",
+  "tutorId": {
+    "_id": "6484371c95bbcbaf6dc24e41",
+    "firstName": "djtest5",
+    "lastName": "test"
+  },
+  "studentId": {
+    "_id": "648407eb508bf9176eeac335",
     "firstName": "DEXTER JAY",
     "lastName": "ALQUISOLA",
-    "email": "dexterjay.alquisola@cvsu.edu.ph",
-    "avatar": "",
-    "role": "tutee",
-    "averageRatingAsTutor": 0,
-    "timeAndDateAvailability": "",
-    "isAvailable": true,
-    "hasRoom": false,
-    "googleId": "102646223652699745847",
-    "isEmailVerified": true,
-    "isBanned": false,
-    "ratingsAsTutor": [],
-    "ratingsAsTutee": [],
-    "subjects": [],
-    "createdAt": "2023-06-10T01:46:57.878Z",
-    "updatedAt": "2023-06-10T01:46:57.955Z",
-    "__v": 2
+    "ratingsAsTutee": []
   },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDgzZDYxMTUwOGJmOTE3NmVlYWI3NTIiLCJnb29nbGVJZCI6IjEwMjY0NjIyMzY1MjY5OTc0NTg0NyIsImlhdCI6MTY4NjM2MTYxN30.0cNKZPi5gIjtv8NLGnzg4yvaJUYBJwfWwP2i-f8GxkM"
+  "name": "sdf",
+  "status": "public",
+  "location": "sdf",
+  "schedule": "2023-06-12T00:00:00.000+16:24.18:24",
+  "reqStatus": "pending",
+  "__v": 0
 }

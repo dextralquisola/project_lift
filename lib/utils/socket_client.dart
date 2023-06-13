@@ -21,6 +21,9 @@ class SocketClient {
   }
 
   SocketClient._internal(String authToken, bool isGoogleLogin) {
+    var t = isGoogleLogin ? "Google $authToken" : "Bearer $authToken";
+    print('SocketClient._internal()');
+    print(t);
     socket = io.io(
       baseServerAddress,
       io.OptionBuilder().setTransports(['websocket']).setQuery(
