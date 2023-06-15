@@ -114,16 +114,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return (await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: AppText(text: 'Are you sure?'),
-            content: AppText(text: 'Do you want to exit LFT?'),
+            title: const AppText(text: 'Are you sure?'),
+            content: const AppText(text: 'Do you want to exit LFT?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: AppText(text: 'No'),
+                child: const AppText(text: 'No'),
               ),
               TextButton(
                 onPressed: () => SystemNavigator.pop(),
-                child: AppText(text: 'Yes'),
+                child: const AppText(text: 'Yes'),
               ),
             ],
           ),
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: AppText(
+          title: const AppText(
             text: 'Reported!',
             fontWeight: FontWeight.w600,
           ),
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppText(text: 'You have been reported!'),
+              const AppText(text: 'You have been reported!'),
               const SizedBox(height: 10),
               AppText(text: 'Category: ${data['category']}'),
               AppText(text: 'Reason: ${data['content']}'),
@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: [
             TextButton(
-              child: AppText(text: 'OK'),
+              child: const AppText(text: 'OK'),
               onPressed: () {
                 appStateProvider.dismissNotif();
                 Navigator.of(context).pop();

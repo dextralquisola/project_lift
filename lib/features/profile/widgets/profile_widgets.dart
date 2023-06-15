@@ -13,11 +13,11 @@ Future<bool> showCancelApplyDialog(BuildContext context) async {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        title: AppText(text: 'Warning!'),
+        title: const AppText(text: 'Warning!'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             AppText(
               text:
                   "The application is processing, please wait. Do you want to cancel the application?",
@@ -29,7 +29,7 @@ Future<bool> showCancelApplyDialog(BuildContext context) async {
             onPressed: () {
               Navigator.pop(context, false);
             },
-            child: AppText(
+            child: const AppText(
               text: 'Cancel',
               textColor: Colors.red,
             ),
@@ -38,7 +38,7 @@ Future<bool> showCancelApplyDialog(BuildContext context) async {
             onPressed: () {
               Navigator.pop(context, true);
             },
-            child: AppText(
+            child: const AppText(
               text: 'Ok',
               textColor: Colors.green,
             ),
@@ -53,12 +53,12 @@ Future<void> logoutDialog(BuildContext context) async {
   return await showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: AppText(text: 'Are you sure?'),
-      content: AppText(text: 'Do you want to logout?'),
+      title: const AppText(text: 'Are you sure?'),
+      content: const AppText(text: 'Do you want to logout?'),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: AppText(text: 'No'),
+          child: const AppText(text: 'No'),
         ),
         TextButton(
           onPressed: () async {
@@ -67,7 +67,7 @@ Future<void> logoutDialog(BuildContext context) async {
               Navigator.of(context).pop(true);
             }
           },
-          child: AppText(text: 'Yes'),
+          child: const AppText(text: 'Yes'),
         ),
       ],
     ),
@@ -82,18 +82,18 @@ void showApplyTutorDialog(BuildContext context) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        title: AppText(text: 'Be a tutor!'),
+        title: const AppText(text: 'Be a tutor!'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppText(
+            const AppText(
                 text:
                     "Beware this cannot be undo, being a tutor can still be a tutee. Being a tutor can have the ff:"),
             const SizedBox(height: 10),
-            AppText(text: "1. Badge"),
-            AppText(text: "2. Rated by tutee"),
-            AppText(text: "3. Create tutor session"),
+            const AppText(text: "1. Badge"),
+            const AppText(text: "2. Rated by tutee"),
+            const AppText(text: "3. Create tutor session"),
             const SizedBox(height: 10),
             AppButton(
               onPressed: () async {
@@ -112,7 +112,7 @@ void showApplyTutorDialog(BuildContext context) {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: AppText(
+              child: const AppText(
                 text: "Maybe next time...",
                 textColor: Colors.grey,
                 fontWeight: FontWeight.w200,

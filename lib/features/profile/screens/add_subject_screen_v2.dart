@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:project_lift/constants/styles.dart';
-import 'package:project_lift/features/profile/screens/tutorial_screen.dart';
-import 'package:project_lift/utils/utils.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_text.dart';
+
+import './tutorial_screen.dart';
+
+import '../../../constants/styles.dart';
+import '../../../utils/utils.dart';
+import '../../../widgets/app_button.dart';
+import '../../../widgets/app_text.dart';
 
 import '../service/profile_service.dart';
 import '../widgets/preview_image_screen.dart';
@@ -57,19 +59,21 @@ class _AddSubjectScreenV2State extends State<AddSubjectScreenV2> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppText(text: "Add subject by uploading grades", textSize: 20),
+              const AppText(
+                  text: "Add subject by uploading grades", textSize: 20),
               const SizedBox(height: 5),
               Row(
                 children: [
-                  AppText(text: "Select grade (from CvSU student portal)"),
+                  const AppText(
+                      text: "Select grade (from CvSU student portal)"),
                   PopupMenuButton(
                     icon: const Icon(Icons.info_outline, color: Colors.amber),
                     itemBuilder: (context) {
                       return [
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 0,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: AppText(
                               text:
                                   "The subject within your grades will be added automatically if the grades is atleast 1.75",
@@ -116,7 +120,7 @@ class _AddSubjectScreenV2State extends State<AddSubjectScreenV2> {
                         ),
                       ),
                     )
-                  : SizedBox(
+                  : const SizedBox(
                       height: 150,
                       child: Card(
                         child: Center(

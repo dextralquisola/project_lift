@@ -81,12 +81,12 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
     return Scaffold(
       appBar: AppBar(
         title: widget.isAskHelp
-            ? AppText(
+            ? const AppText(
                 text: 'Request Help',
                 textSize: 20,
                 textColor: Colors.white,
               )
-            : AppText(
+            : const AppText(
                 text: 'Create Study Room',
                 textSize: 20,
                 textColor: Colors.white,
@@ -133,7 +133,8 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                   onStepCancel: cancel,
                   steps: [
                     Step(
-                      title: AppText(text: "Select subject and sub-topics."),
+                      title:
+                          const AppText(text: "Select subject and sub-topics."),
                       content: Column(
                         children: [
                           Row(
@@ -147,7 +148,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        AppText(
+                                        const AppText(
                                             text: "Select subject",
                                             textSize: 17),
                                         DropdownButton(
@@ -173,7 +174,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      AppText(
+                                      const AppText(
                                           text: "Selected subtopics",
                                           textSize: 17),
                                       const Spacer(),
@@ -216,7 +217,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                           : StepState.disabled,
                     ),
                     Step(
-                      title: AppText(text: 'Set study room name.'),
+                      title: const AppText(text: 'Set study room name.'),
                       content: Column(
                         children: [
                           AppTextField(
@@ -238,7 +239,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                           : StepState.disabled,
                     ),
                     Step(
-                      title: AppText(text: "Set meet schedule."),
+                      title: const AppText(text: "Set meet schedule."),
                       content: Column(
                         children: [
                           GestureDetector(
@@ -362,11 +363,11 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                           : StepState.disabled,
                     ),
                     Step(
-                      title: AppText(text: "Select room privacy"),
+                      title: const AppText(text: "Select room privacy"),
                       content: Column(
                         children: [
                           RadioListTile(
-                            title: AppText(text: "Public"),
+                            title: const AppText(text: "Public"),
                             value: StudyRoomStatus.public,
                             groupValue: studyRoomStatus,
                             onChanged: (value) {
@@ -434,7 +435,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                                 ),
                           TextButton(
                             onPressed: () => setState(() => _currentStep = 2),
-                            child: AppText(
+                            child: const AppText(
                               text: "<< Go back to previous step.",
                               textColor: Colors.redAccent,
                             ),
@@ -521,7 +522,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
         if (subTopic.topic == '' && subTopic.description == '') {
           return DropdownMenuItem(
             value: subTopic,
-            child: AppText(text: 'List of subtopics'),
+            child: const AppText(text: 'List of subtopics'),
           );
         }
         return DropdownMenuItem(
@@ -590,7 +591,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            title: AppText(text: 'Select a topic.'),
+            title: const AppText(text: 'Select a topic.'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -659,7 +660,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
         ? validateStep()
             ? setState(() => _currentStep += 1)
             : ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   backgroundColor: Colors.redAccent,
                   content: AppText(
                     text: 'Please fill up all fields.',

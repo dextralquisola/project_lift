@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/styles.dart';
-import '../../../providers/top_subjects_provider.dart';
 import '../service/profile_service.dart';
 import '../../../models/subject.dart';
 import '../../../utils/utils.dart';
@@ -83,7 +82,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                         textSize: 12,
                       ),
                     )
-                  : AppText(text: 'List of subjects'),
+                  : const AppText(text: 'List of subjects'),
             );
           }).toList();
 
@@ -248,7 +247,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        SnackBar(
+                                        const SnackBar(
                                           content: AppText(
                                             text:
                                                 'Please add sub topics and select a subject.',

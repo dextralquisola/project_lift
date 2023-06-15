@@ -88,7 +88,7 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            AppText(
+            const AppText(
               text: "Select your schedule for the week",
               textSize: 20,
               textColor: Colors.black,
@@ -189,14 +189,14 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
             const SizedBox(height: 20),
             Row(
               children: [
-                AppText(text: "On/Off Availability"),
+                const AppText(text: "On/Off Availability"),
                 PopupMenuButton(
                   icon: const Icon(
                     Icons.info,
                     color: Colors.blueAccent,
                   ),
                   itemBuilder: (context) => [
-                    PopupMenuItem(
+                    const PopupMenuItem(
                       child: AppText(
                         text:
                             "Set visibility of your profile to tutees. If you are not available, your profile will not be visible to tutees.",

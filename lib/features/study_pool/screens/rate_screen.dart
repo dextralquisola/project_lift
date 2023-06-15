@@ -195,7 +195,7 @@ class _RateScreenState extends State<RateScreen> {
         child: Column(
           children: [
             SizedBox(height: size.height * 0.11),
-            AppText(
+            const AppText(
               text: "Rate your tutor's performance",
               textSize: 20,
             ),

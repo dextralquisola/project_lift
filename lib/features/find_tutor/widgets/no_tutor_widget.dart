@@ -12,7 +12,7 @@ class NoTutorWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AppText(text: "There is no tutor available.", textSize: 20),
+          const AppText(text: "There is no tutor available.", textSize: 20),
           TextButton(
             onPressed: () async =>
                 await tutorService.fetchTutors(context, true),

@@ -80,7 +80,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                                   kToolbarHeight ||
                           constraints.biggest.height > 56 &&
                               constraints.biggest.height <= 76
-                      ? AppText(
+                      ? const AppText(
                           text: "Find your tutor",
                           textColor: Colors.white,
                           textSize: 24,
@@ -88,7 +88,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
+                          children: const [
                             AppText(
                                 text: 'Find your',
                                 textColor: Colors.white,

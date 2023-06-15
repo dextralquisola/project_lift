@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/widgets/profile_widgets/profile_name_builder.dart';
 import 'package:provider/provider.dart';
 
 import '../../auth/service/auth_service.dart';
 
+import '../../../widgets/profile_widgets/profile_name_builder.dart';
 import '../../../widgets/profile_widgets/user_ratings_builder.dart';
 import '../../../widgets/profile_widgets/profile_top_builder.dart';
 import '../widgets/profile_tutee_screen.dart';

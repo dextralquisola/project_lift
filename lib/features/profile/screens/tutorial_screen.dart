@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../widgets/app_text.dart';
+import '../../../widgets/app_button.dart';
 import '../../../providers/user_provider.dart';
 
 class TutorialScreen extends StatefulWidget {

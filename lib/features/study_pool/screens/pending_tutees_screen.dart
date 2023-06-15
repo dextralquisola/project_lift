@@ -27,7 +27,7 @@ class _PendingTuteesScreenState extends State<PendingTuteesScreen> {
           backgroundColor: primaryColor,
         ),
         body: pendingParticipants.isEmpty
-            ? Center(
+            ? const Center(
                 child: AppText(
                   text: 'No pending tutee requests',
                 ),

@@ -80,7 +80,7 @@ class _StudyRoomSearchScreenState extends State<StudyRoomSearchScreen> {
         ),
       ),
       body: _searchQuery.isEmpty
-          ? Center(
+          ? const Center(
               child: AppText(
                 text: "Search something...",
               ),

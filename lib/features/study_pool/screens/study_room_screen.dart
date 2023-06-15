@@ -124,9 +124,9 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                     value: 0,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.info, color: Colors.amber),
-                        const SizedBox(width: 5),
+                      children: const [
+                        Icon(Icons.info, color: Colors.amber),
+                        SizedBox(width: 5),
                         AppText(text: "Studyroom Details"),
                       ],
                     ),
@@ -135,9 +135,9 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                     value: 1,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.exit_to_app, color: Colors.redAccent),
-                        const SizedBox(width: 5),
+                      children: const [
+                        Icon(Icons.exit_to_app, color: Colors.redAccent),
+                        SizedBox(width: 5),
                         AppText(text: "Leave Room"),
                       ],
                     ),
@@ -190,7 +190,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
         body: Column(
           children: [
             chats.isEmpty
-                ? Expanded(
+                ? const Expanded(
                     child: Align(
                       alignment: Alignment.center,
                       child: AppText(
@@ -314,7 +314,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   }) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: AppText(
+      child: const AppText(
         text: "Cancel",
       ),
       onPressed: () {
@@ -337,7 +337,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: AppText(
+      title: const AppText(
         text: "Warning!",
         textColor: Colors.red,
         textSize: 20,
@@ -370,7 +370,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   }) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: AppText(
+      child: const AppText(
         text: "Cancel",
       ),
       onPressed: () {
@@ -378,7 +378,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
       },
     );
     Widget continueButton = TextButton(
-      child: AppText(text: "End session", textColor: Colors.red),
+      child: const AppText(text: "End session", textColor: Colors.red),
       onPressed: () async {
         Navigator.of(context).pop();
         await studyRoomService.endStudySession(context: context);
@@ -387,14 +387,14 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: AppText(
+      title: const AppText(
         text: "Warning!",
         textColor: Colors.red,
         textSize: 20,
         fontWeight: FontWeight.w600,
       ),
-      content:
-          AppText(text: "Are you sure you want to end this study session?"),
+      content: const AppText(
+          text: "Are you sure you want to end this study session?"),
       actions: [
         cancelButton,
         continueButton,

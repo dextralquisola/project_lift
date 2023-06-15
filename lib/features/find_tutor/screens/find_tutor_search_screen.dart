@@ -78,7 +78,7 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
         ),
       ),
       body: _searchQuery.isEmpty
-          ? Center(
+          ? const Center(
               child: AppText(
                 text: "Search something...",
               ),

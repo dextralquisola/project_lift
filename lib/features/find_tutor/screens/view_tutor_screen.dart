@@ -37,7 +37,7 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: AppText(
+        title: const AppText(
           text: "View Tutor",
           textColor: Colors.white,
           textSize: 20,
@@ -121,13 +121,13 @@ class _ViewTutorScreenState extends State<ViewTutorScreen> {
           children: [
             ExpansionTile(
               initiallyExpanded: true,
-              title: AppText(
+              title: const AppText(
                 text: "Subjects I can help with",
                 fontWeight: FontWeight.w600,
               ),
               children: [
                 if (user.subjects.isEmpty)
-                  ListTile(
+                  const ListTile(
                     title: AppText(text: "No subjects yet"),
                   ),
                 ...user.subjects.map((e) {

@@ -22,14 +22,14 @@ class SurveyScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppText(
+              const AppText(
                 text:
                     'We kindly request your participation in a survey for our thesis research, focusing on gathering insights about user experiences with our mobile application. Your valuable feedback will greatly contribute to our study, and we would greatly appreciate your time in completing the survey.',
                 textSize: 20,
                 textAlign: TextAlign.justify,
               ),
               const SizedBox(height: 20),
-              AppText(
+              const AppText(
                 text: "For non-tech user (e.g., Students)",
                 textSize: 20,
               ),
@@ -43,7 +43,7 @@ class SurveyScreen extends StatelessWidget {
                 height: 50,
               ),
               const SizedBox(height: 20),
-              AppText(
+              const AppText(
                 text: "For techinical user (e.g., IT professionals)",
                 textSize: 20,
               ),

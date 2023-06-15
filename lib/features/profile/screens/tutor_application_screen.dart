@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/profile/screens/tutorial_screen.dart';
-import 'package:project_lift/providers/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
+import './tutorial_screen.dart';
+import '../../../providers/user_provider.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_textfield.dart';
 import '../../../providers/user_requests_provider.dart';
@@ -62,10 +62,10 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
               icon: const Icon(Icons.info_outline, color: Colors.white),
               itemBuilder: (context) {
                 return [
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 0,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: AppText(
                         text:
                             "Hi! 👋 If you have submitted previous application and now its gone, it means that your application has been rejected.",
@@ -120,7 +120,7 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
                         alignment: Alignment.bottomCenter,
                         child: Column(
                           children: [
-                            AppText(
+                            const AppText(
                               textSize: 18,
                               text: "Select grade (from CvSU student portal)",
                               textOverflow: TextOverflow.clip,
@@ -149,7 +149,7 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
                       ),
                     const SizedBox(height: 10),
                     if (selectedImage == null && !hasTutorApplication) ...[
-                      SizedBox(
+                      const SizedBox(
                         height: 150,
                         child: Card(
                           child: Center(
@@ -166,7 +166,7 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          AppText(text: "Preview", textSize: 18),
+                          const AppText(text: "Preview", textSize: 18),
                           const SizedBox(height: 10),
                           GestureDetector(
                             onTap: () {

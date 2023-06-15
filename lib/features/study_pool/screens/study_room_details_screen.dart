@@ -51,7 +51,8 @@ class StudyRoomDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: AppText(text: 'Study Room Details', textColor: Colors.white),
+        title:
+            const AppText(text: 'Study Room Details', textColor: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -98,7 +99,7 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                             ? const SizedBox()
                             : Column(
                                 children: [
-                                  AppText(
+                                  const AppText(
                                     text: 'Room sub topics:',
                                     textColor: Colors.black,
                                     textSize: 20,
@@ -121,7 +122,7 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                                 ],
                               ),
                         const SizedBox(height: 10),
-                        AppText(
+                        const AppText(
                           text: 'Room participants:',
                           textColor: Colors.black,
                           textSize: 20,
@@ -164,8 +165,9 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                                               color: Colors.yellow)
                                           : participants[index]['status'] ==
                                                   'pending'
-                                              ? AppText(text: 'Pending')
-                                              : AppText(text: 'Participant'),
+                                              ? const AppText(text: 'Pending')
+                                              : const AppText(
+                                                  text: 'Participant'),
                                       const SizedBox(width: 10),
                                       participants[index]['userId'] ==
                                               userProvider.user.userId

@@ -100,7 +100,7 @@ class _StudyPoolScreenState extends State<StudyPoolScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AppText(
+                        const AppText(
                           text: "No study rooms...",
                           textSize: 20,
                         ),
