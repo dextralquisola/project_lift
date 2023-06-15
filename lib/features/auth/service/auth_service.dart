@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:project_lift/features/auth/widgets/auth_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../widgets/auth_widgets.dart';
 import '../../../utils/http_error_handler.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/socket_listeners.dart';
@@ -160,7 +160,7 @@ class AuthService {
         showSnackBar(context, "Something went wrong, please try again later.");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), 'signup');
     }
   }
 
@@ -186,7 +186,7 @@ class AuthService {
         },
       );
 
-      print(res.body);
+      printHttpLog(res, '/api/users/me');
 
       if (!context.mounted) return;
 
@@ -205,8 +205,7 @@ class AuthService {
         },
       );
     } catch (e) {
-      print("asdfasfasdfasdf");
-      print(e);
+      printLog(e.toString(), 'autoLogin');
     }
   }
 
@@ -230,7 +229,7 @@ class AuthService {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       var userData = json.decode(res.body);
 
-      print(res.body);
+      printLog(res.body, 'loginMethod');
 
       if (userData['message'] != null) {
         showSnackBar(context, userData['message']);
@@ -258,8 +257,7 @@ class AuthService {
         };
       }
 
-      print("login");
-      print(userData);
+      printLog(userData.toString(), 'loginMethod');
 
       userProvider.setUserFromMap(userData);
       userProvider.setTokens(fcmToken: fcmToken, deviceToken: deviceToken);
@@ -280,7 +278,7 @@ class AuthService {
         prefs.setString('token', userData['token']);
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), 'loginMethod');
     }
   }
 
@@ -308,7 +306,7 @@ class AuthService {
         );
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), 'forgotPassword error');
     }
   }
 
@@ -325,7 +323,7 @@ class AuthService {
         return true;
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), 'logout error');
     }
     return false;
   }
@@ -338,7 +336,7 @@ class AuthService {
       return iosDeviceInfo.identifierForVendor; // unique ID on iOS
     } else if (Platform.isAndroid) {
       var androidDeviceInfo = await deviceInfo.androidInfo;
-      print('device id: ${androidDeviceInfo.id}');
+      printLog(androidDeviceInfo.id, 'getDeviceId');
       return androidDeviceInfo.id; // unique ID on Android
     }
 
@@ -349,7 +347,7 @@ class AuthService {
     String? token;
     await FirebaseMessaging.instance.getToken().then((t) {
       token = t!;
-      print("FCM TOKEN: $token");
+      printLog("fcm token: $token", 'getFCMToken');
     });
     return token;
   }

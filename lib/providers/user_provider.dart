@@ -127,7 +127,10 @@ class UserProvider with ChangeNotifier {
           context: context,
         );
 
-        if (!result) {
+        print("googleLogin result: $result");
+        print("result: $result");
+
+        if (!result && await googleSignIn.isSignedIn()) {
           await googleSignIn.disconnect();
           _googleUser = null;
           return;
