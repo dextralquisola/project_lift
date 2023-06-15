@@ -71,12 +71,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   SizedBox(
                     height: size.height * 0.1,
                   ),
-                  AppText(
+                  const AppText(
                     text: "Create an Account",
                     fontWeight: FontWeight.bold,
                     textSize: 28,
                   ),
-                  AppText(
+                  const AppText(
                     text: "Sign up to get started with an account",
                     textColor: Colors.grey,
                     textSize: 14,
@@ -135,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           });
                         },
                       ),
-                      AppText(
+                      const AppText(
                         text: "I agree to the ",
                         textColor: Colors.black,
                         textSize: 14,
@@ -188,7 +188,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      AppText(text: "Already have an account?"),
+                      const AppText(text: "Already have an account?"),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -238,11 +238,11 @@ class _SignupScreenState extends State<SignupScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          title: AppText(text: 'Terms and Conditions'),
+          title: const AppText(text: 'Terms and Conditions'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               AppText(
                   textAlign: TextAlign.justify,
                   text:

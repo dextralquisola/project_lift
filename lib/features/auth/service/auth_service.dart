@@ -112,7 +112,7 @@ class AuthService {
         showSnackBar(context, "Something went wrong, please try again later.");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), 'signInWithGoogle');
     }
 
     return false;
@@ -129,13 +129,13 @@ class AuthService {
     try {
       var fcmToken = await _getFCMToken();
       if (fcmToken == null) {
-        print('fcmToken is null');
+        printLog('fcmToken is null');
         return;
       }
       var deviceToken = await _getDeviceId();
 
       if (deviceToken == null) {
-        print('deviceToken is null');
+        printLog('deviceToken is null');
         return;
       }
       var res = await service.requestApi(
@@ -174,7 +174,7 @@ class AuthService {
       var token = prefs.getString('token');
 
       if (token == null) return;
-      print("token: $token");
+      printLog("token: $token");
 
       var res = await service.requestApi(
         path: '/api/users/me',

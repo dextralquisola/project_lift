@@ -39,9 +39,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                Text(
+                const Text(
                   "Enter your email address and we'll send you a link to reset your password.",
-                  style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),

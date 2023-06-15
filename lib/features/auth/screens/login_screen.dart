@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   },
-                  child: AppText(
+                  child: const AppText(
                     text: "Forgot Password?",
                     alignment: Alignment.centerRight,
                   ),
@@ -90,18 +90,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Expanded(
+                  children: const [
+                    Expanded(
                         child: Divider(color: Colors.black87, thickness: 1)),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: AppText(
                         text: "Or",
                         textColor: Colors.black54,
                         textSize: 16,
                       ),
                     ),
-                    const Expanded(
+                    Expanded(
                         child: Divider(color: Colors.black87, thickness: 1)),
                   ],
                 ),
@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    AppText(text: "Don't have an account?"),
+                    const AppText(text: "Don't have an account?"),
                     TextButton(
                       onPressed: () {
                         emailController.clear();
