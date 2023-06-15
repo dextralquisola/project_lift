@@ -5,16 +5,16 @@ class AppButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final double textSize;
-  Color? bgColor;
-  Color? textColor;
-  double? height;
-  IconData? icon;
-  Color? iconColor;
-  double? iconSize;
-  double radius;
-  bool isEnabled;
-  bool wrapRow;
-  AppButton({
+  final Color? bgColor;
+  final Color? textColor;
+  final double? height;
+  final IconData? icon;
+  final Color? iconColor;
+  final double? iconSize;
+  final double radius;
+  final bool isEnabled;
+  final bool wrapRow;
+  const AppButton({
     required this.onPressed,
     required this.text,
     this.radius = 11,

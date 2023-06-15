@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/widgets/app_button.dart';
-import 'package:project_lift/widgets/report_user_screen.dart';
 
 import '../models/user.dart';
+import './report_user_screen.dart';
+import './app_button.dart';
 import './app_text.dart';
 
 void showReportDialog({

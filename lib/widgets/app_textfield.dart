@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:project_lift/constants/styles.dart';
 
-import 'app_text.dart';
+import '../constants/styles.dart';
+import './app_text.dart';
 
 class AppTextField extends StatefulWidget {
   final VoidCallback? onEditingComplete;

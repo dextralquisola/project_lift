@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:project_lift/widgets/app_text.dart';
 
 import '../constants/styles.dart';
+import './app_text.dart';
 
 /// regex
 /// patterns

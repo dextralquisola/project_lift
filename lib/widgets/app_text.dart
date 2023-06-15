@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class AppText extends StatelessWidget {
   final String text;
-  Color? textColor;
-  double? textSize;
-  FontWeight? fontWeight;
-  TextAlign? textAlign;
-  Alignment? alignment;
-  TextOverflow? textOverflow;
-  AppText({
+  final Color? textColor;
+  final double? textSize;
+  final FontWeight? fontWeight;
+  final TextAlign? textAlign;
+  final Alignment? alignment;
+  final TextOverflow? textOverflow;
+  const AppText({
     super.key,
     required this.text,
     this.textColor = Colors.black,

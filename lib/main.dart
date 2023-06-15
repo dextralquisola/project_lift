@@ -1,24 +1,24 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:project_lift/features/auth/screens/login_screen.dart';
-import 'package:project_lift/features/find_tutor/service/tutor_service.dart';
-import 'package:project_lift/features/study_pool/service/study_pool_service.dart';
-import 'package:project_lift/providers/app_state_provider.dart';
-import 'package:project_lift/providers/current_room_provider.dart';
-import 'package:project_lift/providers/study_room_providers.dart';
-import 'package:project_lift/providers/top_subjects_provider.dart';
-import 'package:project_lift/providers/tutors_provider.dart';
-import 'package:project_lift/providers/user_provider.dart';
-import 'package:project_lift/providers/user_requests_provider.dart';
-import 'package:project_lift/utils/firebase_api.dart';
-import 'package:project_lift/widgets/splash_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'constants/styles.dart';
-import 'features/auth/service/auth_service.dart';
-import 'features/home/screens/home_screen.dart';
-import 'features/profile/service/profile_service.dart';
+import './features/auth/screens/login_screen.dart';
+import './features/find_tutor/service/tutor_service.dart';
+import './features/study_pool/service/study_pool_service.dart';
+import './providers/app_state_provider.dart';
+import './providers/current_room_provider.dart';
+import './providers/study_room_providers.dart';
+import './providers/top_subjects_provider.dart';
+import './providers/tutors_provider.dart';
+import './providers/user_provider.dart';
+import './providers/user_requests_provider.dart';
+import './utils/firebase_api.dart';
+import './widgets/splash_screen.dart';
+
+import './constants/styles.dart';
+import './features/auth/service/auth_service.dart';
+import './features/home/screens/home_screen.dart';
+import './features/profile/service/profile_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
