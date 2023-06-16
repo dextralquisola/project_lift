@@ -111,10 +111,8 @@ class UserProvider with ChangeNotifier {
 
       final googleAuth = await googleUser.authentication;
 
-      if (_isTokenExpired(googleAuth.accessToken)) {
-        await googleUser.clearAuthCache();
-        await googleUser.authentication;
-      }
+      // if (_isTokenExpired(googleAuth.accessToken)) {
+      // }
 
       print("credential.accessToken: ${googleAuth.accessToken}");
       print("credential.idToken: ${googleAuth.idToken}");
@@ -152,10 +150,14 @@ class UserProvider with ChangeNotifier {
       return true;
     }
 
-    DateTime expirationTime =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(token));
-    DateTime currentTime = DateTime.now();
-
-    return expirationTime.isBefore(currentTime);
+    try {
+      DateTime expirationTime =
+          DateTime.fromMillisecondsSinceEpoch(int.parse(token));
+      DateTime currentTime = DateTime.now();
+      return expirationTime.isBefore(currentTime);
+    } catch (e) {
+      print('Error parsing token: $e');
+      return true;
+    }
   }
 }
