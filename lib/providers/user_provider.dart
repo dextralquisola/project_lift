@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
 import 'package:project_lift/utils/socket_client.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/subject.dart';
@@ -110,12 +111,10 @@ class UserProvider with ChangeNotifier {
 
       final googleAuth = await googleUser.authentication;
 
-      // final credential = firebaseAuth.GoogleAuthProvider.credential(
-      //   accessToken: googleAuth.accessToken,
-      //   idToken: googleAuth.idToken,
-      // );
-
-      //await firebaseAuth.FirebaseAuth.instance.signInWithCredential(credential);
+      if (_isTokenExpired(googleAuth.accessToken)) {
+        await googleUser.clearAuthCache();
+        await googleUser.authentication;
+      }
 
       print("credential.accessToken: ${googleAuth.accessToken}");
       print("credential.idToken: ${googleAuth.idToken}");
@@ -146,5 +145,17 @@ class UserProvider with ChangeNotifier {
     _user = User.emptyUser();
     _googleUser = null;
     notifyListeners();
+  }
+
+  bool _isTokenExpired(String? token) {
+    if (token == null) {
+      return true;
+    }
+
+    DateTime expirationTime =
+        DateTime.fromMillisecondsSinceEpoch(int.parse(token));
+    DateTime currentTime = DateTime.now();
+
+    return expirationTime.isBefore(currentTime);
   }
 }
