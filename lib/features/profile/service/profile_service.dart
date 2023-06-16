@@ -37,11 +37,10 @@ class ProfileService {
       if (res.statusCode == 200) {
         userProvider.addSubject(subject, false);
       } else {
-        print("Failed: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "addSubject error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "addSubject error");
     }
   }
 
@@ -60,7 +59,7 @@ class ProfileService {
         userProvider.setUserFromMap(decoded, false);
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "fetchUser error");
     }
   }
 
@@ -94,7 +93,7 @@ class ProfileService {
         );
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "uploadAvatar error");
     }
   }
 
@@ -127,13 +126,12 @@ class ProfileService {
       );
 
       if (res.statusCode == 200) {
-        print("success");
         var decoded = json.decode(res.body);
         userRequestsProvider.setTutorApplicationFromMap(decoded);
       } else {
-        showSnackBar(context, "Failed to submit application, make sure the the image is clear and readable");
-        print("Failed: ${res.statusCode}");
-        print(res.body);
+        showSnackBar(context,
+            "Failed to submit application, make sure the the image is clear and readable");
+        printHttpLog(res, "submitTutorApplication error");
       }
     } catch (e) {
       print(e);
@@ -172,15 +170,13 @@ class ProfileService {
       );
 
       if (res.statusCode == 200) {
-        print("success");
         var decoded = json.decode(res.body);
         userRequestsProvider.setTutorApplicationFromMap(decoded);
       } else {
-        print("Failed: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "updateTutorApplication error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "updateTutorApplication error");
     }
   }
 
@@ -200,10 +196,9 @@ class ProfileService {
       );
 
       if (res.statusCode == 200) {
-        print("user get user application");
-        print(res.body);
         var decoded = json.decode(res.body);
         userRequestsProvider.setTutorApplicationFromMap(decoded);
+        printHttpLog(res, "getUserApplication");
       } else if (res.statusCode == 404) {
         userRequestsProvider
             .setTutorApplicationFromModel(TutorApplication.empty());

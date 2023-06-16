@@ -338,7 +338,7 @@ class _EditAvailabilityScreenState extends State<EditAvailabilityScreen> {
             backgroundColor: MaterialStateProperty.all(
           Colors.transparent,
         )),
-        child: AppText(text: ""),
+        child: const AppText(text: ""),
       ),
     );
   }

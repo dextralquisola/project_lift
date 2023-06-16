@@ -113,7 +113,11 @@ class _FindTutorSearchScreenState extends State<FindTutorSearchScreen> {
                   );
                 } else if (snapshot.hasError) {
                   // Display error message
-                  print(snapshot.data);
+                  return Center(
+                    child: AppText(
+                      text: snapshot.error.toString(),
+                    ),
+                  );
                 }
                 return const Center(
                   child: CircularProgressIndicator(),

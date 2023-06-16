@@ -66,7 +66,7 @@ class AuthService {
         return;
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), 'login error');
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_lift/features/auth/service/auth_service.dart';
@@ -104,7 +103,11 @@ class UserProvider with ChangeNotifier {
   Future<void> googleLogin(BuildContext context) async {
     try {
       final authService = AuthService();
+
+      await _googleUser?.clearAuthCache();
+
       final googleUser = await googleSignIn.signIn();
+
       if (googleUser == null) return;
 
       _googleUser = googleUser;
@@ -114,8 +117,8 @@ class UserProvider with ChangeNotifier {
       // if (_isTokenExpired(googleAuth.accessToken)) {
       // }
 
-      print("credential.accessToken: ${googleAuth.accessToken}");
-      print("credential.idToken: ${googleAuth.idToken}");
+      printLog(googleAuth.accessToken.toString(), "credential.accessToken:");
+      printLog(googleAuth.idToken.toString(), "credential.idToken:");
 
       if (context.mounted) {
         var result = await authService.signInWithGoogle(
@@ -124,8 +127,7 @@ class UserProvider with ChangeNotifier {
           context: context,
         );
 
-        print("googleLogin result: $result");
-        print("result: $result");
+        printLog("googleLogin result: $result", "googleLogin result");
 
         if (!result && await googleSignIn.isSignedIn()) {
           await googleSignIn.disconnect();
@@ -134,8 +136,7 @@ class UserProvider with ChangeNotifier {
         }
       }
     } catch (e) {
-      print("googleLogin error: $e");
-      print(e);
+      printLog(e.toString(), "googleLogin error");
     }
   }
 
@@ -143,21 +144,5 @@ class UserProvider with ChangeNotifier {
     _user = User.emptyUser();
     _googleUser = null;
     notifyListeners();
-  }
-
-  bool _isTokenExpired(String? token) {
-    if (token == null) {
-      return true;
-    }
-
-    try {
-      DateTime expirationTime =
-          DateTime.fromMillisecondsSinceEpoch(int.parse(token));
-      DateTime currentTime = DateTime.now();
-      return expirationTime.isBefore(currentTime);
-    } catch (e) {
-      print('Error parsing token: $e');
-      return true;
-    }
   }
 }

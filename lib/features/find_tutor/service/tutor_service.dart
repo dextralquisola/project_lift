@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:project_lift/models/user.dart';
-import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/utils.dart';
+import '../../../models/user.dart';
 import '../../../models/subject.dart';
 import '../../../providers/tutors_provider.dart';
 import '../../../providers/user_provider.dart';
@@ -27,9 +27,8 @@ class TutorService {
         userAuthHeader: userProvider,
       );
 
-      print("fetchTutors");
-      print(tutorProvider.currentPage);
-      print(res.body);
+      printHttpLog(res, "fetchTutors");
+      printLog(tutorProvider.currentPage.toString(), "fetchTutors currentPage");
 
       if (!context.mounted) return;
 
@@ -37,12 +36,10 @@ class TutorService {
         final decoded = json.decode(res.body);
         tutorProvider.setTutorsFromJson(decoded, userProvider.user.userId);
       } else {
-        print(res.statusCode);
-        print(res.body);
+        showSnackBar(context, "Failed to fetch tutors");
       }
     } catch (e) {
-      print("fethcTutors error");
-      print(e);
+      printLog(e.toString(), "fetchTutors error");
     }
   }
 
@@ -74,7 +71,7 @@ class TutorService {
 
       return listOfTutors;
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "searchTutor error");
     }
     return [];
   }
@@ -112,14 +109,12 @@ class TutorService {
         var decoded = json.decode(res.body);
         userRequestsProvider
             .addMyRequestFromMap([decoded], notifyListener: true);
-        print("Success");
+        printLog("Success", "askHelp");
       } else {
-        print(res.statusCode);
-        print(res.body);
-        print("Failed");
+        printHttpLog(res, "askHelp error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "askHelp error");
     }
   }
 }

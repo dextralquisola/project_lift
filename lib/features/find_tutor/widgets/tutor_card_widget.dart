@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:project_lift/features/find_tutor/utils/find_tutor_utitls.dart';
-import 'package:project_lift/widgets/report_widget.dart';
 
+import '../utils/find_tutor_utitls.dart';
+import '../../../widgets/report_widget.dart';
 import '../../../services/global_services.dart';
 import '../../../utils/date_time_utils.dart';
 import '../../../widgets/app_button.dart';
@@ -208,97 +208,6 @@ class TutorCard extends StatelessWidget {
       textSize: isName ? 18 : textSize,
       fontWeight: isName ? FontWeight.bold : FontWeight.w300,
       textOverflow: TextOverflow.ellipsis,
-    );
-  }
-
-  void _showDialog({
-    required BuildContext context,
-    required User tutor,
-    required bool isAvailable,
-  }) {
-    var rating = tutor.parsedRating(true);
-    var ratings = tutor.ratingAsTutor;
-    // ratings
-    //     .sort((a, b) => b.getSubjectRating().compareTo(a.getSubjectRating()));
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            title: AppText(
-              text: "${tutor.firstName} ${tutor.lastName}",
-              fontWeight: FontWeight.w600,
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _textBuilder(text: "Specialization: "),
-                ...tutor.subjects
-                    .map(
-                      (e) {
-                        return _textBuilder(
-                            text: '${e.subjectCode}: ${e.description}',
-                            textSize: 12);
-                      },
-                    )
-                    .toList()
-                    .take(3),
-                const SizedBox(height: 10),
-                _textBuilder(text: "Schedule"),
-                tutor.dateTimeAvailability.isEmpty
-                    ? _textBuilder(text: "No schedule available")
-                    : _textBuilder(
-                        text: dateTimeAvailabilityFormatter(
-                          context,
-                          tutor.dateTimeAvailability,
-                        ),
-                      ),
-                const SizedBox(height: 20),
-                _textBuilder(text: "Rating: $rating ⭐️ (${ratings.length})"),
-                const SizedBox(height: 10),
-                _textBuilder(text: "Comments: "),
-                // ...ratings
-                //     .map(
-                //       (e) => _textBuilder(
-                //         text:
-                //             '${e.firstName} ${e.lastName}: ${e.feedback}  (${e.rating} ⭐️)',
-                //         textSize: 12,
-                //       ),
-                //     )
-                //     .toList()
-                //     .take(3),
-                const SizedBox(height: 20),
-                AppButton(
-                  height: 50,
-                  isEnabled: isAvailable &&
-                      isEnabled &&
-                      isPendingRequest &&
-                      !tutor.hasRoom,
-                  onPressed: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => CreateStudyRoomScreen(
-                          isAskHelp: true,
-                          tutor: tutor,
-                        ),
-                      ),
-                    );
-                    Navigator.of(context).pop();
-                  },
-                  wrapRow: true,
-                  text: tutor.hasRoom ? "Currently in session" : "Ask Help",
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }
