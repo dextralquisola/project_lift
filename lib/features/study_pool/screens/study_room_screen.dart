@@ -14,6 +14,7 @@ import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/socket_client.dart';
 import '../../../widgets/app_text.dart';
+import '../../../utils/utils.dart' show capitalize;
 import '../service/study_pool_service.dart';
 
 class CurrentRoomScreen extends StatefulWidget {
@@ -208,7 +209,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                       itemBuilder: (context, index) {
                         final message = chats[index];
                         final formattedName =
-                            "${message.firstName.capitalize()} ${message.lastName.capitalize()}";
+                            "${capitalize(message.firstName)} ${capitalize(message.lastName)}";
                         return Wrap(
                           alignment: message.userId == user.userId
                               ? WrapAlignment.end
@@ -322,7 +323,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
       },
     );
     Widget continueButton = TextButton(
-      child: AppText(text: "Leave", textColor: Colors.red),
+      child: const AppText(text: "Leave", textColor: Colors.red),
       onPressed: () async {
         setState(() {
           _isLoading = true;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/utils.dart' show capitalize;
 import '../../models/user.dart';
 import '../../models/rating.dart';
 import '../app_text.dart';
@@ -56,7 +57,7 @@ class UserRatingsBuilder extends StatelessWidget {
             ),
             children: [
               if (ratingsAsTutee.isEmpty)
-                ListTile(
+                const ListTile(
                   title: AppText(text: "No ratings yet"),
                 ),
               ..._tuteeRatingBuilder(ratingsAsTutee),
@@ -72,8 +73,9 @@ class UserRatingsBuilder extends StatelessWidget {
       ...tuteeRatings
           .map((e) {
             return ListTile(
-              title:
-                  AppText(text: "${e.firstName} ${e.lastName}: ${e.rating} ⭐️"),
+              title: AppText(
+                  text:
+                      "${capitalize(e.firstName)} ${capitalize(e.lastName)}: ${e.rating} ⭐️"),
               subtitle: AppText(
                 text: "Comment: ${e.feedback}",
               ),
@@ -94,7 +96,7 @@ class UserRatingsBuilder extends StatelessWidget {
           childrenPadding: const EdgeInsets.all(0),
           children: [
             if (tutorRatings.isEmpty)
-              ListTile(
+              const ListTile(
                 title: AppText(text: "No ratings yet"),
               ),
             ListView.builder(
@@ -136,7 +138,7 @@ class UserRatingsBuilder extends StatelessWidget {
                                   return ListTile(
                                     title: AppText(
                                         text:
-                                            "${subTopicRating.ratings[index].firstName} ${subTopicRating.ratings[index].lastName} ⭐️ ${subTopicRating.ratings[index].rating}"),
+                                            "${capitalize(subTopicRating.ratings[index].firstName)} ${capitalize(subTopicRating.ratings[index].lastName)} ⭐️ ${subTopicRating.ratings[index].rating}"),
                                     subtitle: AppText(
                                       text:
                                           "Comment: ${subTopicRating.ratings[index].feedback}",

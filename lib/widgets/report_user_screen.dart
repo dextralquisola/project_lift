@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/utils/utils.dart';
 
 import '../models/user.dart';
 import '../services/global_services.dart';
@@ -54,7 +55,7 @@ class _ReportUserScreenState extends State<ReportUserScreen> {
               AppText(
                 text: widget.user != null
                     ? "Report ${widget.user!.firstName} ${widget.user!.lastName}"
-                    : "Report ${widget.userParticipant!['firstName']} ${widget.userParticipant!['lastName']}",
+                    : "Report ${capitalize(widget.userParticipant!['firstName'])} ${capitalize(widget.userParticipant!['lastName'])}",
                 textSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -74,7 +75,7 @@ class _ReportUserScreenState extends State<ReportUserScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              AppText(
+              const AppText(
                 text: "Additional Details",
                 textSize: 20,
                 fontWeight: FontWeight.bold,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:project_lift/widgets/report_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -8,12 +9,6 @@ import '../../../models/study_room.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../widgets/app_text.dart';
-
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
-  }
-}
 
 class StudyRoomDetailsScreen extends StatelessWidget {
   const StudyRoomDetailsScreen({super.key});
@@ -135,8 +130,10 @@ class StudyRoomDetailsScreen extends StatelessWidget {
                             itemCount: currentStudyRoomProvider
                                 .studyRoom.participants.length,
                             itemBuilder: (context, index) {
-                              final formattedName =
-                                  "${participants[index]['firstName'].split(' ').map((e) => e.capitalize()).join(' ')} ${participants[index]['lastName'].capitalize()}";
+                              final formattedName = capitalize(
+                                  participants[index]['firstName'] +
+                                      ' ' +
+                                      participants[index]['lastName']);
                               return GestureDetector(
                                 onLongPress: participants[index]['userId'] ==
                                         userProvider.user.userId
