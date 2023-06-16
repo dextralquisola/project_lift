@@ -65,7 +65,7 @@ class StudyPoolService {
         // error
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "createStudyPool error");
     }
   }
 
@@ -81,8 +81,7 @@ class StudyPoolService {
         userAuthHeader: userProvider,
       );
 
-      print("Chat room res");
-      print(chatRoomRes.body);
+      printHttpLog(chatRoomRes, "/api/studyroom/user-room");
 
       if (chatRoomRes.statusCode == 200 && chatRoomRes.statusCode != 404) {
         //fetch the chatroom data
@@ -97,8 +96,7 @@ class StudyPoolService {
           userAuthHeader: userProvider,
         );
 
-        print("MessageRes");
-        print(resMessages.body);
+        printHttpLog(resMessages, "/api/studyroom/messages");
 
         if (resMessages.statusCode == 200) {
           var messages = json.decode(resMessages.body)['messages'];
@@ -106,8 +104,7 @@ class StudyPoolService {
         }
       }
     } catch (e) {
-      print("getUserRoom error");
-      print(e);
+      printLog(e.toString(), "getUserRoom error");
     }
   }
 
@@ -130,7 +127,7 @@ class StudyPoolService {
         currentRoomProvider.setMessagesFromJson(messages);
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "fetchMessages error");
     }
   }
 
@@ -152,11 +149,10 @@ class StudyPoolService {
       if (res.statusCode == 200) {
         studyRoomProvider.addStudyRoomFromJson(json.decode(res.body), false);
       } else {
-        print("ERROR: ${res.statusCode}");
+        printHttpLog(res, "/api/studyroom/public error");
       }
     } catch (e) {
-      print("fetchStudyRooms error");
-      print(e);
+      printLog(e.toString(), "fetchStudyRooms error");
     }
   }
 
@@ -182,17 +178,15 @@ class StudyPoolService {
         },
       );
 
-      print("msg");
-      print(res.body);
+      printHttpLog(res, "/api/studyroom/messages");
 
       if (res.statusCode == 200) {
-        print("message sent232323");
         currentStudyRoomProvider.addMessage(json.decode(res.body));
       } else {
-        print("ERROR: ${res.statusCode}");
+        printHttpLog(res, "sendMessage error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "sendMessage error");
     }
   }
 
@@ -204,20 +198,23 @@ class StudyPoolService {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final studyRoomProvider =
           Provider.of<StudyRoomProvider>(context, listen: false);
+
       var joinResRoom = await service.requestApi(
         path: '/api/studyroom/join/$roomId',
         method: 'POST',
         userAuthHeader: userProvider,
       );
 
+      if (!context.mounted) return;
+
       if (joinResRoom.statusCode == 202) {
         studyRoomProvider.addPendingRoom(roomId);
         showSnackBar(context, "Room joined!, waiting for tutor to accept");
       } else {
-        print("ERROR: ${joinResRoom.statusCode}");
+        printHttpLog(joinResRoom, "joinRoom error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "joinRoom error");
     }
   }
 
@@ -239,10 +236,12 @@ class StudyPoolService {
         userAuthHeader: userProvider,
       );
 
+      if (!context.mounted) return;
+
       if (res.statusCode == 200) {
         // success
-        print("response to study room tutee request success");
-        print(res.body);
+
+        printHttpLog(res, "/api/studyroom/accept-participant");
 
         if (res.body == "User accepted successfully.") {
           currentStudyRoomProvider.acceptParticipant(userId);
@@ -252,10 +251,10 @@ class StudyPoolService {
           showSnackBar(context, "Tutee rejected!");
         }
       } else {
-        print("ERROR: ${res.statusCode}");
+        printHttpLog(res, "respondToStudyRoomTuteeRequest error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "respondToStudyRoomTuteeRequest error");
     }
   }
 
@@ -269,8 +268,6 @@ class StudyPoolService {
           Provider.of<StudyRoomProvider>(context, listen: false);
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final sharedPref = await SharedPreferences.getInstance();
-
-      final studyPoolService = StudyPoolService();
 
       var socket = SocketClient.instance.socket!;
       var res = await service.requestApi(
@@ -293,10 +290,10 @@ class StudyPoolService {
         }
         currentRoomProvider.clearRoom();
       } else {
-        print("ERROR: ${res.statusCode}");
+        printHttpLog(res, "leaveStudyRoom error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "leaveStudyRoom error");
     }
   }
 
@@ -310,7 +307,6 @@ class StudyPoolService {
       }
 
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-      final user = userProvider.user;
       var res = await service.requestApi(
         path: '/api/studyroom/public?search=$search',
         method: 'GET',
@@ -327,10 +323,10 @@ class StudyPoolService {
         }
         return searchedStudyRooms;
       } else {
-        print("ERROR: ${res.statusCode}");
+        printHttpLog(res, "searchStudyRoom error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "searchStudyRoom error");
     }
 
     return [];
@@ -355,8 +351,7 @@ class StudyPoolService {
         }
       }
     } catch (e) {
-      print("getPendingChatRoomIds error: $e");
-      print(e);
+      printLog(e.toString(), "getPendingChatRoomIds error");
     }
   }
 
@@ -379,7 +374,7 @@ class StudyPoolService {
         await sharedPref.setString('toRateParticipants', res.body);
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "endStudySession error");
     }
   }
 
@@ -399,8 +394,6 @@ class StudyPoolService {
       Map<String, dynamic> body = {};
 
       if (userProvider.user.userId == currentSudyRoom.studyRoom.roomOwner) {
-        print("rate participants");
-
         path = '/api/rate-participants';
         var participantsMapped = currentSudyRoom.studyRoom.participants
             .map((e) {
@@ -437,15 +430,14 @@ class StudyPoolService {
         body: body,
       );
 
-      if (res.statusCode == 200) {
-        print("Success");
+      if (res.statusCode == 200 && context.mounted) {
         studyRoomService.fetchStudyRooms(context, true);
         return true;
       } else {
-        print("ERROR: ${res.statusCode}");
+        printHttpLog(res, "rateTutor error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "rateTutor error");
     }
     return false;
   }
@@ -478,15 +470,14 @@ class StudyPoolService {
         },
       );
 
-      if (res.statusCode == 200) {
-        print("Success");
+      if (res.statusCode == 200 && context.mounted) {
         studyRoomService.fetchStudyRooms(context, true);
         return true;
       } else {
-        print("ERROR: ${res.statusCode}");
+        printHttpLog(res, "rateTutees error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "rateTutees error");
     }
     return false;
   }
@@ -504,19 +495,16 @@ class StudyPoolService {
         userAuthHeader: userProvider,
       );
 
-      print("getTuteeRequests");
-      print(res.body);
+      printHttpLog(res, "getTuteeRequests");
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
         userRequestsProvider.addTuteeRequestsFromMap(decoded);
       } else {
-        print("ERROR: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "getTuteeRequests error");
       }
     } catch (e) {
-      print("getTuteeRequest error");
-      print(e);
+      printLog(e.toString(), "getTuteeRequests error");
     }
   }
 
@@ -531,8 +519,7 @@ class StudyPoolService {
         userAuthHeader: userProvider,
       );
 
-      print("getMyRequests");
-      print(res.body);
+      printHttpLog(res, "getMyRequests");
 
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
@@ -541,13 +528,10 @@ class StudyPoolService {
           isMyRequest: true,
         );
       } else {
-        print('getMyRequests');
-        print("ERROR: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "getMyRequests error");
       }
     } catch (e) {
-      print("getMyRequests");
-      print(e);
+      printLog(e.toString(), "getMyRequests error");
     }
   }
 
@@ -573,25 +557,23 @@ class StudyPoolService {
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
 
-        print("respond tutee request");
-        print(res.body);
+        printHttpLog(res, "respondTuteeRequest");
 
         if (decoded['reqStatus'] != null) {
           userRequestsProvider.removeTuteeRequestById(requestId);
-          print("success, rejected");
+          printLog("success, accepted", "respondTuteeRequest");
           return;
         } else if (decoded['request']['reqStatus'] != null) {
           currentStudyRoomProvider.setStudyRoomFromJson(decoded['chatroom']);
           userRequestsProvider.removeTuteeRequestById(requestId);
-          print('success, accepted');
+          printLog("success, accepted", "respondTuteeRequest");
           return;
         }
       } else {
-        print("ERROR: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "respondTuteeRequest error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "respondTuteeRequest error");
     }
   }
 }

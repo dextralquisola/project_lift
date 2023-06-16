@@ -14,7 +14,7 @@ void showBannedDialog({
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        title: AppText(
+        title: const AppText(
           text: 'Notice',
           fontWeight: FontWeight.w600,
           textSize: 18,
@@ -24,11 +24,11 @@ void showBannedDialog({
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppText(text: "Your account has been banned!"),
+            const AppText(text: "Your account has been banned!"),
             const SizedBox(height: 10),
-            AppText(text: "Please contact admin for more information."),
+            const AppText(text: "Please contact admin for more information."),
             const SizedBox(height: 10),
-            AppText(text: "Email: liftappteam@gmail.com"),
+            const AppText(text: "Email: liftappteam@gmail.com"),
             const SizedBox(height: 10),
             AppButton(
               height: 50,

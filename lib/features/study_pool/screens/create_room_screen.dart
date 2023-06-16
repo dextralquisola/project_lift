@@ -377,7 +377,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
                             },
                           ),
                           RadioListTile(
-                            title: AppText(text: "Private"),
+                            title: const AppText(text: "Private"),
                             value: StudyRoomStatus.private,
                             groupValue: studyRoomStatus,
                             onChanged: (value) {
@@ -689,7 +689,7 @@ class _CreateStudyRoomScreenState extends State<CreateStudyRoomScreen> {
       var index = topSearchSubjects.indexWhere(
         (element) => element.subjectCode == subject.subjectCode,
       );
-      print(index);
+
       if (index == -1) return '';
       return List<String>.generate((index - 3).abs(), (index) => '🔥').join('');
     }

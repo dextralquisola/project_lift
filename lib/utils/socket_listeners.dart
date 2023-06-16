@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/models/subject.dart';
-import 'package:project_lift/providers/app_state_provider.dart';
-import 'package:project_lift/providers/study_room_providers.dart';
-import 'package:project_lift/utils/socket_client.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import './socket_client.dart';
+import '../models/subject.dart';
+
+import '../providers/app_state_provider.dart';
+import '../providers/study_room_providers.dart';
 import '../providers/current_room_provider.dart';
 import '../providers/tutors_provider.dart';
 import '../providers/user_provider.dart';
@@ -85,9 +87,8 @@ class SocketListeners {
     final studyRoomProvider =
         Provider.of<StudyRoomProvider>(context, listen: false);
     _socket.on("participant-rejected", (data) {
-      print("Onparticipant rejected");
-      print(data);
       studyRoomProvider.removePendingRoomById(data['chatRoom']['_id']);
+      printLog(data, "participant-rejected");
     });
   }
 
@@ -95,9 +96,8 @@ class SocketListeners {
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("participant-cancelled", (data) {
-      print("Onparticipant cancelled");
-      print(data);
       currentRoomProvider.removeParticipantById(data['userId']);
+      printLog(data, "participant-cancelled");
     });
   }
 
@@ -105,8 +105,7 @@ class SocketListeners {
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("user-left", (data) {
-      print("on user left");
-      print(data);
+      printLog(data, "user-left");
       if (data['sessionEnded'] != null &&
           currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
         currentRoomProvider.removeParticipantById(
@@ -124,8 +123,7 @@ class SocketListeners {
         Provider.of<StudyRoomProvider>(context, listen: false);
 
     _socket.on("room-deleted", (data) {
-      print("on room deleted");
-      print(data);
+      printLog(data, "room-deleted");
 
       _socket.emit("leave-room", {
         "roomId": currentRoomProvider.studyRoom.roomId,
@@ -187,8 +185,7 @@ class SocketListeners {
     _socket.on(
       "tutor-application-approved",
       (data) {
-        print("tutor application approved");
-        print(data);
+        printLog(data, "tutor-application-approved");
         userProvider.setUserFromModel(userProvider.user.copyFrom(
           role: "tutor",
           subjects: List<Subject>.from(
@@ -234,11 +231,7 @@ class SocketListeners {
           currentStudyRoomProvider.clearRoom();
           await userProvider.logout();
         } else {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: AppText(text: 'Report resolved!'),
-          //   ),
-          // );
+          printLog(data, "report-result");
         }
       }
     });

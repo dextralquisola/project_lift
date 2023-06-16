@@ -33,7 +33,7 @@ class _TutorScreenState extends State<TutorScreen> {
           children: [
             ExpansionTile(
               initiallyExpanded: true,
-              title: AppText(
+              title: const AppText(
                 text: "Subjects I can help with",
                 fontWeight: FontWeight.w600,
               ),
@@ -63,7 +63,7 @@ class _TutorScreenState extends State<TutorScreen> {
               ),
               children: [
                 if (widget.user.subjects.isEmpty)
-                  ListTile(
+                  const ListTile(
                     title: AppText(text: "No subjects yet"),
                   ),
                 ...widget.user.subjects.map((e) {

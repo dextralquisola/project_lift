@@ -24,16 +24,15 @@ class GlobalService {
         },
       );
 
-      if (res.statusCode == 201) {
+      if (res.statusCode == 201 && context.mounted) {
         showSnackBar(context, "User reported");
       } else {
-        print(res.statusCode);
-        print(res.body);
+        printHttpLog(res, "Failed to report user");
         showSnackBar(context, "Failed to report user");
       }
     } catch (e) {
-      showSnackBar(context, "${e.toString()}");
-      print(e);
+      showSnackBar(context, "$e");
+      printLog(e.toString(), "Failed to report user");
     }
   }
 }

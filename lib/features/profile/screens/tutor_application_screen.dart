@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -214,8 +215,7 @@ class _TutotApplicationScreenState extends State<TutotApplicationScreen> {
                       setState(() {
                         _isEdit = true;
                       });
-                      print("pressed!");
-                      print(_isEnabledForEditing);
+                      printLog("pressed!");
                     },
                     text: "Edit Applicaton",
                   ),

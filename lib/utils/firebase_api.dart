@@ -1,13 +1,16 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-  print('title: ${message.notification!.title}');
-  print('body: ${message.notification!.body}');
-  print('data: ${message.data}');
+  if (kDebugMode) {
+    print("Handling a background message: ${message.messageId}");
+    print('title: ${message.notification!.title}');
+    print('body: ${message.notification!.body}');
+    print('data: ${message.data}');
+  }
 }
 
 class FirebaseApi {

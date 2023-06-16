@@ -31,7 +31,7 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: requests.isEmpty
-            ? Center(
+            ? const Center(
                 child: AppText(text: 'No tutee requests'),
               )
             : ListView.builder(
@@ -148,18 +148,9 @@ class _TuteeRequestScreenState extends State<TuteeRequestScreen> {
                   text: "Rating: $rating ⭐️ (${ratings.length})",
                 ),
                 const SizedBox(height: 10),
-                AppText(
+                const AppText(
                   text: "Comments: ",
                 ),
-                // ...ratings
-                //     .map(
-                //       (rating) => AppText(
-                //         text:
-                //             "Anon user: ${rating.feedback} (${rating.rating} ⭐️)",
-                //       ),
-                //     )
-                //     .toList()
-                //     .take(3),
               ],
             ),
           ),

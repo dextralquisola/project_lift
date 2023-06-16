@@ -73,8 +73,6 @@ class StudyPoolCard extends StatelessWidget {
       return participant['status'] == 'accepted';
     }).length;
 
-    print("Showing dialog");
-    print(participantCount);
     showDialog(
       context: context,
       builder: (BuildContext context) {

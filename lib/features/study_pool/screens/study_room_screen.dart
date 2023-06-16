@@ -27,7 +27,7 @@ class CurrentRoomScreen extends StatefulWidget {
 class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   final _messageInputController = TextEditingController();
   var _scrollControllerMessage = ScrollController();
-  var _isLoading = false;
+  var isLoading = false;
 
   final _socket = SocketClient.instance.socket!;
 
@@ -326,11 +326,11 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
       child: const AppText(text: "Leave", textColor: Colors.red),
       onPressed: () async {
         setState(() {
-          _isLoading = true;
+          isLoading = true;
         });
         await studyRoomService.leaveStudyRoom(context);
         setState(() {
-          _isLoading = false;
+          isLoading = false;
         });
         Navigator.of(context).pop();
       },

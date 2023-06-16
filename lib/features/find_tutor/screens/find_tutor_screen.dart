@@ -26,7 +26,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
   bool _isLoading = false;
 
   late AnimationController _animationController;
-  late Animation _animation;
+  late Animation animation;
 
   final tutorService = TutorService();
   final profileService = ProfileService();
@@ -38,7 +38,7 @@ class _FindTutorScreenState extends State<FindTutorScreen>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _animation = Tween(begin: 1, end: 0).animate(_animationController);
+    animation = Tween(begin: 1, end: 0).animate(_animationController);
     _scrollControllerTutors = ScrollController(initialScrollOffset: 5.0)
       ..addListener(_scrollListenerTutors);
   }

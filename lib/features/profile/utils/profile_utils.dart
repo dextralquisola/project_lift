@@ -21,6 +21,7 @@ Future<void> logout(BuildContext context) async {
     final currentStudyRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     var isLogoutSuccess = await authService.logout(context);
+
     if (isLogoutSuccess) {
       userProvider.clearUserData();
       tutorsProvider.clearTutors();
@@ -32,8 +33,7 @@ Future<void> logout(BuildContext context) async {
       showSnackBar(context, "Something went wrong");
     }
   } catch (e) {
-    print("logout error: $e");
-    print(e);
+    printLog(e.toString(), "Failed to logout");
   }
 }
 

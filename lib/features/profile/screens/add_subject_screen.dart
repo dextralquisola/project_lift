@@ -140,7 +140,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          AppText(text: "Add sub topics", textSize: 20),
+                          const AppText(text: "Add sub topics", textSize: 20),
                           const SizedBox(height: 10),
                           Row(
                             children: [

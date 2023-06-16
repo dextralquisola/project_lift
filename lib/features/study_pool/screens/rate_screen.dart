@@ -32,22 +32,23 @@ class _RateScreenState extends State<RateScreen> {
   final feedback = TextEditingController();
   final studyRoomService = StudyPoolService();
 
-  List<TextEditingController> _feedbackControllers = [];
+  List<TextEditingController> feedbackControllers = [];
   List<int> ratings = [];
 
   @override
   void dispose() {
     super.dispose();
     feedback.dispose();
-    for (var i = 0; i < _feedbackControllers.length; i++) {
-      _feedbackControllers[i].dispose();
+    for (var i = 0; i < feedbackControllers.length; i++) {
+      feedbackControllers[i].dispose();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final currentStudyRoom = Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    final currentStudyRoom =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
 
     final user = userProvider.user;
     final studyRoom = currentStudyRoom.studyRoom;
@@ -60,9 +61,8 @@ class _RateScreenState extends State<RateScreen> {
     final size = MediaQuery.of(context).size;
 
     if (user.userId == studyRoom.roomOwner && widget.resBody != null) {
-      print("toRateParticipants.length ${toRateParticipants.length}");
       for (var i = 0; i < toRateParticipants.length; i++) {
-        _feedbackControllers.add(TextEditingController());
+        feedbackControllers.add(TextEditingController());
         ratings.add(0);
       }
     }
@@ -119,7 +119,7 @@ class _RateScreenState extends State<RateScreen> {
                       var isSuccess = await studyRoomService.rateTutees(
                         context: context,
                         ratings: ratings,
-                        feedbackControllers: _feedbackControllers,
+                        feedbackControllers: feedbackControllers,
                         participants: participants,
                       );
 
@@ -127,11 +127,11 @@ class _RateScreenState extends State<RateScreen> {
                         _isLoading = false;
                       });
 
-                      if (isSuccess) {
+                      if (isSuccess && context.mounted) {
                         await studyRoomService.leaveStudyRoom(context);
                       }
                     } else {
-                      print("not validated");
+                      showSnackBar(context, "Please rate all participants");
                     }
                   },
                   text: "Submit",
@@ -144,8 +144,6 @@ class _RateScreenState extends State<RateScreen> {
   }
 
   Widget _rateParticipantsBuilder(Map<String, dynamic> participant, int index) {
-    print("rateparticipantsbuilder");
-    print(index);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -172,7 +170,7 @@ class _RateScreenState extends State<RateScreen> {
             ),
             const SizedBox(height: 10),
             AppTextField(
-              controller: _feedbackControllers[index],
+              controller: feedbackControllers[index],
               labelText: 'Feedback',
               maxLines: 3,
               length: 200,
@@ -248,7 +246,7 @@ class _RateScreenState extends State<RateScreen> {
                           _isLoading = false;
                         });
 
-                        if (isSuccess) {
+                        if (isSuccess && context.mounted) {
                           await studyRoomService.leaveStudyRoom(context);
                         }
                       } else {
@@ -267,7 +265,7 @@ class _RateScreenState extends State<RateScreen> {
 
   bool validatedParticipantRatings(List<dynamic> participants) {
     for (var i = 0; i < participants.length; i++) {
-      if (ratings[i] == 0 || _feedbackControllers[i].text.isEmpty) {
+      if (ratings[i] == 0 || feedbackControllers[i].text.isEmpty) {
         return false;
       }
     }

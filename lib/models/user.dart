@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import './rating.dart';
 import './subject.dart';
 
@@ -91,20 +93,22 @@ class User {
   }
 
   void printUser() {
-    print('userId: $userId');
-    print('firstName: $firstName');
-    print('lastName: $lastName');
-    print('email: $email');
-    print('role: $role');
-    print('token: $token');
-    print('deviceToken: $deviceToken');
-    print('firebaseToken: $firebaseToken');
-    print('subjects: $subjects');
-    //print('ratingAsTutor: ${[...ratingAsTutor.map((e) => e.rating).toList()]}');
-    print('ratingAsTutee: $ratingAsTutee');
-    print('dateTimeAvailability: $dateTimeAvailability');
-    print('isAvailable: $isAvailable');
-    print('isEmailVerified: $isEmailVerified');
+    if (kDebugMode) {
+      print('userId: $userId');
+      print('firstName: $firstName');
+      print('lastName: $lastName');
+      print('email: $email');
+      print('role: $role');
+      print('token: $token');
+      print('deviceToken: $deviceToken');
+      print('firebaseToken: $firebaseToken');
+      print('subjects: $subjects');
+      //print('ratingAsTutor: ${[...ratingAsTutor.map((e) => e.rating).toList()]}');
+      print('ratingAsTutee: $ratingAsTutee');
+      print('dateTimeAvailability: $dateTimeAvailability');
+      print('isAvailable: $isAvailable');
+      print('isEmailVerified: $isEmailVerified');
+    }
   }
 
   factory User.emptyUser() {
@@ -180,8 +184,6 @@ class User {
   bool isSubjectAdded(String subjectCode) {
     return subjects.any((subject) => subject.subjectCode == subjectCode);
   }
-
-  // TODO: Get rating from tutor or tutee
 
   double getRating([bool isTutor = false]) {
     return isTutor ? _getTutorRating() : _getTuteeRating();

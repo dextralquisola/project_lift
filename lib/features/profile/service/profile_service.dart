@@ -125,6 +125,8 @@ class ProfileService {
         },
       );
 
+      if(!context.mounted) return;
+
       if (res.statusCode == 200) {
         var decoded = json.decode(res.body);
         userRequestsProvider.setTutorApplicationFromMap(decoded);
@@ -134,7 +136,7 @@ class ProfileService {
         printHttpLog(res, "submitTutorApplication error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "submitTutorApplication error");
     }
   }
 
@@ -204,8 +206,7 @@ class ProfileService {
             .setTutorApplicationFromModel(TutorApplication.empty());
       }
     } catch (e) {
-      print('error getting user application');
-      print(e);
+      printLog(e.toString(), "getUserApplication error");
     }
   }
 
@@ -241,29 +242,31 @@ class ProfileService {
                   },
       );
 
-      if (res.statusCode == 200) {
-        dateTimeAvailability.isNotEmpty
-            ? userProvider.setUserFromModel(
-                userProvider.user.copyFrom(
-                  dateTimeAvailability: dateTimeAvailability,
-                  isAvailable: isAvailable!,
-                ),
-                false,
-              )
-            : userProvider.setUserFromModel(
-                userProvider.user.copyFrom(
-                  firstName: firstName,
-                  lastName: lastName,
-                ),
-                false,
-              );
-      } else if (res.statusCode == 400) {
-        showSnackBar(context, "Invalid Input");
-      } else {
-        showSnackBar(context, "Something went wrong");
+      if (context.mounted) {
+        if (res.statusCode == 200) {
+          dateTimeAvailability.isNotEmpty
+              ? userProvider.setUserFromModel(
+                  userProvider.user.copyFrom(
+                    dateTimeAvailability: dateTimeAvailability,
+                    isAvailable: isAvailable!,
+                  ),
+                  false,
+                )
+              : userProvider.setUserFromModel(
+                  userProvider.user.copyFrom(
+                    firstName: firstName,
+                    lastName: lastName,
+                  ),
+                  false,
+                );
+        } else if (res.statusCode == 400) {
+          showSnackBar(context, "Invalid Input");
+        } else {
+          showSnackBar(context, "Something went wrong");
+        }
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "updateUser error");
     }
   }
 
@@ -286,11 +289,10 @@ class ProfileService {
       if (res.statusCode == 200) {
         userProvider.updateSubject(subject, false);
       } else {
-        print("Failed: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "updateSubject error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "updateSubject error");
     }
   }
 
@@ -309,11 +311,10 @@ class ProfileService {
       if (res.statusCode == 200) {
         userProvider.deleteSubject(subject, false);
       } else {
-        print("Failed: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "deleteSubject error");
       }
     } catch (e) {
-      print(e);
+      printLog(e.toString(), "deleteSubject error");
     }
   }
 
@@ -334,12 +335,10 @@ class ProfileService {
         var decoded = json.decode(res.body);
         topSubjectsProvider.setTopSubjectsFromMap(decoded['topSubject']);
       } else {
-        print("Failed: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "getMostSearchedTutorAndSubject error");
       }
     } catch (e) {
-      print("error in getMostSearchedTutorAndSubject");
-      print(e);
+      printLog(e.toString(), "getMostSearchedTutorAndSubject error");
     }
   }
 
@@ -355,7 +354,7 @@ class ProfileService {
           filePath: image.path,
           fileName: "${userProvider.user.userId}.grades}");
 
-      print("gradeUrl: $gradeUrl");
+      printLog(gradeUrl, "gradeUrl");
 
       var res = await service.requestApi(
         path: '/api/tutor/add-subject',
@@ -366,16 +365,17 @@ class ProfileService {
         },
       );
 
+      if (!context.mounted) return;
+
       if (res.statusCode == 200) {
         showSnackBar(context, "Subject Added");
       } else {
         showSnackBar(context, res.body);
-        print("Failed: ${res.statusCode}");
-        print(res.body);
+        printHttpLog(res, "addSubjectV2 error");
       }
     } catch (e) {
       showSnackBar(context, e.toString());
-      print(e);
+      printLog(e.toString(), "addSubjectV2 error");
     }
   }
 }

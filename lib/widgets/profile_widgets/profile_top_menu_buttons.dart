@@ -34,9 +34,9 @@ class ProfileTopMenuButtons extends StatelessWidget {
                 value: 0,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.edit, color: Colors.green),
-                    const SizedBox(width: 5),
+                  children: const [
+                    Icon(Icons.edit, color: Colors.green),
+                    SizedBox(width: 5),
                     AppText(
                       text: "Edit profile details",
                     ),
@@ -47,9 +47,9 @@ class ProfileTopMenuButtons extends StatelessWidget {
                 value: 1,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.edit, color: Colors.green),
-                    const SizedBox(width: 5),
+                  children: const [
+                    Icon(Icons.edit, color: Colors.green),
+                    SizedBox(width: 5),
                     AppText(
                       text: "Change avatar",
                     ),
@@ -61,9 +61,9 @@ class ProfileTopMenuButtons extends StatelessWidget {
                   value: 2,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.edit, color: Colors.green),
-                      const SizedBox(width: 5),
+                    children: const [
+                      Icon(Icons.edit, color: Colors.green),
+                      SizedBox(width: 5),
                       AppText(
                         text: "Change schedule/availability",
                         textSize: 12,

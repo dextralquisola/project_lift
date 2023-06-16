@@ -17,7 +17,7 @@ void showReportDialog({
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        title: AppText(text: 'Warning!'),
+        title: const AppText(text: 'Warning!'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

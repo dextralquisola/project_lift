@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import './message.dart';
 import './subject.dart';
@@ -96,14 +97,16 @@ class StudyRoom {
   }
 
   void printRoom() {
-    print("Room ID: $roomId");
-    print("Room Name: $roomName");
-    print("Room Owner: $roomOwner");
-    print("Room Messages: $messages");
-    print("Room Participants: ${participants.length}");
-    print("location: $location");
-    print("schedule: $schedule");
-    print("sessionEnded: $sessionEnded");
+    if (kDebugMode) {
+      print("Room ID: $roomId");
+      print("Room Name: $roomName");
+      print("Room Owner: $roomOwner");
+      print("Room Messages: $messages");
+      print("Room Participants: ${participants.length}");
+      print("location: $location");
+      print("schedule: $schedule");
+      print("sessionEnded: $sessionEnded");
+    }
   }
 
   factory StudyRoom.fromJson(String source) =>

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:project_lift/models/study_room.dart';
+import 'package:flutter/foundation.dart';
+import '../models/study_room.dart';
 
 class StudyRoomProvider with ChangeNotifier {
   List<StudyRoom> _studyRooms = [];
@@ -15,13 +15,15 @@ class StudyRoomProvider with ChangeNotifier {
   }
 
   void printStudyRooms() {
-    print("======= Study Rooms ========");
-    _studyRooms.forEach((element) {
-      print('>>');
-      element.printRoom();
-      print('>>');
-    });
-    print("============================");
+    if (kDebugMode) {
+      print("======= Study Rooms ========");
+      for (var element in _studyRooms) {
+        print('>>');
+        element.printRoom();
+        print('>>');
+      }
+      print("============================");
+    }
   }
 
   void clearPendingRooms() {
