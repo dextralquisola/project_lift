@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/utils/utils.dart';
+import 'package:project_lift/utils/utils.dart' show capitalize;
 import 'package:provider/provider.dart';
 
 import '../../../widgets/app_button.dart';
@@ -38,8 +38,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       userProvider = Provider.of<UserProvider>(context, listen: false);
-      firstNameController.text = userProvider.user.firstName;
-      lastNameController.text = userProvider.user.lastName;
+      firstNameController.text = capitalize(userProvider.user.firstName);
+      lastNameController.text = capitalize(userProvider.user.lastName);
     });
   }
 
@@ -113,7 +113,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         passwordController.text == confirmPasswordController.text) {
       password = passwordController.text;
     }
-    
+
     await profileService.updateUser(
       context: context,
       firstName: firstNameController.text,
