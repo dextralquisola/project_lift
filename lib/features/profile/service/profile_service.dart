@@ -243,6 +243,7 @@ class ProfileService {
       );
 
       if (context.mounted) {
+        printLog("context is mounted", "updateUser");
         if (res.statusCode == 200) {
           dateTimeAvailability.isNotEmpty
               ? userProvider.setUserFromModel(
@@ -264,6 +265,8 @@ class ProfileService {
         } else {
           showSnackBar(context, "Something went wrong");
         }
+      }else{
+        printLog("context is not mounted", "updateUser error");
       }
     } catch (e) {
       printLog(e.toString(), "updateUser error");

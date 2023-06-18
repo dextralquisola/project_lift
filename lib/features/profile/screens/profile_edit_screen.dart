@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widgets/app_button.dart';
@@ -20,7 +21,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   final lastNameController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
+  late UserProvider userProvider;
   var _isLoading = false;
 
   @override
@@ -33,11 +34,19 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      firstNameController.text = userProvider.user.firstName;
+      lastNameController.text = userProvider.user.lastName;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
     final isGoogleLogin = userProvider.isGoogleLogin;
-    firstNameController.text = userProvider.user.firstName;
-    lastNameController.text = userProvider.user.lastName;
 
     return Scaffold(
       appBar: AppBar(
@@ -103,10 +112,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     } else if (passwordController.text.isNotEmpty &&
         passwordController.text == confirmPasswordController.text) {
       password = passwordController.text;
-    } else {
-      return;
     }
-
+    
     await profileService.updateUser(
       context: context,
       firstName: firstNameController.text,
