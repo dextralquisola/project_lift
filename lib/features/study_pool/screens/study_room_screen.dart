@@ -27,6 +27,7 @@ class CurrentRoomScreen extends StatefulWidget {
 class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   final _messageInputController = TextEditingController();
   var _scrollControllerMessage = ScrollController();
+  var isSendingMsg = false;
   var isLoading = false;
 
   final _socket = SocketClient.instance.socket!;
@@ -285,17 +286,29 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () async {
-                        if (_messageInputController.text.trim().isNotEmpty) {
-                          await studyRoomService.sendMessage(
-                            roomId: currentStudyRoomProvider.studyRoom.roomId,
-                            context: context,
-                            message: _messageInputController.text,
-                          );
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          _messageInputController.clear();
-                        }
-                      },
+                      onPressed: isSendingMsg
+                          ? () {}
+                          : () async {
+                              if (_messageInputController.text
+                                  .trim()
+                                  .isNotEmpty) {
+                                setState(() {
+                                  isSendingMsg = true;
+                                });
+                                await studyRoomService.sendMessage(
+                                  roomId:
+                                      currentStudyRoomProvider.studyRoom.roomId,
+                                  context: context,
+                                  message: _messageInputController.text,
+                                );
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                _messageInputController.clear();
+
+                                setState(() {
+                                  isSendingMsg = false;
+                                });
+                              }
+                            },
                       icon: const Icon(Icons.send),
                     )
                   ],
