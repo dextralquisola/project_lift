@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_lift/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import './socket_client.dart';
@@ -88,7 +87,7 @@ class SocketListeners {
         Provider.of<StudyRoomProvider>(context, listen: false);
     _socket.on("participant-rejected", (data) {
       studyRoomProvider.removePendingRoomById(data['chatRoom']['_id']);
-      printLog(data, "participant-rejected");
+      //printLog(data, "participant-rejected");
     });
   }
 
@@ -97,7 +96,7 @@ class SocketListeners {
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("participant-cancelled", (data) {
       currentRoomProvider.removeParticipantById(data['userId']);
-      printLog(data, "participant-cancelled");
+      //printLog(data, "participant-cancelled");
     });
   }
 
@@ -105,7 +104,7 @@ class SocketListeners {
     final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("user-left", (data) {
-      printLog(data, "user-left");
+      //printLog(data, "user-left");
       if (data['sessionEnded'] != null &&
           currentRoomProvider.studyRoom.roomOwner != data['user']['userId']) {
         currentRoomProvider.removeParticipantById(
@@ -123,7 +122,7 @@ class SocketListeners {
         Provider.of<StudyRoomProvider>(context, listen: false);
 
     _socket.on("room-deleted", (data) {
-      printLog(data, "room-deleted");
+      //printLog(data, "room-deleted");
 
       _socket.emit("leave-room", {
         "roomId": currentRoomProvider.studyRoom.roomId,
@@ -185,7 +184,7 @@ class SocketListeners {
     _socket.on(
       "tutor-application-approved",
       (data) {
-        printLog(data, "tutor-application-approved");
+        //printLog(data, "tutor-application-approved");
         userProvider.setUserFromModel(userProvider.user.copyFrom(
           role: "tutor",
           subjects: List<Subject>.from(
@@ -231,7 +230,7 @@ class SocketListeners {
           currentStudyRoomProvider.clearRoom();
           await userProvider.logout();
         } else {
-          printLog(data, "report-result");
+          //printLog(data, "report-result");
         }
       }
     });

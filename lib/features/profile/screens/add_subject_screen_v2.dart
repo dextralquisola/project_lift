@@ -143,6 +143,7 @@ class _AddSubjectScreenV2State extends State<AddSubjectScreenV2> {
                         if (selectedImage == null) {
                           showSnackBar(
                               context, "Please select an image first.");
+                          return;
                         }
 
                         setState(() {
