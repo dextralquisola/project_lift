@@ -32,13 +32,15 @@ dependencies:
   badges: ^3.1.1
   cached_network_image: ^3.2.3
   cupertino_icons: ^1.0.2
-  device_info_plus: ^8.2.0
+  device_info_plus: ^9.0.2
+  file_picker: ^5.3.2
   firebase_auth: ^4.6.2
   firebase_core: ^2.10.0
   firebase_messaging: ^14.4.1
   firebase_storage: ^11.1.2
   flutter:
     sdk: flutter
+  flutter_file_downloader: ^1.1.2
   flutter_local_notifications: ^9.8.0+1
   flutter_rating_bar: ^4.0.1
   flutter_speed_dial: ^6.3.0

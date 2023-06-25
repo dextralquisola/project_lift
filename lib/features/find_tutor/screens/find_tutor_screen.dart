@@ -85,10 +85,10 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                           textColor: Colors.white,
                           textSize: 24,
                         )
-                      : Column(
+                      : const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
+                          children: [
                             AppText(
                                 text: 'Find your',
                                 textColor: Colors.white,
@@ -102,10 +102,10 @@ class _FindTutorScreenState extends State<FindTutorScreen>
                           ],
                         ),
                   titlePadding: const EdgeInsets.only(left: 10.0, bottom: 16.0),
-                  background: Stack(
+                  background: const Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.bottomCenter,
-                    children: const [BackgroundCover(), SearchBar()],
+                    children: [BackgroundCover(), SearchBarWidget()],
                   ),
                 );
               }),

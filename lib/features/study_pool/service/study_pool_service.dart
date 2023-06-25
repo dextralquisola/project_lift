@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,7 @@ import '../../../providers/study_room_providers.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/user_requests_provider.dart';
 import '../../../utils/http_utils.dart' as service;
+import '../../../utils/storage_utils.dart' as storage;
 
 class StudyPoolService {
   Future<void> createStudyPool({
@@ -159,12 +161,23 @@ class StudyPoolService {
   Future<void> sendMessage({
     required String roomId,
     required String message,
+    PlatformFile? file,
     required BuildContext context,
   }) async {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final currentStudyRoomProvider =
           Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
+      var fileUrl = "";
+      if (file != null) {
+        fileUrl = await storage.StorageMethods().uploadFile(
+          filePath: file.path!,
+          fileName: "files/${DateTime.now().toIso8601String()}_${file.name}",
+        );
+      }
+
+      printLog(fileUrl, "fileUrl");
 
       var res = await service.requestApi(
         path: '/api/studyroom/messages',
@@ -173,6 +186,7 @@ class StudyPoolService {
         body: {
           'roomId': roomId,
           'message': message,
+          'fileUrl': fileUrl,
           "fcmToken": userProvider.user.firebaseToken,
           "deviceToken": userProvider.user.deviceToken,
         },

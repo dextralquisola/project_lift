@@ -1,6 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:intl/intl.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
@@ -9,13 +10,16 @@ import './pending_tutees_screen.dart';
 import './study_room_details_screen.dart';
 import '../../../constants/styles.dart';
 import '../../../models/study_room.dart';
-import '../../../models/user.dart';
 import '../../../providers/current_room_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/socket_client.dart';
 import '../../../widgets/app_text.dart';
-import '../../../utils/utils.dart' show capitalize;
+import '../../../utils/utils.dart' show printLog;
+import '../widgets/study_room_widgets.dart';
 import '../service/study_pool_service.dart';
+
+import '../widgets/empty_room_widget.dart';
+import '../widgets/message_widget.dart';
 
 class CurrentRoomScreen extends StatefulWidget {
   const CurrentRoomScreen({super.key});
@@ -57,6 +61,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   }
 
   final studyRoomService = StudyPoolService();
+  PlatformFile? pickedFile;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +79,16 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
         currentStudyRoomProvider.studyRoom.participants
             .where((participant) => participant['status'] == 'accepted')
             .isNotEmpty;
+
+    Future selectFile() async {
+      final result = await FilePicker.platform.pickFiles();
+      if (result == null) return;
+
+      setState(() {
+        pickedFile = result.files.first;
+        printLog(pickedFile!.name.toString(), "file");
+      });
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -122,22 +137,22 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
               icon: const Icon(Icons.more_vert, color: Colors.white),
               itemBuilder: (context) {
                 return [
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 0,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(Icons.info, color: Colors.amber),
                         SizedBox(width: 5),
                         AppText(text: "Studyroom Details"),
                       ],
                     ),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 1,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(Icons.exit_to_app, color: Colors.redAccent),
                         SizedBox(width: 5),
                         AppText(text: "Leave Room"),
@@ -173,16 +188,18 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                     ),
                   );
                 } else if (value == 1) {
-                  await _showAlertDialog(
+                  showAlertDialog(
                     context: context,
+                    user: user,
                     studyRoom: currentStudyRoomProvider.studyRoom,
-                    user: userProvider.user,
+                    onLeave: _onLeave,
                   );
                 } else if (value == 2) {
-                  await _showEndSessionDialog(
+                  showEndSessionDialog(
                     context: context,
+                    user: user,
                     studyRoom: currentStudyRoomProvider.studyRoom,
-                    user: userProvider.user,
+                    onEndSession: _endSession,
                   );
                 }
               },
@@ -192,15 +209,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
         body: Column(
           children: [
             chats.isEmpty
-                ? const Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: AppText(
-                        text: "Send hello to get started! 😊",
-                        textSize: 20,
-                      ),
-                    ),
-                  )
+                ? const EmptyMsgWidget()
                 : Expanded(
                     child: ListView.separated(
                       reverse: true,
@@ -208,57 +217,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                       padding: const EdgeInsets.all(16),
                       controller: _scrollControllerMessage,
                       itemBuilder: (context, index) {
-                        final message = chats[index];
-                        final formattedName =
-                            "${capitalize(message.firstName)} ${capitalize(message.lastName)}";
-                        return Wrap(
-                          alignment: message.userId == user.userId
-                              ? WrapAlignment.end
-                              : WrapAlignment.start,
-                          children: [
-                            Card(
-                              color: message.userId == user.userId
-                                  ? const Color(0xff2A813E)
-                                  : Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      message.userId == user.userId
-                                          ? CrossAxisAlignment.end
-                                          : CrossAxisAlignment.start,
-                                  children: [
-                                    if (message.userId != user.userId)
-                                      AppText(
-                                        textColor: primaryColor,
-                                        fontWeight: FontWeight.w600,
-                                        text: formattedName,
-                                      ),
-                                    AppText(
-                                      textSize: 14,
-                                      textColor: message.userId == user.userId
-                                          ? Colors.white
-                                          : Colors.black,
-                                      text: message.message,
-                                    ),
-                                    AppText(
-                                      textSize: 11,
-                                      textColor: message.userId == user.userId
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontWeight: FontWeight.w300,
-                                      text: DateFormat('hh:mm a').format(
-                                        DateTime.parse(message.createdAt)
-                                            .toLocal(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        );
+                        return MessageWidget(message: chats[index], user: user);
                       },
                       separatorBuilder: (_, index) => const SizedBox(
                         height: 5,
@@ -266,6 +225,34 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                       itemCount: chats.length,
                     ),
                   ),
+            if (pickedFile != null)
+              Container(
+                height: 50,
+                color: Colors.greenAccent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: SizedBox(
+                        child: AppText(
+                          textColor: Colors.black,
+                          text: _cropFileLongFileName(pickedFile!.name),
+                          textOverflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          pickedFile = null;
+                        });
+                      },
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+              ),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
@@ -276,6 +263,15 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
               child: SafeArea(
                 child: Row(
                   children: [
+                    IconButton(
+                      onPressed: selectFile,
+                      icon: const FaIcon(
+                        FontAwesomeIcons.paperclip,
+                        size: 20,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
                     Expanded(
                       child: TextField(
                         controller: _messageInputController,
@@ -288,28 +284,14 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                     IconButton(
                       onPressed: isSendingMsg
                           ? () {}
-                          : () async {
-                              if (_messageInputController.text
-                                  .trim()
-                                  .isNotEmpty) {
-                                setState(() {
-                                  isSendingMsg = true;
-                                });
-                                await studyRoomService.sendMessage(
-                                  roomId:
-                                      currentStudyRoomProvider.studyRoom.roomId,
-                                  context: context,
-                                  message: _messageInputController.text,
-                                );
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                _messageInputController.clear();
-
-                                setState(() {
-                                  isSendingMsg = false;
-                                });
-                              }
-                            },
-                      icon: const Icon(Icons.send),
+                          : () async => await _sendMsg(
+                                studyRoom: currentStudyRoomProvider.studyRoom,
+                              ),
+                      icon: isSendingMsg
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : const Icon(Icons.send),
                     )
                   ],
                 ),
@@ -321,107 +303,52 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
     );
   }
 
-  _showAlertDialog({
-    required BuildContext context,
-    required User user,
-    required StudyRoom studyRoom,
-  }) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const AppText(
-        text: "Cancel",
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = TextButton(
-      child: const AppText(text: "Leave", textColor: Colors.red),
-      onPressed: () async {
-        setState(() {
-          isLoading = true;
-        });
-        await studyRoomService.leaveStudyRoom(context);
-        setState(() {
-          isLoading = false;
-        });
-        Navigator.of(context).pop();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const AppText(
-        text: "Warning!",
-        textColor: Colors.red,
-        textSize: 20,
-        fontWeight: FontWeight.w600,
-      ),
-      content: AppText(
-        text: user.userId == studyRoom.roomOwner
-            ? "Are you sure you want to leave this study room? The room will be deleted and the tutees will be notified and kicked to the room. "
-            : "Are you sure you want to leave this study room?",
-      ),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+  String _cropFileLongFileName(String filename) {
+    if (filename.length > 20) {
+      return "${filename.substring(0, 5)}...${filename.substring(filename.length - 10, filename.length)}";
+    }
+    return filename;
   }
 
-  _showEndSessionDialog({
-    required BuildContext context,
-    required User user,
+  Future<void> _sendMsg({
     required StudyRoom studyRoom,
-  }) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const AppText(
-        text: "Cancel",
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = TextButton(
-      child: const AppText(text: "End session", textColor: Colors.red),
-      onPressed: () async {
-        Navigator.of(context).pop();
-        await studyRoomService.endStudySession(context: context);
-      },
-    );
+  }) async {
+    if (_messageInputController.text.trim().isNotEmpty) {
+      setState(() {
+        isSendingMsg = true;
+      });
+      await studyRoomService.sendMessage(
+        context: context,
+        roomId: studyRoom.roomId,
+        message: _messageInputController.text,
+        file: pickedFile,
+      );
+      FocusManager.instance.primaryFocus?.unfocus();
+      _messageInputController.clear();
 
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const AppText(
-        text: "Warning!",
-        textColor: Colors.red,
-        textSize: 20,
-        fontWeight: FontWeight.w600,
-      ),
-      content: const AppText(
-          text: "Are you sure you want to end this study session?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
+      setState(() {
+        pickedFile = null;
+        isSendingMsg = false;
+      });
+    }
+  }
 
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+  _onLeave() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await studyRoomService.leaveStudyRoom(context);
+
+    setState(() {
+      isLoading = false;
+    });
+    Navigator.of(context).pop();
+  }
+
+  _endSession() async {
+    Navigator.of(context).pop();
+    await studyRoomService.endStudySession(context: context);
   }
 
   _scrollListenerMessage() async {

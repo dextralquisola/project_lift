@@ -7,6 +7,7 @@ class Message {
   final String firstName;
   final String lastName;
   final String message;
+  final String fileUrl;
   final String createdAt;
 
   Message({
@@ -16,6 +17,7 @@ class Message {
     required this.message,
     required this.firstName,
     required this.lastName,
+    this.fileUrl = '',
     this.createdAt = '',
   });
 
@@ -43,6 +45,7 @@ class Message {
           ? map['user']['lastName'] ?? ''
           : map['userId']['lastName'] ?? '',
       message: isFromAppSend ? map['message']['message'] ?? '' : map['message'] ?? '',
+      fileUrl: isFromAppSend ? map['message']['fileUrl'] ?? '' : map['fileUrl'] ?? '',
       createdAt:
           isFromAppSend ? map['message']['createdAt'] ?? '' : map['createdAt'] ?? '',
     );

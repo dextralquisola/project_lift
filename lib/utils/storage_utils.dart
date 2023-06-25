@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class StorageMethods {
-  Future<String> uploadImage({
+  Future<String> uploadFile({
     required String filePath,
     required String fileName,
   }) async {
@@ -11,8 +11,8 @@ class StorageMethods {
     UploadTask uploadTask = ref.putFile(File(filePath));
 
     TaskSnapshot snap = await uploadTask;
-    String imageUrl = await snap.ref.getDownloadURL();
+    String fileUrl = await snap.ref.getDownloadURL();
 
-    return imageUrl;
+    return fileUrl;
   }
 }

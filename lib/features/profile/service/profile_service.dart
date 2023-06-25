@@ -71,7 +71,7 @@ class ProfileService {
       final storageMethods = StorageMethods();
       final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-      var avatarUrl = await storageMethods.uploadImage(
+      var avatarUrl = await storageMethods.uploadFile(
         filePath: avatarPath,
         fileName: userProvider.user.userId,
       );
@@ -109,7 +109,7 @@ class ProfileService {
       final userRequestsProvider =
           Provider.of<UserRequestsProvider>(context, listen: false);
 
-      var gradeUrl = await storageMethods.uploadImage(
+      var gradeUrl = await storageMethods.uploadFile(
         filePath: gradePath,
         fileName: "grades_${userProvider.user.userId}",
       );
@@ -155,7 +155,7 @@ class ProfileService {
       var gradeUrl = gradePath.contains(
               'https://firebasestorage.googleapis.com/v0/b/project-lift-f75f9.appspot.com')
           ? gradePath
-          : await storageMethods.uploadImage(
+          : await storageMethods.uploadFile(
               filePath: gradePath,
               fileName: "grades_${userProvider.user.userId}",
             );
@@ -353,7 +353,7 @@ class ProfileService {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final storageMethods = StorageMethods();
 
-      var gradeUrl = await storageMethods.uploadImage(
+      var gradeUrl = await storageMethods.uploadFile(
           filePath: image.path,
           fileName: "${userProvider.user.userId}.grades}");
 
