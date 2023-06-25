@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/current_room_provider.dart';
+import '../../../providers/study_room_providers.dart';
+import '../../../providers/tutors_provider.dart';
+import '../../../providers/user_requests_provider.dart';
 import '../../find_tutor/screens/find_tutor_screen.dart';
 import '../../profile/screens/profile_screen.dart';
 import '../../profile/service/profile_service.dart';
@@ -126,8 +130,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void showLogoutDialog(BuildContext context, dynamic data) {
     final appStateProvider =
         Provider.of<AppStateProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    final studyPoolProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
+    final currentStudyRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const AppText(
@@ -144,9 +157,15 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             TextButton(
               child: const AppText(text: 'OK'),
-              onPressed: () {
+              onPressed: () async {
                 appStateProvider.dismissNotifLogout();
-                Navigator.of(context).pop();
+                await userProvider.logout();
+                tutorsProvider.clearTutors();
+                userRequestsProvider.clearRequests();
+                studyPoolProvider.clearStudyRooms();
+                currentStudyRoomProvider.clearRoom();
+
+                if (mounted) Navigator.of(context).pop();
               },
             ),
           ],

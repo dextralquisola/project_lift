@@ -238,22 +238,10 @@ class SocketListeners {
   }
 
   void _onLoginOtherDevice(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
-    final userRequestsProvider =
-        Provider.of<UserRequestsProvider>(context, listen: false);
-    final studyPoolProvider =
-        Provider.of<StudyRoomProvider>(context, listen: false);
-    final currentStudyRoomProvider =
-        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
-    final appStateProvider = Provider.of<AppStateProvider>(context, listen: false);
+    final appStateProvider =
+        Provider.of<AppStateProvider>(context, listen: false);
     _socket.on("logged-in-other-device", (data) async {
       appStateProvider.setNotifLogout(data);
-      await userProvider.logout();
-      tutorsProvider.clearTutors();
-      userRequestsProvider.clearRequests();
-      studyPoolProvider.clearStudyRooms();
-      currentStudyRoomProvider.clearRoom();
     });
   }
 }
