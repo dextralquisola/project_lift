@@ -14,10 +14,10 @@ Future<bool> showCancelApplyDialog(BuildContext context) async {
           borderRadius: BorderRadius.circular(10.0),
         ),
         title: const AppText(text: 'Warning!'),
-        content: Column(
+        content: const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             AppText(
               text:
                   "The application is processing, please wait. Do you want to cancel the application?",
