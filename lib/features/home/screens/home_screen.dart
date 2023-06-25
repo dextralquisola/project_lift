@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:project_lift/features/find_tutor/screens/find_tutor_screen.dart';
-import 'package:project_lift/features/profile/screens/profile_screen.dart';
-import 'package:project_lift/features/profile/service/profile_service.dart';
-import 'package:project_lift/features/study_pool/screens/study_pool_screen.dart';
-import 'package:project_lift/widgets/app_text.dart';
 import 'package:provider/provider.dart';
+
+import '../../find_tutor/screens/find_tutor_screen.dart';
+import '../../profile/screens/profile_screen.dart';
+import '../../profile/service/profile_service.dart';
+import '../../study_pool/screens/study_pool_screen.dart';
+import '../../../widgets/app_text.dart';
 
 import '../../../providers/app_state_provider.dart';
 import '../../../providers/user_provider.dart';
@@ -37,6 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (appStateProvider.getNotif != null) {
         showAlertDialog(context, appStateProvider.getNotif);
+      }
+
+      if (appStateProvider.getNotifLogout != null) {
+        showLogoutDialog(context, appStateProvider.getNotifLogout);
       }
     });
 
@@ -83,19 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     Navigator.of(context).push(
-        //       MaterialPageRoute(
-        //         builder: (context) => SurveyScreen(),
-        //       ),
-        //     );
-        //   },
-        //   backgroundColor: Colors.red,
-        //   tooltip: "Gifts",
-        //   child: const Icon(Icons.card_giftcard, color: Colors.white),
-        // ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       ),
     );
   }
@@ -129,6 +121,38 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         )) ??
         false;
+  }
+
+  void showLogoutDialog(BuildContext context, dynamic data) {
+    final appStateProvider =
+        Provider.of<AppStateProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const AppText(
+            text: 'Notice!',
+            fontWeight: FontWeight.w600,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppText(text: data['message']),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: const AppText(text: 'OK'),
+              onPressed: () {
+                appStateProvider.dismissNotifLogout();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void showAlertDialog(BuildContext context, dynamic data) {

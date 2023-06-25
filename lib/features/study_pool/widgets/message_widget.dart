@@ -29,7 +29,7 @@ class _MessageWidgetState extends State<MessageWidget> {
           : WrapAlignment.start,
       children: [
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.6,
+          width: widget.message.fileUrl == '' ? null : MediaQuery.of(context).size.width * 0.6,
           child: Card(
             color: widget.message.userId == widget.user.userId
                 ? const Color(0xff2A813E)
@@ -93,6 +93,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                           borderRadius: BorderRadius.circular(8),
                           child: Container(
                             padding: const EdgeInsets.all(8),
+                            width: MediaQuery.of(context).size.width * 0.5,
                             color: Colors.green.shade600,
                             child: Row(
                               children: [

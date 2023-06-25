@@ -32,6 +32,7 @@ class SocketListeners {
     _onNewReport(context);
     _onReportResult(context);
     _onRequestRemove(context);
+    _onLoginOtherDevice(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -233,6 +234,26 @@ class SocketListeners {
           //printLog(data, "report-result");
         }
       }
+    });
+  }
+
+  void _onLoginOtherDevice(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final tutorsProvider = Provider.of<TutorProvider>(context, listen: false);
+    final userRequestsProvider =
+        Provider.of<UserRequestsProvider>(context, listen: false);
+    final studyPoolProvider =
+        Provider.of<StudyRoomProvider>(context, listen: false);
+    final currentStudyRoomProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    final appStateProvider = Provider.of<AppStateProvider>(context, listen: false);
+    _socket.on("logged-in-other-device", (data) async {
+      await userProvider.logout();
+      appStateProvider.setNotifLogout(data);
+      tutorsProvider.clearTutors();
+      userRequestsProvider.clearRequests();
+      studyPoolProvider.clearStudyRooms();
+      currentStudyRoomProvider.clearRoom();
     });
   }
 }

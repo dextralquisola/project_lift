@@ -88,7 +88,9 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await googleSignIn.disconnect();
+    if (_isGoogleLogin) {
+      await googleSignIn.disconnect();
+    }
 
     _user = User.emptyUser();
 
