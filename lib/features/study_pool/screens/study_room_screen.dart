@@ -313,7 +313,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
   Future<void> _sendMsg({
     required StudyRoom studyRoom,
   }) async {
-    if (_messageInputController.text.trim().isNotEmpty) {
+    if (_messageInputController.text.trim().isNotEmpty || pickedFile != null) {
       setState(() {
         isSendingMsg = true;
       });
