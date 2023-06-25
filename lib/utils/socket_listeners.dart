@@ -248,8 +248,8 @@ class SocketListeners {
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     final appStateProvider = Provider.of<AppStateProvider>(context, listen: false);
     _socket.on("logged-in-other-device", (data) async {
-      await userProvider.logout();
       appStateProvider.setNotifLogout(data);
+      await userProvider.logout();
       tutorsProvider.clearTutors();
       userRequestsProvider.clearRequests();
       studyPoolProvider.clearStudyRooms();
