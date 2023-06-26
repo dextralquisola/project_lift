@@ -233,7 +233,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                     description: descriptionController.text,
                                   );
                                   st(() {
-                                    _isLoading = true;
+                                    _isLoading = false;
                                   });
                                   if (mounted) Navigator.of(context).pop();
                                 },

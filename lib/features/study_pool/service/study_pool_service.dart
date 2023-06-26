@@ -618,7 +618,7 @@ class StudyPoolService {
     }
   }
 
-  Future<void> addTodo({
+  Future<bool> addTodo({
     required BuildContext context,
     required String title,
     required String description,
@@ -642,12 +642,18 @@ class StudyPoolService {
         var decoded = json.decode(res.body);
         printHttpLog(res, "addTodo");
         currentStudyRoomProvider.addTodoFromJson(decoded);
+        return true;
       } else {
+        if (context.mounted) {
+          showSnackBar(context, res.body);
+        }
         printHttpLog(res, "addTodo error");
       }
+      return false;
     } catch (e) {
       printLog(e.toString(), "addTodo error");
     }
+    return false;
   }
 
   Future<void> updateTodo({

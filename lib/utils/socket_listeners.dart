@@ -250,26 +250,35 @@ class SocketListeners {
   }
 
   void _onNewTodo(BuildContext context) {
-    final todoProvider =
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("create-todo", (data) {
-      todoProvider.addTodoItem(ToDo.fromMap(data));
+      if (userProvider.user.userId != currentRoomProvider.studyRoom.roomOwner) {
+        currentRoomProvider.addTodoItem(ToDo.fromMap(data));
+      }
     });
   }
 
   void _onUpdateTodo(BuildContext context) {
-    final todoProvider =
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("update-todo", (data) {
-      todoProvider.updateTodoItem(ToDo.fromMap(data));
+      if (userProvider.user.userId != currentRoomProvider.studyRoom.roomOwner) {
+        currentRoomProvider.updateTodoItem(ToDo.fromMap(data));
+      }
     });
   }
 
   void _onDeleteTodoItem(BuildContext context) {
-    final todoProvider =
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final currentRoomProvider =
         Provider.of<CurrentStudyRoomProvider>(context, listen: false);
     _socket.on("delete-todo", (data) {
-      todoProvider.removeTodoItem(data);
+      if (userProvider.user.userId != currentRoomProvider.studyRoom.roomOwner) {
+        currentRoomProvider.removeTodoItem(data);
+      }
     });
   }
 }
