@@ -25,6 +25,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
   var _isLoading = false;
 
   @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final currentStudyRoom = Provider.of<CurrentStudyRoomProvider>(context);
@@ -221,6 +228,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                   st(() {
                                     _isLoading = false;
                                   });
+                                  titleController.clear();
+                                  descriptionController.clear();
                                   if (mounted) Navigator.of(context).pop();
                                 }
                               : () async {
@@ -235,6 +244,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                   st(() {
                                     _isLoading = false;
                                   });
+                                  titleController.clear();
+                                  descriptionController.clear();
                                   if (mounted) Navigator.of(context).pop();
                                 },
                           text: index != null ? 'Update' : 'Add +',
