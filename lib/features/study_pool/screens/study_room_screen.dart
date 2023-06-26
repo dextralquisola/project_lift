@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_lift/features/study_pool/screens/todo_list_screen.dart';
 
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
@@ -95,6 +96,7 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
         appBar: AppBar(
           title: AppText(
             text: currentStudyRoomProvider.studyRoom.roomName,
+            fontWeight: FontWeight.w600,
             textColor: Colors.white,
           ),
           backgroundColor: primaryColor,
@@ -120,7 +122,10 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                             ),
                           );
                         },
-                        icon: const Icon(Icons.pending_actions),
+                        icon: const FaIcon(
+                          size: 18,
+                          FontAwesomeIcons.userClock,
+                        ),
                       ),
                     )
                   : IconButton(
@@ -131,8 +136,25 @@ class _CurrentRoomScreenState extends State<CurrentRoomScreen> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.pending_actions),
+                      icon: const FaIcon(
+                        size: 18,
+                        FontAwesomeIcons.userClock,
+                      ),
                     ),
+            const SizedBox(width: 5),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ToDoScreen(),
+                  ),
+                );
+              },
+              icon: const FaIcon(
+                FontAwesomeIcons.listUl,
+                size: 20,
+              ),
+            ),
             PopupMenuButton(
               icon: const Icon(Icons.more_vert, color: Colors.white),
               itemBuilder: (context) {

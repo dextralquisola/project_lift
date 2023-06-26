@@ -590,4 +590,125 @@ class StudyPoolService {
       printLog(e.toString(), "respondTuteeRequest error");
     }
   }
+
+  Future<void> getTodo({
+    required BuildContext context,
+    required String roomId,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentStudyRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/todo/$roomId',
+        method: 'GET',
+        userAuthHeader: userProvider,
+      );
+
+      printHttpLog(res, "getTodo");
+
+      if (res.statusCode == 200) {
+        var decoded = json.decode(res.body);
+        currentStudyRoomProvider.setTodoFromJson(decoded);
+      } else {
+        printHttpLog(res, "getTodo error");
+      }
+    } catch (e) {
+      printLog(e.toString(), "getTodo error");
+    }
+  }
+
+  Future<void> addTodo({
+    required BuildContext context,
+    required String title,
+    required String description,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentStudyRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+      var res = await service.requestApi(
+        path: '/api/todo/create',
+        method: 'POST',
+        body: {
+          "roomId": currentStudyRoomProvider.studyRoom.roomId,
+          "title": title,
+          "description": description,
+        },
+        userAuthHeader: userProvider,
+      );
+
+      if (res.statusCode == 200) {
+        var decoded = json.decode(res.body);
+        currentStudyRoomProvider.addTodoFromJson(decoded);
+      } else {
+        printHttpLog(res, "addTodo error");
+      }
+    } catch (e) {
+      printLog(e.toString(), "addTodo error");
+    }
+  }
+
+  Future<void> updateTodo({
+    required BuildContext context,
+    required String roomId,
+    required ToDo todo,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentStudyRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
+      var res = await service.requestApi(
+        path: '/api/todo/update',
+        method: 'PATCH',
+        body: {
+          "roomId": roomId,
+          "todoId": todo.id,
+          "title": todo.title,
+          "description": todo.description,
+          "isDone": todo.isDone,
+        },
+        userAuthHeader: userProvider,
+      );
+
+      if (res.statusCode == 200) {
+        currentStudyRoomProvider.updateTodoItem(todo);
+      } else {
+        printHttpLog(res, "updateTodo error");
+      }
+    } catch (e) {
+      printLog(e.toString(), "updateTodo error");
+    }
+  }
+
+  Future<void> deleteTodo({
+    required BuildContext context,
+    required String roomId,
+    required String todoId,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final currentStudyRoomProvider =
+          Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+
+      var res = await service.requestApi(
+        path: '/api/todo/delete',
+        method: 'DELETE',
+        body: {
+          "roomId": roomId,
+          "todoId": todoId,
+        },
+        userAuthHeader: userProvider,
+      );
+
+      if (res.statusCode == 200) {
+        currentStudyRoomProvider.removeTodoItem(todoId);
+      } else {
+        printHttpLog(res, "deleteTodo error");
+      }
+    } catch (e) {
+      printLog(e.toString(), "deleteTodo error");
+    }
+  }
 }

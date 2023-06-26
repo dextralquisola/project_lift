@@ -8,6 +8,7 @@ class StudyRoomProvider with ChangeNotifier {
   int _currentPage = 1;
 
   List<StudyRoom> get studyRooms => _studyRooms;
+
   int get currentPage => _currentPage;
 
   StudyRoom getRoomById(String id) {

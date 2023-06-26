@@ -7,6 +7,7 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   StudyRoom _studyRoom = StudyRoom.empty();
 
   StudyRoom get studyRoom => _studyRoom;
+  List<ToDo> get todos => _studyRoom.todos;
 
   List<Map<String, dynamic>> get pendingParticipants => _studyRoom.participants
       .where((element) => element['status'] == 'pending')
@@ -127,6 +128,49 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   void clearRoom() {
     _currentMessagePage = 1;
     _studyRoom = StudyRoom.empty();
+    notifyListeners();
+  }
+
+  void addTodoItem(ToDo todo) {
+    _studyRoom.copyWith(todos: [..._studyRoom.todos, todo]);
+    notifyListeners();
+  }
+
+  void setTodoFromJson(dynamic data) {
+    var todo = List<ToDo>.from(data.map((x) => ToDo.fromMap(x)));
+    _studyRoom.copyWith(todos: todo);
+    notifyListeners();
+  }
+
+  void addTodoFromJson(dynamic data) {
+    var todo = ToDo.fromMap(data);
+    _studyRoom.copyWith(todos: [..._studyRoom.todos, todo]);
+    notifyListeners();
+  }
+
+  void updateTodoFromJson(dynamic data) {
+    var todo = ToDo.fromMap(data);
+    var tempTodos = _studyRoom.todos;
+    final index = tempTodos.indexWhere((element) => element.id == todo.id);
+    tempTodos[index] = todo;
+
+    _studyRoom.copyWith(todos: tempTodos);
+    notifyListeners();
+  }
+
+  void updateTodoItem(ToDo todo) {
+    var tempTodos = _studyRoom.todos;
+    final index = tempTodos.indexWhere((element) => element.id == todo.id);
+    tempTodos[index] = todo;
+
+    _studyRoom.copyWith(todos: tempTodos);
+    notifyListeners();
+  }
+
+  void removeTodoItem(String id) {
+    var tempTodos = _studyRoom.todos;
+    tempTodos.removeWhere((element) => element.id == id);
+    _studyRoom.copyWith(todos: tempTodos);
     notifyListeners();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/study_room.dart';
 import './socket_client.dart';
 import '../models/subject.dart';
 
@@ -33,6 +34,9 @@ class SocketListeners {
     _onReportResult(context);
     _onRequestRemove(context);
     _onLoginOtherDevice(context);
+    _onNewTodo(context);
+    _onUpdateTodo(context);
+    _onDeleteTodoItem(context);
   }
 
   void _onMessageEvent(BuildContext context) {
@@ -242,6 +246,30 @@ class SocketListeners {
         Provider.of<AppStateProvider>(context, listen: false);
     _socket.on("logged-in-other-device", (data) async {
       appStateProvider.setNotifLogout(data);
+    });
+  }
+
+  void _onNewTodo(BuildContext context) {
+    final todoProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    _socket.on("create-todo", (data) {
+      todoProvider.addTodoItem(ToDo.fromMap(data));
+    });
+  }
+
+  void _onUpdateTodo(BuildContext context) {
+    final todoProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    _socket.on("update-todo", (data) {
+      todoProvider.updateTodoItem(ToDo.fromMap(data));
+    });
+  }
+
+  void _onDeleteTodoItem(BuildContext context) {
+    final todoProvider =
+        Provider.of<CurrentStudyRoomProvider>(context, listen: false);
+    _socket.on("delete-todo", (data) {
+      todoProvider.removeTodoItem(data);
     });
   }
 }

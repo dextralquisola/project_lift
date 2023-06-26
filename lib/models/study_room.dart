@@ -2,8 +2,60 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import './message.dart';
 import './subject.dart';
+
+class ToDo {
+  final String id;
+  final String title;
+  final String description;
+  final bool isDone;
+
+  ToDo({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.isDone,
+  });
+
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'title': title});
+    result.addAll({'description': description});
+    result.addAll({'isDone': isDone});
+
+    return result;
+  }
+
+  ToDo copyWith({
+    String? id,
+    String? title,
+    String? description,
+    bool? isDone,
+  }) {
+    return ToDo(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      isDone: isDone ?? this.isDone,
+    );
+  }
+
+  factory ToDo.fromMap(Map<String, dynamic> map) {
+    return ToDo(
+      id: map['_id'] ?? '',
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
+      isDone: map['isDone'] ?? false,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ToDo.fromJson(String source) => ToDo.fromMap(json.decode(source));
+}
 
 class StudyRoom {
   final String roomId;
@@ -14,6 +66,7 @@ class StudyRoom {
   final List<Message> messages;
   final List<Map<String, dynamic>> participants;
   final Subject subject;
+  final List<ToDo> todos;
   final int participantCount;
   final bool sessionEnded;
 
@@ -26,14 +79,25 @@ class StudyRoom {
     required this.subject,
     required this.location,
     required this.schedule,
+    required this.todos,
     required this.sessionEnded,
     this.participantCount = 0,
   });
 
-  factory StudyRoom.fromMap(Map<String, dynamic> map,
-      [bool isMapMessage = false, bool isParticipantPopulated = true]) {
+  factory StudyRoom.fromMap(
+    Map<String, dynamic> map, [
+    bool isMapMessage = false,
+    bool isParticipantPopulated = true,
+  ]) {
     return StudyRoom(
       roomId: map['_id'] ?? '',
+      todos: map['todoList'] != null
+          ? List<ToDo>.from(
+              map['todoList']?.map(
+                (x) => ToDo.fromMap(x),
+              ),
+            )
+          : [],
       messages: isMapMessage
           ? List<Message>.from(
               map['messages']?.map(
@@ -81,6 +145,7 @@ class StudyRoom {
     String? location,
     String? schedule,
     bool? sessionEnded,
+    List<ToDo>? todos,
   }) {
     return StudyRoom(
       roomId: roomId ?? this.roomId,
@@ -92,6 +157,7 @@ class StudyRoom {
       participantCount: participantCount ?? this.participantCount,
       location: location ?? this.location,
       schedule: schedule ?? this.schedule,
+      todos: todos ?? this.todos,
       sessionEnded: sessionEnded ?? this.sessionEnded,
     );
   }
@@ -117,6 +183,7 @@ class StudyRoom {
       roomId: '',
       messages: [],
       participants: [],
+      todos: [],
       roomName: '',
       roomOwner: '',
       location: '',
