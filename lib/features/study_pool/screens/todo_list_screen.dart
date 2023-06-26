@@ -32,6 +32,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
       appBar: AppBar(
         title: const Text('Agenda for this session'),
       ),
+      resizeToAvoidBottomInset: false,
       body: currentStudyRoom.todos.isEmpty
           ? const Center(
               child: AppText(

@@ -638,7 +638,7 @@ class StudyPoolService {
         userAuthHeader: userProvider,
       );
 
-      if (res.statusCode == 200) {
+      if (res.statusCode == 201) {
         var decoded = json.decode(res.body);
         currentStudyRoomProvider.addTodoFromJson(decoded);
       } else {
