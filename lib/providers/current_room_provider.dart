@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_lift/models/study_room.dart';
+import 'package:project_lift/utils/utils.dart';
 
 import '../models/message.dart';
 
@@ -132,19 +133,19 @@ class CurrentStudyRoomProvider with ChangeNotifier {
   }
 
   void addTodoItem(ToDo todo) {
-    _studyRoom.copyWith(todos: [..._studyRoom.todos, todo]);
+    _studyRoom = _studyRoom.copyWith(todos: [..._studyRoom.todos, todo]);
     notifyListeners();
   }
 
   void setTodoFromJson(dynamic data) {
     var todo = List<ToDo>.from(data.map((x) => ToDo.fromMap(x)));
-    _studyRoom.copyWith(todos: todo);
+    _studyRoom = _studyRoom.copyWith(todos: todo);
     notifyListeners();
   }
 
   void addTodoFromJson(dynamic data) {
     var todo = ToDo.fromMap(data);
-    _studyRoom.copyWith(todos: [..._studyRoom.todos, todo]);
+    _studyRoom = _studyRoom.copyWith(todos: [..._studyRoom.todos, todo]);
     notifyListeners();
   }
 
@@ -154,7 +155,7 @@ class CurrentStudyRoomProvider with ChangeNotifier {
     final index = tempTodos.indexWhere((element) => element.id == todo.id);
     tempTodos[index] = todo;
 
-    _studyRoom.copyWith(todos: tempTodos);
+    _studyRoom = _studyRoom.copyWith(todos: tempTodos);
     notifyListeners();
   }
 
@@ -163,14 +164,14 @@ class CurrentStudyRoomProvider with ChangeNotifier {
     final index = tempTodos.indexWhere((element) => element.id == todo.id);
     tempTodos[index] = todo;
 
-    _studyRoom.copyWith(todos: tempTodos);
+    _studyRoom = _studyRoom.copyWith(todos: tempTodos);
     notifyListeners();
   }
 
   void removeTodoItem(String id) {
     var tempTodos = _studyRoom.todos;
     tempTodos.removeWhere((element) => element.id == id);
-    _studyRoom.copyWith(todos: tempTodos);
+    _studyRoom = _studyRoom.copyWith(todos: tempTodos);
     notifyListeners();
   }
 }

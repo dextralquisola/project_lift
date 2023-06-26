@@ -640,6 +640,7 @@ class StudyPoolService {
 
       if (res.statusCode == 201) {
         var decoded = json.decode(res.body);
+        printHttpLog(res, "addTodo");
         currentStudyRoomProvider.addTodoFromJson(decoded);
       } else {
         printHttpLog(res, "addTodo error");

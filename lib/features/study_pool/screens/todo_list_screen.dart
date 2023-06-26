@@ -174,71 +174,73 @@ class _ToDoScreenState extends State<ToDoScreen> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (context, st) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            title: AppText(
-              text: index != null ? 'Edit agenda.' : 'Add an agenda.',
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AppTextField(
-                  controller: titleController,
-                  labelText: 'Title',
-                ),
-                const SizedBox(height: 10),
-                AppTextField(
-                  controller: descriptionController,
-                  maxLines: 3,
-                  labelText: 'Description',
-                ),
-                const SizedBox(height: 10),
-                _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : AppButton(
-                        wrapRow: true,
-                        height: 40,
-                        onPressed: index != null
-                            ? () async {
-                                st(() {
-                                  _isLoading = true;
-                                });
-                                var updatedTodo =
-                                    currentStudyRoom.todos[index].copyWith(
-                                  title: titleController.text,
-                                  description: descriptionController.text,
-                                );
-                                await studyroomService.updateTodo(
-                                  context: context,
-                                  roomId: currentStudyRoom.studyRoom.roomId,
-                                  todo: updatedTodo,
-                                );
-                                st(() {
-                                  _isLoading = false;
-                                });
-                                if (mounted) Navigator.of(context).pop();
-                              }
-                            : () async {
-                                st(() {
-                                  _isLoading = true;
-                                });
-                                await studyroomService.addTodo(
-                                  context: context,
-                                  title: titleController.text,
-                                  description: descriptionController.text,
-                                );
-                                st(() {
-                                  _isLoading = true;
-                                });
-                                if (mounted) Navigator.of(context).pop();
-                              },
-                        text: index != null ? 'Update' : 'Add +',
-                      ),
-              ],
+          builder: (context, st) => SingleChildScrollView(
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              title: AppText(
+                text: index != null ? 'Edit agenda.' : 'Add an agenda.',
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppTextField(
+                    controller: titleController,
+                    labelText: 'Title',
+                  ),
+                  const SizedBox(height: 10),
+                  AppTextField(
+                    controller: descriptionController,
+                    maxLines: 3,
+                    labelText: 'Description',
+                  ),
+                  const SizedBox(height: 10),
+                  _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : AppButton(
+                          wrapRow: true,
+                          height: 40,
+                          onPressed: index != null
+                              ? () async {
+                                  st(() {
+                                    _isLoading = true;
+                                  });
+                                  var updatedTodo =
+                                      currentStudyRoom.todos[index].copyWith(
+                                    title: titleController.text,
+                                    description: descriptionController.text,
+                                  );
+                                  await studyroomService.updateTodo(
+                                    context: context,
+                                    roomId: currentStudyRoom.studyRoom.roomId,
+                                    todo: updatedTodo,
+                                  );
+                                  st(() {
+                                    _isLoading = false;
+                                  });
+                                  if (mounted) Navigator.of(context).pop();
+                                }
+                              : () async {
+                                  st(() {
+                                    _isLoading = true;
+                                  });
+                                  await studyroomService.addTodo(
+                                    context: context,
+                                    title: titleController.text,
+                                    description: descriptionController.text,
+                                  );
+                                  st(() {
+                                    _isLoading = true;
+                                  });
+                                  if (mounted) Navigator.of(context).pop();
+                                },
+                          text: index != null ? 'Update' : 'Add +',
+                        ),
+                ],
+              ),
             ),
           ),
         );
