@@ -1,6 +1,9 @@
 # Project Looking For Tutor (lift)
 
-A mobile application where you can find your turor and also become a tutor for CvSU students
+A mobile application where you can find your tutor and also become a tutor for CvSU students.
+
+## Back-end Repository
+https://github.com/karl0223/thesis-backend
 
 ## Functionalities
 1. Find Tutor
