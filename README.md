@@ -1,16 +1,14 @@
-# project_lift
+# Project Looking For Tutor (lift)
 
-A new Flutter project.
+A mobile application where you can find your turor and also become a tutor for CvSU students
 
-## Getting Started
+## Functionalities
+1. Find Tutor
+2. Be a tutor (Ratings incentives and others to be updated)
+3. Join study pools (for specific subject rooms)
 
-This project is a starting point for a Flutter application.
+## Future Updates
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Update the project to clean architecture for future feature expansions
+* Incentives for student (money, foods) 
+* Make it available outside CvSU too (need to ask each university for this :v).
